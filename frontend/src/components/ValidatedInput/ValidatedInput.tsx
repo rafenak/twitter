@@ -4,7 +4,11 @@ import { StyledInputBox, StyledInputLabel } from "./StyledInput";
 
 import "./ValidatedInput.css";
 
-import { ValidatedInputState } from "../../utils/GlobalInterfaces";
+import { determineValidatedStyles } from "../../utils/DetermineStylesUtils";
+
+import { ValidatedInputState, } from "../../utils/GlobalInterfaces";
+
+
 
 interface ValidatedUserInputProps {
   name: string;
@@ -31,6 +35,12 @@ export const ValidatedInput: React.FC<ValidatedUserInputProps> = ({
     labelColor: "gray",
     value: "",
   });
+
+  useEffect(() => {
+    setvalidatedState(determineValidatedStyles(validatedState,validator));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validatedState.active,validatedState.typedIn,
+    validatedState.valid,validatedState.labelActive,validatedState.labelColor])
 
   const focus = (e: React.FocusEvent<HTMLInputElement>): void => {
     setvalidatedState({
@@ -63,7 +73,7 @@ export const ValidatedInput: React.FC<ValidatedUserInputProps> = ({
           {...attributes}
         />
       </StyledInputBox>
-      <span>{errorMessage}</span>
+      {validatedState.valid ? <></> : <span>{errorMessage}</span>}
     </div>
   );
 };

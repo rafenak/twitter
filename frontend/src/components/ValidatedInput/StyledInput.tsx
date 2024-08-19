@@ -16,11 +16,11 @@ export const StyledInputBox = styled.div<StyledInputProps>`
 export const StyledInputLabel = styled.span<StyledInputProps>`
      position : absolute;
      left : 10px;
-     font-weight : 200;
+     font-weight : 400;
      width: 100%;
      margin: 0;
      padding : 0;
-     font-size : ${(props) => (props.active ? "13px" : "16px")};
-     top : ${(props) => (props.active ? "5px" : "16px")}
+     font-size : ${(props) => (props.active ? "13px" : "18px")};
+     top : ${(props) => (props.active ? "5px" : "16px")};
      color : ${(props) => determineLabourColor(props)};
 `;
