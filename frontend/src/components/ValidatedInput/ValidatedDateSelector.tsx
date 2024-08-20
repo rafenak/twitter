@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyledInputBox, StyledInputLabel } from "./StyledInput";
 import { determineValidatedSelectSylyes } from "../../utils/DetermineStylesUtils";
 
@@ -7,6 +7,7 @@ interface ValidateDatedSelectorProps {
   valid: boolean;
   name: string;
   dropDown(): JSX.Element[];
+  dispatcher(name: string, value: string | number | boolean): void;
 }
 
 export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
@@ -14,19 +15,21 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
   valid,
   name,
   dropDown,
+  dispatcher,
 }) => {
   const [active, setActive] = useState<boolean>(false);
   const [value, setValue] = useState<number>(0);
-  const [color, setColor] = useState<string>('gray')
+  const [color, setColor] = useState<string>("gray");
 
-  useEffect(()=>{
-    setColor(determineValidatedSelectSylyes(active,valid))
-  },[active,valid,value])
+  useEffect(() => {
+    setColor(determineValidatedSelectSylyes(active, valid));
+  }, [active, valid, value]);
 
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(+e.target.value);
     console.log("Dispatch this change to reducer");
     console.log("value ", e.target.value);
-    setValue(+e.target.value);
+    dispatcher(name.toLowerCase(), +e.target.value);
   };
 
   const toogleActive = (e: React.FormEvent<HTMLSelectElement>) => {

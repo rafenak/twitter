@@ -28,7 +28,7 @@ export interface ValidatedInputState {
   value: string;
 }
 
-export interface dob{
+export interface Dob{
   month : number;
   day : number;
   year : number;
