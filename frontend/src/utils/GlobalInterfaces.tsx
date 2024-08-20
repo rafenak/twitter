@@ -27,3 +27,9 @@ export interface ValidatedInputState {
   labelColor: string;
   value: string;
 }
+
+export interface dob{
+  month : number;
+  day : number;
+  year : number;
+}

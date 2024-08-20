@@ -4,7 +4,8 @@ import "./RegisterFormOne.css";
 
 import { ValidatedInput } from "../../../../components/ValidatedInput/ValidatedInput";
 
-import {validateName} from '../../../../services/Validators'
+import { validateName } from "../../../../services/Validators";
+import { RegisterDateInput } from "../RegisterDateInput/RegisterDateInput";
 
 interface FormOneState {
   firstName: string;
@@ -21,34 +22,39 @@ export const RegisterFormOne: React.FC = () => {
     dateOfBirth: "",
   });
 
-
   const updateUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStepOneState({...stepOneState, [e.target.name]: e.target.value})
+    setStepOneState({ ...stepOneState, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
-    console.log("state change",stepOneState)
-  }, [stepOneState])
-  
-
-
+    console.log("state change", stepOneState);
+  }, [stepOneState]);
 
   return (
     <div className="reg-step-one-container">
       <div className="reg-step-one-content">
-        <ValidatedInput name={"firstName"} label={"First"} errorMessage={"Whats your name?"} 
-        changeValue={updateUser} validator={validateName}
+        <ValidatedInput
+          name={"firstName"}
+          label={"First"}
+          errorMessage={"Whats your name?"}
+          changeValue={updateUser}
+          validator={validateName}
         />
-        </div>
-        <div className="reg-step-one-content">
-        <ValidatedInput name={"lastName"} label={"Last"} errorMessage={"Whats your name?"} 
-        changeValue={updateUser} validator={validateName}
+        <ValidatedInput
+          name={"lastName"}
+          label={"Last"}
+          errorMessage={"Whats your name?"}
+          changeValue={updateUser}
+          validator={validateName}
         />
-         </div>
-         <div className="reg-step-one-content">
-         <ValidatedInput name={"email"} label={"Email"} errorMessage={"Please enter a valid email"} 
-        changeValue={updateUser} validator={()=>true}
+        <ValidatedInput
+          name={"email"}
+          label={"Email"}
+          errorMessage={"Please enter a valid email"}
+          changeValue={updateUser}
+          validator={() => true}
         />
+        <RegisterDateInput />
       </div>
     </div>
   );

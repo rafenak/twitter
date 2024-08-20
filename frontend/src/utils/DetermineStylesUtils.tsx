@@ -73,3 +73,18 @@ export const determineValidatedStyles = (
   };
   return state;
 };
+
+export const determineValidatedSelectSylyes = (
+  active: boolean,
+  valid: boolean
+): string => {
+  if (!valid) {
+    return "error";
+  }
+
+  if (active) {
+    return "blue";
+  }
+
+  return "gray";
+};
