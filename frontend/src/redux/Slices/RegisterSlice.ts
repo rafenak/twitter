@@ -12,6 +12,7 @@ interface RegisterSliceState {
   emailValid: boolean;
   dob: Dob;
   dobValid: boolean;
+  step: number;
 }
 
 interface UpdatePayload {
@@ -34,6 +35,7 @@ const initialState: RegisterSliceState = {
     year: 0,
   },
   dobValid: false,
+  step: 1,
 };
 
 export const RegisterSlice = createSlice({
@@ -60,13 +62,25 @@ export const RegisterSlice = createSlice({
           [name]: value,
         };
       }
-      console.log('updating the global resgter ', state)
+      console.log("updating the global resgter ", state);
       return state;
+    },
+    incrementStep(state) {
+      state.step++;
+      return state;
+    },
+
+    decrementStep(state) {
+      if (state.step === 1 || state.step === 4 || state.step == 6) {
+        return state;
+      } else {
+        state.step--;
+        return state;
+      }
     },
   },
 });
 
-
-export const {updateRegister} = RegisterSlice.actions;
+export const { updateRegister,incrementStep,decrementStep } = RegisterSlice.actions;
 
 export default RegisterSlice.reducer;
