@@ -12,35 +12,15 @@ import { AppDisptach } from "../../../../redux/Store";
 import { incrementStep } from "../../../../redux/Slices/RegisterSlice";
 
 
-interface FormOneState {
-  firstName: string;
-  lastName: string;
-  email: string;
-  dateOfBirth: string;
-}
-
 export const RegisterFormOne: React.FC = () => {
-  // const [stepOneState, setStepOneState] = useState<FormOneState>({
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   dateOfBirth: "",
-  // });
-
   const registerState = useSelector((state: RootState) => state.register);
-  const dispatch:AppDisptach = useDispatch()
+  const dispatch: AppDisptach = useDispatch();
 
   const [buttonActive, setButtonActive] = useState<boolean>(false);
 
-  const nextPage =()=>{
-    dispatch(incrementStep())
-  }
-
-
-  // const updateUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setStepOneState({ ...stepOneState, [e.target.name]: e.target.value });
-  // };
-
+  const nextPage = () => {
+    dispatch(incrementStep());
+  };
   useEffect(() => {
     if (
       registerState.dobValid &&
@@ -57,37 +37,28 @@ export const RegisterFormOne: React.FC = () => {
   return (
     <div className="reg-step-one-container">
       <div className="reg-step-one-content">
-        <RegisterNameInputs firstName={registerState.firstName} lastName={registerState.lastName} />
-        {/* <ValidatedInput
-          name={"firstName"}
-          label={"First"}
-          errorMessage={"Whats your name?"}
-          changeValue={updateUser}
-          validator={validateName}
+        <h1 className="reg-step-one-header">Create your account</h1>
+        <RegisterNameInputs
+          firstName={registerState.firstName}
+          lastName={registerState.lastName}
         />
-        <ValidatedInput
-          name={"lastName"}
-          label={"Last"}
-          errorMessage={"Whats your name?"}
-          changeValue={updateUser}
-          validator={validateName}
-        /> 
-        <ValidatedInput
-          name={"email"}
-          label={"Email"}
-          errorMessage={"Please enter a valid email"}
-          changeValue={updateUser}
-          validator={() => true}
-        /> */}
-        <RegisterEmailInput email={registerState.email}/>
-        <RegisterDateInput date={registerState.dob}/>
+        <RegisterEmailInput email={registerState.email} />
+        <div className="reg-step-one-dob-disclaimer">
+          <p className="reg-step-one-dob-header">Date of Birth</p>
+          <span className="reg-step-one-dob-text">
+          This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.
+          </span>
+        </div>
+        <RegisterDateInput date={registerState.dob} />
       </div>
       <StyledNextButton
         disabled={!buttonActive}
         active={buttonActive}
         color={"black"}
         onClick={nextPage}
-      > Next </StyledNextButton>
+      >
+        Next
+      </StyledNextButton>
     </div>
   );
 };

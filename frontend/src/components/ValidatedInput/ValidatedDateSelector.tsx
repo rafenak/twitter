@@ -33,7 +33,6 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setValue(+e.target.value);
     console.log("Dispatch this change to reducer");
-    console.log("value ", e.target.value);
     dispatcher(name.toLowerCase(), +e.target.value);
   };
 
@@ -46,7 +45,6 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
       <StyledInputBox active={active} valid={valid}>
         <StyledInputLabel color={color} active={true} valid={valid}>
           {name}
-        </StyledInputLabel>
         <ExpandMoreRounded
           sx={{
             fontSize: 34,
@@ -56,8 +54,9 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
             top: "35%",
           }}
         />
+         </StyledInputLabel>
         <select
-          className="validated-input-value validated-date-selector"
+          className={"validated-input-value validated-date-selector"}
           onChange={changeValue}
           onFocus={toogleActive}
           onBlur={toogleActive}

@@ -62,7 +62,7 @@ export const RegisterSlice = createSlice({
           [name]: value,
         };
       }
-      console.log("updating the global resgter ", state);
+      console.log("updating the global register ", state);
       return state;
     },
     incrementStep(state) {
