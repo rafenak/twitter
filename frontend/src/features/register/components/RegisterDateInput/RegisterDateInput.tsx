@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { ValidatedDateSelector, } from "../../../../components/ValidatedInput/ValidatedDateSelector";
+import { ValidatedDateSelector, } from "../../../../components/validatedInput/ValidatedDateSelector";
 import { getMonths, getDays, getYears } from "../../utils/DateUtils";
 import { useDispatch,useSelector } from "react-redux";
 import {AppDisptach, RootState} from '../../../../redux/Store';
@@ -28,8 +28,8 @@ export const RegisterDateInput: React.FC = () => {
     let { month, day, year } = state.dob;
     if(day && month && year){
       setValid(validateDob({
-        day,
         month,
+        day, 
         year
       }));
 
@@ -38,7 +38,7 @@ export const RegisterDateInput: React.FC = () => {
     } 
 
     
-  }, [state.dob.day,state.dob.month,state.dob.year,state.dobValid,valid])
+  }, [state.dob.day, state.dob.month, state.dob.year, state.dobValid, valid])
 
 
   return (

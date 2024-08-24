@@ -1,4 +1,6 @@
+import { error } from "console";
 import { StyledInputProps, ValidatedInputState } from "./GlobalInterfaces";
+import { blue } from "@mui/material/colors";
 
 export const determineStyledInputBorder = (props: StyledInputProps): string => {
   let { active, valid, theme } = props;
@@ -83,6 +85,20 @@ export const determineValidatedSelectSylyes = (
   }
 
   if (active) {
+    return "blue";
+  }
+
+  return "gray";
+};
+
+export const determineValidatedTextLabel = (
+  active: boolean,
+  valid: boolean
+): string => {
+  if (!valid && active) {
+    return "error";
+  }
+  if (valid && active) {
     return "blue";
   }
 

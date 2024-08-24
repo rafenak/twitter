@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { StyledInputBox, StyledInputLabel } from "./StyledInput";
+import { determineValidatedTextLabel } from "../../utils/DetermineStylesUtils";
 
-export const ValidatedTextInput: React.FC = () => {
+interface ValidatedTextInputProps{
+  valid: boolean;
+  name:string;
+  label:string;
+  changeValue(e:React.ChangeEvent<HTMLInputElement>):void
+}
+
+export const ValidatedTextInput: React.FC<ValidatedTextInputProps> = ({
+  valid,name,label,changeValue
+}) => {
   const [value, setValue] = useState<string>("");
   const [borderActive, setBorderActive] = useState<boolean>(false);
   const [labelActive, setLabelActive] = useState<boolean>(false);
@@ -17,30 +27,32 @@ export const ValidatedTextInput: React.FC = () => {
   const update =(e:React.ChangeEvent<HTMLInputElement>):void =>{
         setValue(e.target.value);
         console.log('send the info back to dispact');
-        //changeValue(e);
+        changeValue(e);
   }
 
   useEffect(() => {
 
-    if(value){
+    if(value && !labelActive){
         setLabelActive(true)
     }
-  }, [value,borderActive,labelActive,color])
+
+    setColor(determineValidatedTextLabel(borderActive,valid));
+  }, [valid,value,borderActive,labelActive,color])
   
 
   return (
     <div className="validated-text-input">
-      <StyledInputBox active={borderActive} valid={true}>
-        <StyledInputLabel color={color} active={labelActive} valid={true}>
-          {"lable"}
+      <StyledInputBox active={borderActive} valid={valid}>
+        <StyledInputLabel color={color} active={labelActive} valid={valid}>
+          {label}
         </StyledInputLabel>
       </StyledInputBox>
       <input
-        className="validated-input-value"
-        name={"name"}
-        onFocus={() => {}}
-        onBlur={() => {}}
-        onChange={() => {}}
+        className="validated-text-input-value"
+        name={name}
+        onFocus={focus}
+        onBlur={focus}
+        onChange={update}
       ></input>
     </div>
   );
