@@ -5,7 +5,7 @@ import { AppDisptach, store } from "../../../../redux/Store";
 import { updateRegister } from "../../../../redux/Slices/RegisterSlice";
 import { validateName } from "../../../../services/Validators";
 
-import './RegisterNameInputs.css'
+import "./RegisterNameInputs.css";
 
 interface RigesterNameProps {
   firstName: string;
@@ -48,25 +48,39 @@ export const RegisterNameInputs: React.FC<RigesterNameProps> = ({
   return (
     <div className="register-name-input">
       <div className="register-name-content">
-      <ValidatedTextInput
-        valid={firstValid}
-        name={"firstName"}
-        label={"First"}
-        changeValue={updateName}
-        data={firstName}
-      />
-      {firstValid ? <></> : <span className="register-name-error">what's your first name?</span>}
+        <ValidatedTextInput
+          valid={firstValid}
+          name={"firstName"}
+          label={"First"}
+          changeValue={updateName}
+          data={firstName}
+          attributes={{
+            maxLength: 50,
+          }}
+        />
+        {firstValid ? (
+          <></>
+        ) : (
+          <span className="register-name-error">what's your first name?</span>
+        )}
       </div>
       <div className="register-name-content">
-      <ValidatedTextInput
-        valid={lastValid}
-        name={"lastName"}
-        label={"Last"}
-        changeValue={updateName}
-        data={lastName}
-      />
-      {lastValid ? <></> : <span className="register-name-error">what's your last name?</span>}
-    </div>
+        <ValidatedTextInput
+          valid={lastValid}
+          name={"lastName"}
+          label={"Last"}
+          changeValue={updateName}
+          data={lastName}
+          attributes={{
+            maxLength: 50,
+          }}
+        />
+        {lastValid ? (
+          <></>
+        ) : (
+          <span className="register-name-error">what's your last name?</span>
+        )}
+      </div>
     </div>
   );
 };
