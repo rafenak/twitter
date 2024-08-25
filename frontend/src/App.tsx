@@ -19,10 +19,13 @@ const theme:Theme = {
 };
 
 const GlobalStyle = createGlobalStyle`
-* {
-    font-family : 'IBM Plex Sans',sans-serif;
-    font-weight : 500;
-}
+  * {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 `;
 
 const App = () => {

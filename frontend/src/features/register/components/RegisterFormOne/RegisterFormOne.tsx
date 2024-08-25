@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./RegisterFormOne.css";
-// import { ValidatedInput } from "../../../../components/validatedInput/ValidatedInput"
-// import { validateName } from "../../../../services/Validators";
 import { RegisterNameInputs } from "../RegisterNameInputs/RegisterNameInputs";
 import { RegisterDateInput } from "../RegisterDateInput/RegisterDateInput";
 import { RegisterEmailInput } from "../RegisterEmailInput/RegisterEmailInput";
@@ -13,6 +10,7 @@ import {
   incrementStep,
   updateRegister,
 } from "../../../../redux/Slices/RegisterSlice";
+import "./RegisterFormOne.css";
 
 export const RegisterFormOne: React.FC = () => {
   const registerState = useSelector((state: RootState) => state.register);

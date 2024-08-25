@@ -1,18 +1,19 @@
+import { RegisterFormFour } from "../components/RegisterFormFour/RegisterFormFour";
 import { RegisterFormOne } from "../components/RegisterFormOne/RegisterFormOne";
 import { RegisterFormThree } from "../components/RegisterFormThree/RegisterFormThree";
 import { RegisterFormTwo } from "../components/RegisterFormTwo/RegisterFormTwo";
-
+import data from "../../../data/code.json";
 
 export const determineModalContent = (step: number): JSX.Element => {
   switch (step) {
     case 1:
-      return <RegisterFormOne/>
+      return <RegisterFormOne />;
     case 2:
-      return <RegisterFormTwo/>
+      return <RegisterFormTwo />;
     case 3:
-      return <RegisterFormThree/>
+      return <RegisterFormThree />;
     case 4:
-      return <span>Registration Step 4</span>;
+      return <RegisterFormFour />;
     case 5:
       return <span>Registration Step 5</span>;
     case 6:
@@ -21,3 +22,53 @@ export const determineModalContent = (step: number): JSX.Element => {
       return <></>;
   }
 };
+
+// export const countryCodeDropDown = (): JSX.Element[] => {
+//   let options = data
+//     .filter((country) => {
+//       if (country.code !== "US") {
+//         return country;
+//       }
+//     })
+//     .map((country) => {
+//       return (
+//         <option
+//           value={`${country.dial_code} ${country.name}`}
+//           key={country.code}
+//         >
+//           {`${country.dial_code} ${country.name}`}
+//         </option>
+//       );
+//     });
+
+//   options.unshift(
+//     <option value={"+1 United States"} key={"US"}>
+//       {"+1 United States"}
+//     </option>
+//   );
+
+//   return options;
+// };
+
+
+export const countryCodeDropDown = (): JSX.Element[] => {
+  let options = data
+    .filter((country) => country.code !== "US")
+    .map((country) => (
+      <option
+        value={`${country.dial_code} ${country.name}`}
+        key={country.code}
+      >
+        {`${country.dial_code} ${country.name}`}
+      </option>
+    ));
+
+  options.unshift(
+    <option value={"+1 United States"} key={"US"}>
+      {"+1 United States"}
+    </option>
+  );
+
+  return options;
+};
+
