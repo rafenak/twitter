@@ -1,6 +1,4 @@
-import { error } from "console";
 import { StyledInputProps, ValidatedInputState } from "./GlobalInterfaces";
-import { blue } from "@mui/material/colors";
 
 export const determineStyledInputBorder = (props: StyledInputProps): string => {
   let { active, valid, theme } = props;
