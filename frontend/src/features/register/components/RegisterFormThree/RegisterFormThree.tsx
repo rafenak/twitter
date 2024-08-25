@@ -1,14 +1,31 @@
 import React from "react";
 import { ValidatedDisplay } from "../../../../components/validatedInput/ValidatedDisplay";
-import { RootState } from "../../../../redux/Store";
-import { useSelector } from "react-redux";
+import { RootState, AppDisptach } from "../../../../redux/Store";
+import { useSelector, useDispatch } from "react-redux";
 import { stringifyDate } from "../../utils/DateUtils";
 import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 
-import './RegisterFormThree.css'
+import "./RegisterFormThree.css";
+import { registerUser } from "../../../../redux/Slices/RegisterSlice";
 
 export const RegisterFormThree: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
+  const dispatch: AppDisptach = useDispatch();
+
+  const pad = (num: number): string => num.toString().padStart(2, '0');
+
+  const submitUser = () => {
+    const user = {
+      firstName: state.firstName,
+      lastName: state.lastName,
+      email: state.email,
+      dob: `${state.dob.year}-${pad(state.dob.month)}-${state.dob.day}`,
+    };
+
+    console.log("We are attempting to register the user");
+
+    dispatch(registerUser(user));
+  };
 
   return (
     <div className="reg-step-three-container">
@@ -22,6 +39,14 @@ export const RegisterFormThree: React.FC = () => {
         </div>
         <div className="reg-step-three-value">
           <ValidatedDisplay label={"Email"} value={state.email} />
+          {state.error ? (
+            <p className="reg-step-three-error">
+              The email you specified is in use, please provided a different
+              once
+            </p>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="reg-step-three-value">
           <ValidatedDisplay
@@ -42,7 +67,7 @@ export const RegisterFormThree: React.FC = () => {
           choose otherwise <span className="reg-step-three-link">here</span>.
         </p>
       </div>
-      <StyledNextButton onClick={()=> alert("singing up!")} color={"blue"} active={true}>
+      <StyledNextButton onClick={submitUser} color={"blue"} active={true}>
         Sign Up
       </StyledNextButton>
     </div>

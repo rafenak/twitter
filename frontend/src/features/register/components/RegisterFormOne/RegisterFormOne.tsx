@@ -9,8 +9,10 @@ import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/Store";
 import { AppDisptach } from "../../../../redux/Store";
-import { incrementStep } from "../../../../redux/Slices/RegisterSlice";
-
+import {
+  incrementStep,
+  updateRegister,
+} from "../../../../redux/Slices/RegisterSlice";
 
 export const RegisterFormOne: React.FC = () => {
   const registerState = useSelector((state: RootState) => state.register);
@@ -19,6 +21,12 @@ export const RegisterFormOne: React.FC = () => {
   const [buttonActive, setButtonActive] = useState<boolean>(false);
 
   const nextPage = () => {
+    dispatch(
+      updateRegister({
+        name: "name",
+        value: false,
+      })
+    );
     dispatch(incrementStep());
   };
   useEffect(() => {
@@ -46,7 +54,8 @@ export const RegisterFormOne: React.FC = () => {
         <div className="reg-step-one-dob-disclaimer">
           <p className="reg-step-one-dob-header">Date of Birth</p>
           <span className="reg-step-one-dob-text">
-          This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.
+            This will not be shown publicly. Confirm your own age, even if this
+            account is for a business, a pet, or something else.
           </span>
         </div>
         <RegisterDateInput date={registerState.dob} />

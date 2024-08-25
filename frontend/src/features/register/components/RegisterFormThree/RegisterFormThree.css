@@ -42,3 +42,12 @@
 .reg-step-three-link:hover {
   text-decoration: underline;
 }
+
+
+.reg-step-three-error{
+  color: red;
+  font-size: 13px;
+  font-weight: 300;
+  margin-left: 10px;
+  margin-top: 5px;
+}

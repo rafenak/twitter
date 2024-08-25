@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dob } from "../../utils/GlobalInterfaces";
+import axios from "axios";
 
 interface RegisterSliceState {
   loading: boolean;
@@ -20,6 +21,13 @@ interface UpdatePayload {
   value: string | number | boolean;
 }
 
+interface RegisterUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  dob: string;
+}
+
 const initialState: RegisterSliceState = {
   loading: false,
   error: false,
@@ -37,6 +45,18 @@ const initialState: RegisterSliceState = {
   dobValid: false,
   step: 1,
 };
+
+export const registerUser = createAsyncThunk(
+  "register/register",
+  async (user: RegisterUser, thuckAPI) => {
+    try {
+      const req = await axios.post("http://localhost:8000/auth/register", user);
+      return await req.data;
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
 
 export const RegisterSlice = createSlice({
   name: "register",
@@ -71,7 +91,7 @@ export const RegisterSlice = createSlice({
     },
 
     decrementStep(state) {
-      if (state.step === 1 || state.step === 4 || state.step == 6) {
+      if (state.step === 1 || state.step === 4 || state.step === 6) {
         return state;
       } else {
         state.step--;
@@ -79,8 +99,26 @@ export const RegisterSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(registerUser.pending, (state, action) => {
+      state.loading = true;
+      return state;
+    });
+    builder.addCase(registerUser.fulfilled,(state,action)=>{
+      state.loading = false;
+      state.error = false;
+      state.step ++;
+      return state;
+    });
+    builder.addCase(registerUser.rejected,(state,action)=>{
+      state.error = true;
+      state.loading = false;
+      return state;
+    })
+  },
 });
 
-export const { updateRegister,incrementStep,decrementStep } = RegisterSlice.actions;
+export const { updateRegister, incrementStep, decrementStep } =
+  RegisterSlice.actions;
 
 export default RegisterSlice.reducer;
