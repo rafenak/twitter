@@ -1,3 +1,5 @@
+import { Dob } from "../../../utils/GlobalInterfaces";
+
 const MONTHS: string[] = [
   "",
   "January",
@@ -51,8 +53,16 @@ export const getYears = (): JSX.Element[] => {
     if (i === 2025) {
       options.push(<option value={0} key={i}></option>);
     } else {
-      options.push(<option value={i} key={i}>{i}</option>);
+      options.push(
+        <option value={i} key={i}>
+          {i}
+        </option>
+      );
     }
   }
   return options;
+};
+
+export const stringifyDate = (date: Dob): string => {
+  return `${MONTHS[date.month].substring(0, 3)} ${date.day}, ${date.year}`;
 };
