@@ -4,6 +4,7 @@ import {
   StyledInputBox,
   StyledInputLabel,
 } from "../ValidatedInput/StyledInput";
+import '../ValidatedInput/ValidatedInput.css'
 
 interface DropDownProps {
   content(): JSX.Element[];
@@ -47,7 +48,7 @@ export const DropDown: React.FC<DropDownProps> = ({
                 top : '35%'
             }} />
         </StyledInputLabel>
-        <select onChange={changeValue} onFocus={toggleSelect} onBlur={toggleSelect} value={data ? data :defaultValue}>
+        <select className="validated-input-value validated-date-selector" onChange={changeValue} onFocus={toggleSelect} onBlur={toggleSelect} value={data ? data :defaultValue}>
             {content()}
         </select>
       </StyledInputBox>

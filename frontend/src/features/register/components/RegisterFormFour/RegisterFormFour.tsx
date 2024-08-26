@@ -8,6 +8,7 @@ import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserPhone } from "../../../../redux/Slices/RegisterSlice";
+import './RegsiterFormFour.css'
 
 export const RegisterFormFour: React.FC = () => {
 
@@ -46,8 +47,8 @@ export const RegisterFormFour: React.FC = () => {
     <div className="reg-step-four-container">
       <div className="reg-step-four-content">
         <h1>Add a phone number</h1>
-        <p>
-          Enter the phone number you would like to asscaite with your Social
+        <p className="reg-step-four-subhead">
+          Enter the phone number you would like to associate with your Social
           Media account. You won't get verification code sent here.
         </p>
         <div className="reg-step-four-inputs">
@@ -86,10 +87,10 @@ export const RegisterFormFour: React.FC = () => {
             </p>
             <Checkbox />
           </div>
-          <StyledNextButton disabled={(phoneNumber && validateNumber)? false : true}
+      </div>
+      <StyledNextButton disabled={(phoneNumber && validateNumber)? false : true}
           color={"black"} active={(phoneNumber && validateNumber)? true : false}
           onClick={sendPhoneNumber}>Update Number</StyledNextButton>
-      </div>
     </div>
   );
 };
