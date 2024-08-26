@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ValidatedTextInput } from "../../../../components/validatedInput/ValidatedTextInput";
 import { useDispatch } from "react-redux";
 import { AppDisptach } from "../../../../redux/Store";
 import { updateRegister } from "../../../../redux/Slices/RegisterSlice";
 import { validateEmail } from "../../../../services/Validators";
 import './RegsiterEmailInput.css'
+import {ValidatedTextInput} from '../../../../components/ValidatedInput/ValidatedTextInput'
 
 interface RegisterEmailInputPros{
     email:string;

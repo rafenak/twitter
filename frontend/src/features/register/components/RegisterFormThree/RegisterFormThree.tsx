@@ -1,12 +1,11 @@
 import React from "react";
-import { ValidatedDisplay } from "../../../../components/validatedInput/ValidatedDisplay";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
 import { stringifyDate } from "../../utils/DateUtils";
 import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
-
 import "./RegisterFormThree.css";
 import { registerUser } from "../../../../redux/Slices/RegisterSlice";
+import { ValidatedDisplay } from "../../../../components/ValidatedInput/ValidatedDisplay";
 
 export const RegisterFormThree: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);

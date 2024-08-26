@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StyledInputBox, StyledInputLabel } from "./StyledInput";
 import { determineValidatedTextLabel } from "../../utils/DetermineStylesUtils";
 import "./ValidatedInput.css";
+import {StyledInputBox,StyledInputLabel} from './StyledInput'
+
 
 interface ValidatedTextInputProps {
   valid: boolean;

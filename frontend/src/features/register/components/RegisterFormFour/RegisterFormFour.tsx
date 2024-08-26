@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "../../../../components/Checkbox/Checkbox";
 import { DropDown } from "../../../../components/DropDown/DropDown";
-import { ValidatedTextInput } from "../../../../components/validatedInput/ValidatedTextInput";
 import { countryCodeDropDown } from "../../utils/RegisterModalUtils";
+import { ValidatedTextInput } from '../../../../components/ValidatedInput/ValidatedTextInput'
+
 
 export const RegisterFormFour: React.FC = () => {
   const [phoneCode, setPhoneCode] = useState<string>("+1");
