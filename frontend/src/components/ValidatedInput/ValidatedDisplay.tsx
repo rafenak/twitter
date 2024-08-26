@@ -46,6 +46,7 @@ export const ValidatedDisplay: React.FC<ValidatedDisplayProps> = ({
           className="validated-input-value"
           onFocus={focus}
           value={value}
+          readOnly
         />
       </StyledInputBox>
     </div>

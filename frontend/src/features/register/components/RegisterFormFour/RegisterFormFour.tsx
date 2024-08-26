@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "../../../../components/Checkbox/Checkbox";
 import { DropDown } from "../../../../components/DropDown/DropDown";
+import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
 import { countryCodeDropDown } from "../../utils/RegisterModalUtils";
-import { ValidatedTextInput } from '../../../../components/ValidatedInput/ValidatedTextInput'
-
 
 export const RegisterFormFour: React.FC = () => {
   const [phoneCode, setPhoneCode] = useState<string>("+1");
@@ -42,27 +41,27 @@ export const RegisterFormFour: React.FC = () => {
             label={"Your Phone Number"}
             changeValue={changePhoneNumber}
           />
-        </div>
-        <div className="reg-step-four-check-group">
-          <p>
-            Let people who have phone number find and contact with you on Social
-            Media.
-            <span className="reg-step-four-link"> Learn More</span>.
+          <div className="reg-step-four-check-group">
+            <p>
+              Let people who have phone number find and contact with you on
+              Social Media.
+              <span className="reg-step-four-link"> Learn More</span>.
+            </p>
             <Checkbox />
-          </p>
-        </div>
-        <div className="reg-step-four-check-group">
-          <p>
-            Let Social Media use your phone number to personalize our services,
-            including ads (if permitted by your Ads perferences). If you don't
-            enable this, Social Media will still use your phone number for
-            purpose including account security, spam, farud, and abuse
-            prevention.
-            <span className="reg-step-four-link">
-              See our Privacy Policy for more information.
-            </span>
-          </p>
-          <Checkbox />
+          </div>
+          <div className="reg-step-four-check-group">
+            <p>
+              Let Social Media use your phone number to personalize our
+              services, including ads (if permitted by your Ads perferences). If
+              you don't enable this, Social Media will still use your phone
+              number for purpose including account security, spam, farud, and
+              abuse prevention.
+              <span className="reg-step-four-link">
+                See our Privacy Policy for more information.
+              </span>
+            </p>
+            <Checkbox />
+          </div>
         </div>
       </div>
     </div>

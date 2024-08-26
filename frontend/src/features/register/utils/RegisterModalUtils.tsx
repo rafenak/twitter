@@ -1,8 +1,8 @@
-import { RegisterFormFour } from "../components/RegisterFormFour/RegisterFormFour";
 import { RegisterFormOne } from "../components/RegisterFormOne/RegisterFormOne";
-import { RegisterFormThree } from "../components/RegisterFormThree/RegisterFormThree";
 import { RegisterFormTwo } from "../components/RegisterFormTwo/RegisterFormTwo";
+import { RegisterFormThree } from "../components/RegisterFormThree/RegisterFormThree";
 import data from "../../../data/code.json";
+import { RegisterFormFour } from "../components/RegisterFormFour/RegisterFormFour";
 
 export const determineModalContent = (step: number): JSX.Element => {
   switch (step) {
@@ -13,7 +13,7 @@ export const determineModalContent = (step: number): JSX.Element => {
     case 3:
       return <RegisterFormThree />;
     case 4:
-      return   <RegisterFormFour />;
+      return <RegisterFormFour />;
     case 5:
       return <span>Registration Step 5</span>;
     case 6:
@@ -50,15 +50,11 @@ export const determineModalContent = (step: number): JSX.Element => {
 //   return options;
 // };
 
-
 export const countryCodeDropDown = (): JSX.Element[] => {
   let options = data
     .filter((country) => country.code !== "US")
     .map((country) => (
-      <option
-        value={`${country.dial_code} ${country.name}`}
-        key={country.code}
-      >
+      <option value={`${country.dial_code} ${country.name}`} key={country.code}>
         {`${country.dial_code} ${country.name}`}
       </option>
     ));
@@ -71,4 +67,3 @@ export const countryCodeDropDown = (): JSX.Element[] => {
 
   return options;
 };
-

@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { Dob } from "../utils/GlobalInterfaces";
 
 export const validateName = (value: string): boolean => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "../../../../components/modal/Modal";
 import "./RegisterModal.css";
 import { RegisterStepCounter } from "../RegisterStepCounter/RegisterStepCounter";
