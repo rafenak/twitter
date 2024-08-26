@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dob } from "../../utils/GlobalInterfaces";
 import axios from "axios";
+import { error } from "console";
 
 interface RegisterSliceState {
   loading: boolean;
@@ -14,6 +15,7 @@ interface RegisterSliceState {
   dob: Dob;
   dobValid: boolean;
   step: number;
+  username : string
 }
 
 interface UpdatePayload {
@@ -26,6 +28,11 @@ interface RegisterUser {
   lastName: string;
   email: string;
   dob: string;
+}
+
+interface UpdatePhone {
+  username: string;
+  phone: string;
 }
 
 const initialState: RegisterSliceState = {
@@ -44,14 +51,36 @@ const initialState: RegisterSliceState = {
   },
   dobValid: false,
   step: 1,
+  username: ""
 };
 
+/**
+ *  Send Register Request
+ */
 export const registerUser = createAsyncThunk(
   "register/register",
   async (user: RegisterUser, thuckAPI) => {
     try {
       const req = await axios.post("http://localhost:8000/auth/register", user);
       return await req.data;
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
+/**
+ *    Update Register Form with phone number
+ */
+
+export const updateUserPhone = createAsyncThunk(
+  "register/phone",
+  async (body: UpdatePhone, thuckAPI) => {
+    try {
+      const req = await axios.put(
+        "http://localhost:8000/auth/update/phone",
+        body
+      );
     } catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
@@ -104,17 +133,53 @@ export const RegisterSlice = createSlice({
       state.loading = true;
       return state;
     });
-    builder.addCase(registerUser.fulfilled,(state,action)=>{
-      state.loading = false;
-      state.error = false;
-      state.step ++;
+
+    builder.addCase(updateUserPhone.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
       return state;
     });
-    builder.addCase(registerUser.rejected,(state,action)=>{
+
+    builder.addCase(registerUser.fulfilled, (state, action) => {
+      let nextStep = state.step + 1;
+      state={
+        ...state,
+        username:action.payload.username,
+        loading: false,
+        error: false,
+        step: nextStep
+
+      }
+      return state;
+    });
+
+    builder.addCase(updateUserPhone.fulfilled, (state, action) => {
+      let nextStep = state.step + 1;
+      state = {
+        ...state,
+        loading: false,
+        error: false,
+        step: nextStep,
+      };
+      return state;
+    });
+
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.error = true;
       state.loading = false;
       return state;
-    })
+    });
+
+    builder.addCase(updateUserPhone.rejected, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: true,
+      };
+      return state;
+    });
   },
 });
 

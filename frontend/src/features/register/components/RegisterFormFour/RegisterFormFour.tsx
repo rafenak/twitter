@@ -3,10 +3,21 @@ import { Checkbox } from "../../../../components/Checkbox/Checkbox";
 import { DropDown } from "../../../../components/DropDown/DropDown";
 import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
 import { countryCodeDropDown } from "../../utils/RegisterModalUtils";
+import { validatePhone } from "../../../../services/Validators";
+import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
+import { RootState, AppDisptach } from "../../../../redux/Store";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserPhone } from "../../../../redux/Slices/RegisterSlice";
 
 export const RegisterFormFour: React.FC = () => {
+
+  const state = useSelector((state:RootState)=> state.register);
+
   const [phoneCode, setPhoneCode] = useState<string>("+1");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [validateNumber,setValidateNumber] = useState<boolean>(true);
+
+  const dispatch:AppDisptach = useDispatch();
 
   const changeCode = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPhoneCode(e.target.value.split(" ")[0]);
@@ -16,8 +27,19 @@ export const RegisterFormFour: React.FC = () => {
     setPhoneNumber(e.target.value);
   };
 
+  const sendPhoneNumber=() =>{
+    dispatch(updateUserPhone({
+        username:state.username,
+        phone: phoneNumber
+    }))
+  }
+
   useEffect(() => {
     console.log(phoneCode, phoneNumber);
+
+    if(phoneNumber){
+        setValidateNumber(validatePhone(phoneNumber));
+    }
   }, [phoneCode, phoneNumber]);
 
   return (
@@ -41,6 +63,8 @@ export const RegisterFormFour: React.FC = () => {
             label={"Your Phone Number"}
             changeValue={changePhoneNumber}
           />
+          {validateNumber ? <></> : <p className="reg-step-four-invalid">Please enter a valid 10 digit number</p>}
+          </div>
           <div className="reg-step-four-check-group">
             <p>
               Let people who have phone number find and contact with you on
@@ -62,7 +86,9 @@ export const RegisterFormFour: React.FC = () => {
             </p>
             <Checkbox />
           </div>
-        </div>
+          <StyledNextButton disabled={(phoneNumber && validateNumber)? false : true}
+          color={"black"} active={(phoneNumber && validateNumber)? true : false}
+          onClick={sendPhoneNumber}>Update Number</StyledNextButton>
       </div>
     </div>
   );

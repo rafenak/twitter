@@ -19,11 +19,14 @@ export const DropDown: React.FC<DropDownProps> = ({
   defaultValue,
 }) => {
   const [active, setActive] = useState<boolean>(false);
+  const [data,setData] = useState<string>("");
+
   const toggleSelect = () => {
     setActive(!active);
   };
 
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setData(e.target.value)
     change(e);
   };
 
@@ -44,7 +47,7 @@ export const DropDown: React.FC<DropDownProps> = ({
                 top : '35%'
             }} />
         </StyledInputLabel>
-        <select onChange={changeValue} onFocus={toggleSelect} onBlur={toggleSelect} value={defaultValue}>
+        <select onChange={changeValue} onFocus={toggleSelect} onBlur={toggleSelect} value={data ? data :defaultValue}>
             {content()}
         </select>
       </StyledInputBox>

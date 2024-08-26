@@ -32,7 +32,7 @@ const checkAge = (dob: Dob): boolean => {
 
   let today = new Date();
   let todaysYear = today.getFullYear();
-  let todaysMonth = today.getMonth()+1;
+  let todaysMonth = today.getMonth() + 1;
   let todaysDay = today.getDate();
   if (todaysYear - year > 13) {
     return true;
@@ -95,4 +95,9 @@ export const validateEmail = (value: string): boolean => {
   } else {
     return true;
   }
+};
+
+export const validatePhone = (phone: string): boolean => {
+  let value = phone.replace(/[^0-9]/ig, "");
+  return value.length === 10;
 };

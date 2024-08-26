@@ -18,7 +18,7 @@ export const RegisterFormThree: React.FC = () => {
       firstName: state.firstName,
       lastName: state.lastName,
       email: state.email,
-      dob: `${state.dob.year}-${pad(state.dob.month)}-${state.dob.day}`,
+      dob: `${state.dob.year}-${pad(state.dob.month)}-${pad(state.dob.day)}`,
     };
 
     console.log("We are attempting to register the user");
