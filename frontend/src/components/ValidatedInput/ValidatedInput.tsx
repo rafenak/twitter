@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-
-import { StyledInputBox, StyledInputLabel } from "./StyledInput";
-
 import "./ValidatedInput.css";
-
 import { determineValidatedStyles } from "../../utils/DetermineStylesUtils";
-
 import { ValidatedInputState, } from "../../utils/GlobalInterfaces";
+import { StyledInputBox,StyledInputLabel } from "./StyledInput";
+
 
 
 

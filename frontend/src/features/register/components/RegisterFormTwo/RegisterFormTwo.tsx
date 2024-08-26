@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { incrementStep } from "../../../../redux/Slices/RegisterSlice";
 import { AppDisptach } from "../../../../redux/Store";
 import { Checkbox } from "../../../../components/Checkbox/Checkbox";
-import { StyledNextButton} from "../RegisterNextButton/RegisterNextButton";
 import "./RegisterFormTwo.css";
+import {StyledNextButton} from '../RegisterNextButton/RegisterNextButton'
 
 
 export const RegisterFormTwo: React.FC = () => {

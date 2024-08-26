@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import {
   StyledInputBox,
   StyledInputLabel,
-} from "../validatedInput/StyledInput";
+} from "../ValidatedInput/StyledInput";
 
 interface DropDownProps {
   content(): JSX.Element[];

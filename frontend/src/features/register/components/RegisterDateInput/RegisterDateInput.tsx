@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ValidatedDateSelector } from "../../../../components/validatedInput/ValidatedDateSelector";
 import { getMonths, getDays, getYears } from "../../utils/DateUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import { updateRegister } from "../../../../redux/Slices/RegisterSlice";
 import { validateDob } from "../../../../services/Validators";
 import { Dob } from "../../../../utils/GlobalInterfaces";
-
 import './RegisterDateInput.css'
+import { ValidatedDateSelector } from "../../../../components/ValidatedInput/ValidatedDateSelector";
 
 interface RegisterDateInputProps {
   date: Dob;
