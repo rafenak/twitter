@@ -53,7 +53,7 @@ export const RegisterFormThree: React.FC = () => {
             value={stringifyDate(state.dob)}
           />
         </div>
-        <p className="reg-step-three-policy">
+        {/* <p className="reg-step-three-policy">
           By signing up are agree{" "}
           <span className="reg-step-three-link">Terms and Services</span> and{" "}
           <span className="reg-step-three-link">Privacy Policy</span>, including{" "}
@@ -64,9 +64,9 @@ export const RegisterFormThree: React.FC = () => {
           <span className="reg-step-three-link">Learn More</span>. Others will{" "}
           be able to find you by email or phone number, when provided unless you{" "}
           choose otherwise <span className="reg-step-three-link">here</span>.
-        </p>
+        </p> */}
       </div>
-      <StyledNextButton onClick={submitUser} color={"blue"} active={true}>
+      <StyledNextButton onClick={submitUser} color={"black"} active={true}>
         Sign Up
       </StyledNextButton>
     </div>

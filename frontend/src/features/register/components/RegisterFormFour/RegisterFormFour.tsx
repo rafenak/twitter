@@ -7,7 +7,7 @@ import { validatePhone } from "../../../../services/Validators";
 import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserPhone } from "../../../../redux/Slices/RegisterSlice";
+import { updateUserPhone,updateRegister } from "../../../../redux/Slices/RegisterSlice";
 import './RegsiterFormFour.css'
 
 export const RegisterFormFour: React.FC = () => {
@@ -26,6 +26,10 @@ export const RegisterFormFour: React.FC = () => {
 
   const changePhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhoneNumber(e.target.value);
+    dispatch(updateRegister({
+      name:"phoneNumber",
+      value:e.target.value
+    }))
   };
 
   const sendPhoneNumber=() =>{
@@ -74,7 +78,7 @@ export const RegisterFormFour: React.FC = () => {
             </p>
             <Checkbox />
           </div>
-          <div className="reg-step-four-check-group">
+          {/* <div className="reg-step-four-check-group">
             <p>
               Let Social Media use your phone number to personalize our
               services, including ads (if permitted by your Ads perferences). If
@@ -86,7 +90,7 @@ export const RegisterFormFour: React.FC = () => {
               </span>
             </p>
             <Checkbox />
-          </div>
+          </div> */}
       </div>
       <StyledNextButton disabled={(phoneNumber && validateNumber)? false : true}
           color={"black"} active={(phoneNumber && validateNumber)? true : false}

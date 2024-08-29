@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dob } from "../../utils/GlobalInterfaces";
 import axios from "axios";
-import { error } from "console";
 
 interface RegisterSliceState {
   loading: boolean;
@@ -15,7 +14,8 @@ interface RegisterSliceState {
   dob: Dob;
   dobValid: boolean;
   step: number;
-  username : string
+  username: string;
+  phoneNumber: string;
 }
 
 interface UpdatePayload {
@@ -51,8 +51,14 @@ const initialState: RegisterSliceState = {
   },
   dobValid: false,
   step: 1,
-  username: ""
+  username: "",
+  phoneNumber: ""
 };
+
+interface VerifyCode{
+  username:string;
+  code:string;
+}
 
 /**
  *  Send Register Request
@@ -81,11 +87,51 @@ export const updateUserPhone = createAsyncThunk(
         "http://localhost:8000/auth/update/phone",
         body
       );
+      const email = await axios.post("http://localhost:8000/auth/email/code", {
+        username: body.username,
+      });
     } catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
   }
 );
+
+/**
+ * Resend email
+ */
+
+export const resendEmail = createAsyncThunk(
+  "register/resend",
+  async (username: string, thuckAPI) => {
+    try {
+      const req = await axios.post("http://localhost:8000/auth/email/code", {
+        username,
+      });
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
+/**
+ * Verify verificaton Code
+ */
+export const sendVerification = createAsyncThunk(
+  "register/verify",
+  async (body:VerifyCode,thuckAPI)=>{
+    try{
+      const req = await axios.post('http://localhost:8000/auth/email/verify',{
+        username:body.username,
+        code: body.code
+      })
+      return req.data
+
+    }
+    catch(e){
+      return thuckAPI.rejectWithValue(e)
+    }
+  }
+)
 
 export const RegisterSlice = createSlice({
   name: "register",
@@ -142,20 +188,56 @@ export const RegisterSlice = createSlice({
       return state;
     });
 
+    builder.addCase(resendEmail.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
+      return state;
+    });
+
+    builder.addCase(sendVerification.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
+      return state;
+    });
+
+
+
     builder.addCase(registerUser.fulfilled, (state, action) => {
       let nextStep = state.step + 1;
-      state={
+      state = {
         ...state,
-        username:action.payload.username,
+        username: action.payload.username,
         loading: false,
         error: false,
-        step: nextStep
-
-      }
+        step: nextStep,
+      };
       return state;
     });
 
     builder.addCase(updateUserPhone.fulfilled, (state, action) => {
+      let nextStep = state.step + 1;
+      state = {
+        ...state,
+        loading: false,
+        error: false,
+        step: nextStep,
+      };
+      return state;
+    });
+    builder.addCase(resendEmail.fulfilled, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: false,
+      };
+      return state;
+    });
+
+    builder.addCase(sendVerification.fulfilled, (state, action) => {
       let nextStep = state.step + 1;
       state = {
         ...state,
@@ -173,6 +255,22 @@ export const RegisterSlice = createSlice({
     });
 
     builder.addCase(updateUserPhone.rejected, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: true,
+      };
+      return state;
+    });
+    builder.addCase(resendEmail.rejected, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: true,
+      };
+      return state;
+    });
+    builder.addCase(sendVerification.rejected, (state, action) => {
       state = {
         ...state,
         loading: false,
