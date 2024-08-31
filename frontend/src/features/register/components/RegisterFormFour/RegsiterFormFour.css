@@ -22,7 +22,7 @@ p {
 }
 
 .reg-step-four-subhead {
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 
@@ -35,7 +35,7 @@ p {
 }
 
 .reg-step-four-inputs {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .reg-step-four-invalid {
@@ -52,7 +52,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  /* margin-bottom: 10px; */
+  margin-bottom: 5px;
   /* margin-top: 2px; */
 }
 
@@ -67,6 +67,6 @@ p {
   text-decoration: underline;
 }
 
-.reg-step-four-check-group > p {
+/* .reg-step-four-check-group > p {
   margin-right: 20px;
-}
+} */

@@ -7,6 +7,7 @@ import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
 import "./RegisterFormSix.css";
 import { updateUserPassword } from "../../../../redux/Slices/RegisterSlice";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterFormSix: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
@@ -16,6 +17,8 @@ export const RegisterFormSix: React.FC = () => {
   const [active, setActive] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
 
+  const navigate = useNavigate()
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -24,13 +27,17 @@ export const RegisterFormSix: React.FC = () => {
     setActive(!active);
   };
 
-  const sendPassword = () => {
-    dispatch(
+  const sendPassword = async () => {
+    await dispatch(
       updateUserPassword({
         username: state.username,
         password: password,
       })
     );
+
+    console.log('naviagte to home');
+    navigate('/home')
+
   };
 
   return (
@@ -53,13 +60,13 @@ export const RegisterFormSix: React.FC = () => {
             {active ? (
               <VisibilityOffOutlinedIcon
                 sx={{
-                  fontSize: "24px",
+                  fontSize: "20px",
                 }}
               />
             ) : (
               <VisibilityOutlinedIcon
                 sx={{
-                  fontSize: "24px",
+                  fontSize: "20px",
                 }}
               />
             )}
