@@ -5,11 +5,17 @@ import com.twitter.exceptions.EmailFailedToSendException;
 import com.twitter.exceptions.IncorrectVerificationCodeException;
 import com.twitter.exceptions.UserDoesNotExistException;
 import com.twitter.models.AppUser;
+import com.twitter.models.LoginResponse;
 import com.twitter.request.RegistrationRequest;
+import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -21,6 +27,8 @@ import java.util.LinkedHashMap;
 public class AuthenticationController {
 
     private final UserService userService;
+    private final TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
 
     @ExceptionHandler({EmailAlreadyTakenException.class})
     public ResponseEntity<String> handleEmailTaken() {
@@ -58,10 +66,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/email/code")
-    public ResponseEntity<String> createEmailVerification(@RequestBody LinkedHashMap<String, String> body){
+    public ResponseEntity<String> createEmailVerification(@RequestBody LinkedHashMap<String, String> body) {
         userService.generateEmailVerification(body.get("username"));
 
-                return new ResponseEntity<String>("Verification code generated, email sent",HttpStatus.OK);
+        return new ResponseEntity<String>("Verification code generated, email sent", HttpStatus.OK);
     }
 
     @ExceptionHandler({IncorrectVerificationCodeException.class})
@@ -71,22 +79,35 @@ public class AuthenticationController {
     }
 
     @PostMapping("/email/verify")
-    public AppUser verifyEmail(@RequestBody LinkedHashMap<String,String>  body){
-        Long code =  Long.parseLong(body.get("code"));
+    public AppUser verifyEmail(@RequestBody LinkedHashMap<String, String> body) {
+        Long code = Long.parseLong(body.get("code"));
         String username = body.get("username");
 
-        return  userService.verifyEmail(username,code);
+        return userService.verifyEmail(username, code);
     }
 
     @PutMapping("/update/password")
-    public AppUser updatePassword(@RequestBody LinkedHashMap<String,String>  body){
+    public AppUser updatePassword(@RequestBody LinkedHashMap<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
 
-        return  userService.setPassword(username,password);
+        return userService.setPassword(username, password);
     }
 
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) {
+        String username = body.get("username");
+        String password = body.get("password");
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username,password));
 
-
+            String token = tokenService.generateToken(authentication);
+            return  new LoginResponse(userService.getUserByName(username),token);
+        }
+        catch (AuthenticationException e){
+            return new LoginResponse(null,"");
+        }
+    }
 
 }

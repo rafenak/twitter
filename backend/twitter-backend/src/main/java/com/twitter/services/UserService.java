@@ -6,41 +6,43 @@ import com.twitter.exceptions.IncorrectVerificationCodeException;
 import com.twitter.exceptions.UserDoesNotExistException;
 import com.twitter.models.AppUser;
 import com.twitter.models.Role;
-import com.twitter.request.RegistrationRequest;
 import com.twitter.repositories.RoleRepository;
 import com.twitter.repositories.UserRepository;
+import com.twitter.request.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
-
-    private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
-
-    private final MailService mailService;
-
-    private final PasswordEncoder passwordEncoder;
+public class UserService implements UserDetailsService {
 
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final int NUMBER_LENGTH = 9; // Length of the number part
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
-
-    public  AppUser getUserByName(String username){
-      return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+    public AppUser getUserByName(String username) {
+        return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
     }
 
-    public  AppUser updateUser(AppUser user){
+    public AppUser updateUser(AppUser user) {
         try {
             return userRepository.save(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new EmailAlreadyTakenException();
         }
     }
@@ -55,7 +57,7 @@ public class UserService {
         user.setDateOfBirth(ro.getDob());
 
         String baseName = user.getFirstName() + user.getLastName();
-        String username="";
+        String username = "";
         Set<String> attemptedUsernames = new HashSet<>();
 
         do {
@@ -75,26 +77,26 @@ public class UserService {
 //        }
         user.setUsername(username);
 
-        Set<Role> roles  = user.getAuthorities();
+        Set<Role> roles = user.getAuthorities();
         roles.add(roleRepository.findByAuthority("USER").get());
         user.setAuthorities(roles);
-        try{
+        try {
             return userRepository.save(user);
-        }catch (Exception e){
-            throw  new EmailAlreadyTakenException();
+        } catch (Exception e) {
+            throw new EmailAlreadyTakenException();
         }
 
     }
 
     public void generateEmailVerification(String username) {
 
-        AppUser user =  userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+        AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
 
         user.setVerification(generateVerificationNumber());
         try {
             mailService.sendEmail(user.getEmail(),
                     "Your verification Code",
-                    "Here is your verification Code: "+user.getVerification());
+                    "Here is your verification Code: " + user.getVerification());
             userRepository.save(user);
         } catch (Exception e) {
             throw new EmailFailedToSendException();
@@ -102,7 +104,7 @@ public class UserService {
     }
 
     private long generateVerificationNumber() {
-        return  RANDOM.nextLong(100_000_000);
+        return RANDOM.nextLong(100_000_000);
     }
 
     private String generateUserName(String name) {
@@ -121,22 +123,35 @@ public class UserService {
 
     public AppUser verifyEmail(String username, Long code) {
 
-        AppUser user =  userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+        AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
 
-        if (code.equals(user.getVerification())){
+        if (code.equals(user.getVerification())) {
             user.setEnabled(true);
             user.setVerification(null);
-           return userRepository.save(user);
-        }
-        else{
-            throw  new IncorrectVerificationCodeException();
+            return userRepository.save(user);
+        } else {
+            throw new IncorrectVerificationCodeException();
         }
     }
 
     public AppUser setPassword(String username, String password) {
-        AppUser user =  userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+        AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
         String encodedPassword = passwordEncoder.encode(password);
         user.setPassword(encodedPassword);
-        return  userRepository.save(user);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User not found"));
+
+        Set<GrantedAuthority> authorities = user.getAuthorities().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
+                .collect(Collectors.toSet());
+
+        UserDetails userDetails = new User(user.getUsername(), user.getPassword(), authorities);
+
+        return userDetails;
     }
 }
