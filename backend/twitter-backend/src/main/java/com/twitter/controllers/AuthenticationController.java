@@ -78,7 +78,7 @@ public class AuthenticationController {
         return  userService.verifyEmail(username,code);
     }
 
-    @PostMapping("/update/password")
+    @PutMapping("/update/password")
     public AppUser updatePassword(@RequestBody LinkedHashMap<String,String>  body){
         String username = body.get("username");
         String password = body.get("password");

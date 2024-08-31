@@ -41,7 +41,8 @@ export const RegisterFormFive: React.FC = () => {
           changeValue={handleChange}
         />
         <p className="reg-step-five-message" onClick={resend}>Didn't received a email?</p>
-        <StyledNextButton
+      </div>
+      <StyledNextButton
           active={code ? true : false}
           disabled={code ? false : true}
           color={"black"}
@@ -49,7 +50,6 @@ export const RegisterFormFive: React.FC = () => {
         >
           Next
         </StyledNextButton>
-      </div>
     </div>
   );
 };

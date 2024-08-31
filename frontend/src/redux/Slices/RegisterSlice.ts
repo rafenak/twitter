@@ -60,6 +60,11 @@ interface VerifyCode{
   code:string;
 }
 
+interface UpdatePassword{
+  username:string;
+  password:string;
+}
+
 /**
  *  Send Register Request
  */
@@ -126,6 +131,25 @@ export const sendVerification = createAsyncThunk(
       })
       return req.data
 
+    }
+    catch(e){
+      return thuckAPI.rejectWithValue(e)
+    }
+  }
+)
+
+/**
+ *  Update User Password
+ */
+
+export const updateUserPassword = createAsyncThunk(
+  "register/password",
+  async (body:UpdatePassword,thuckAPI)=>{
+    try{
+      const req = await  axios.put('http://localhost:8000/auth/update/password',{
+        username:body.username,
+        password:body.password
+      })
     }
     catch(e){
       return thuckAPI.rejectWithValue(e)
@@ -204,6 +228,14 @@ export const RegisterSlice = createSlice({
       return state;
     });
 
+    builder.addCase(updateUserPassword.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
+      return state;
+    });
+
 
 
     builder.addCase(registerUser.fulfilled, (state, action) => {
@@ -248,6 +280,17 @@ export const RegisterSlice = createSlice({
       return state;
     });
 
+    builder.addCase(updateUserPassword.fulfilled, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: false
+      };
+      console.log('forward user to home page')
+      console.log('call the logib thunk to be made,to make sure they have a JWT token created')
+      return state;
+    });
+
     builder.addCase(registerUser.rejected, (state, action) => {
       state.error = true;
       state.loading = false;
@@ -271,6 +314,15 @@ export const RegisterSlice = createSlice({
       return state;
     });
     builder.addCase(sendVerification.rejected, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: true,
+      };
+      return state;
+    });
+
+    builder.addCase(updateUserPassword.rejected, (state, action) => {
       state = {
         ...state,
         loading: false,
