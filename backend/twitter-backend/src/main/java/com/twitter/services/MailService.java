@@ -19,6 +19,14 @@ public class MailService {
 
     private final Gmail gmail;
 
+
+    /**
+     * Send the email verification code to the user email id using google API
+     * @param toAddress
+     * @param subject
+     * @param content
+     * @throws Exception
+     */
     public void sendEmail(String  toAddress,String subject,String content) throws Exception{
 
         Properties properties = new Properties();

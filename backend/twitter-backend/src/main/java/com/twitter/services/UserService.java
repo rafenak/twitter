@@ -35,10 +35,20 @@ public class UserService implements UserDetailsService {
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     *  find the username from the database
+     * @param username
+     * @return
+     */
     public AppUser getUserByName(String username) {
         return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
     }
 
+    /**
+     *  Update user details into the database
+     * @param user
+     * @return
+     */
     public AppUser updateUser(AppUser user) {
         try {
             return userRepository.save(user);
@@ -48,6 +58,12 @@ public class UserService implements UserDetailsService {
     }
 
 
+    /**
+     * Registration request to create an account into the system
+     * @param ro
+     * @return
+     * @throws EmailAlreadyTakenException
+     */
     public AppUser registerUser(RegistrationRequest ro) throws EmailAlreadyTakenException {
 
         AppUser user = new AppUser();
@@ -88,6 +104,10 @@ public class UserService implements UserDetailsService {
 
     }
 
+    /**
+     * Generate Email Verification code and Send the code to the user inbox
+     * @param username
+     */
     public void generateEmailVerification(String username) {
 
         AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
@@ -103,15 +123,30 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Generate Random number
+     * @return
+     */
     private long generateVerificationNumber() {
         return RANDOM.nextLong(100_000_000);
     }
 
+    /**
+     * Generate Random number to append at end of the username
+     * @param name
+     * @return
+     */
     private String generateUserName(String name) {
         long generatedNumber = RANDOM.nextLong(1_000_000_000);
         return name + String.format("%0" + NUMBER_LENGTH + "d", generatedNumber);
     }
 
+    /**
+     * check the username is already in use or generate a new
+     * @param username
+     * @param attemptedUsernames
+     * @return
+     */
     private boolean isUsernameTaken(String username, Set<String> attemptedUsernames) {
         if (attemptedUsernames.contains(username)) {
             return true; // Avoid redundant checks
@@ -121,6 +156,12 @@ public class UserService implements UserDetailsService {
     }
 
 
+    /**
+     * Check the verification code is matching
+     * @param username
+     * @param code
+     * @return
+     */
     public AppUser verifyEmail(String username, Long code) {
 
         AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
@@ -134,6 +175,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * update user password into db and encode the password
+     * @param username
+     * @param password
+     * @return
+     */
     public AppUser setPassword(String username, String password) {
         AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
         String encodedPassword = passwordEncoder.encode(password);
@@ -141,6 +188,12 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    /**
+     * UserDetails to check the username and password is present
+     * @param username the username identifying the user whose data is required.
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = userRepository.findByUsername(username).orElseThrow(

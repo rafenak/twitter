@@ -16,6 +16,11 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
     private final UserService userService;
 
+    /**
+     * Generate JWT token using Authentication Manager
+     * @param authentication
+     * @return
+     */
     public String generateToken(Authentication authentication) {
         Instant now = Instant.now();
 
@@ -34,6 +39,11 @@ public class TokenService {
                 .getTokenValue();
     }
 
+    /**
+     * Decode the token and find the username
+     * @param token
+     * @return
+     */
     public String getUserNameFromToken(String token) {
         Jwt decoded = jwtDecoder.decode(token);
         String username = decoded.getSubject();

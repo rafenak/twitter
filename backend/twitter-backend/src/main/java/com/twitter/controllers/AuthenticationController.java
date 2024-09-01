@@ -5,7 +5,7 @@ import com.twitter.exceptions.EmailFailedToSendException;
 import com.twitter.exceptions.IncorrectVerificationCodeException;
 import com.twitter.exceptions.UserDoesNotExistException;
 import com.twitter.models.AppUser;
-import com.twitter.models.LoginResponse;
+import com.twitter.response.LoginResponse;
 import com.twitter.request.RegistrationRequest;
 import com.twitter.services.TokenService;
 import com.twitter.services.UserService;

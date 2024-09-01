@@ -35,3 +35,6 @@ build/
 **/resources/*.json
 tokens/
 **/resources/certs/**
+
+### Image ###
+img/**
