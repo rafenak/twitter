@@ -5,7 +5,6 @@ import com.twitter.models.AppUser;
 import com.twitter.models.Role;
 import com.twitter.repositories.RoleRepository;
 import com.twitter.repositories.UserRepository;
-import com.twitter.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +23,14 @@ public class TwitterBackendApplication {
         SpringApplication.run(TwitterBackendApplication.class, args);
     }
 
+
+    /**
+     * This is use to create a temp user and do some testing
+     * @param roleRepo
+     * @param userRepository
+     * @param encoder
+     * @return
+     */
     @Bean
     CommandLineRunner run(RoleRepository roleRepo, UserRepository userRepository, PasswordEncoder encoder) {
         return args -> {

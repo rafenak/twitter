@@ -8,10 +8,11 @@ import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 
 @RestController
@@ -22,26 +23,48 @@ public class UserController {
 
     private final UserService userService;
     private final TokenService tokenService;
-    private  final ImageService imageService;
+    private final ImageService imageService;
 
     @GetMapping("/verify")
     public AppUser verifyIdentity(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        String username = "";
-        AppUser user;
-        if (token.startsWith("Bearer")) {
-            username = tokenService.getUserNameFromToken(token.substring(7));
-        }
-        try {
-            user = userService.getUserByName(username);
-        } catch (Exception e) {
-            user = null;
-        }
-        return user;
+        String username = tokenService.getUserNameFromToken(token);
+        return userService.getUserByName(username);
     }
 
     @PostMapping("/pfp")
-    public ResponseEntity<String> uploadProfilePicture(@RequestParam("image") MultipartFile file) throws UnableToSavePhotoException {
-        String uploadImage = imageService.uploadImage(file,"pfp");
-        return  ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    public AppUser uploadProfilePicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("image") MultipartFile file) throws UnableToSavePhotoException {
+        String username = tokenService.getUserNameFromToken(token);
+        return userService.setProfileOrBannerPicture(username, file, "pfp");
     }
+
+    @PostMapping("/banner")
+    public AppUser uploadBannerPicture(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("image") MultipartFile file) throws UnableToSavePhotoException {
+        String username = tokenService.getUserNameFromToken(token);
+        return userService.setProfileOrBannerPicture(username, file, "bnr");
+    }
+
+
+    @PutMapping("/")
+    public AppUser updateUser(AppUser user) {
+        return userService.updateUser(user);
+    }
+
+    @PutMapping("/follow")
+    public Set<AppUser> followUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody LinkedHashMap<String, String> body) {
+        String loggedInUser = tokenService.getUserNameFromToken(token);
+        String followedUser = body.get("followedUser");
+        return userService.followingUser(loggedInUser, followedUser);
+    }
+
+    @GetMapping("/following/{username}")
+    public Set<AppUser> getFollowingList(@PathVariable String username) {
+        return  userService.retrieveFollowingList(username);
+    }
+
+    @GetMapping("/followers/{username}")
+    public Set<AppUser> getFollowersList(@PathVariable String username) {
+        return  userService.retrieveFollowersList(username);
+    }
+
+
 }

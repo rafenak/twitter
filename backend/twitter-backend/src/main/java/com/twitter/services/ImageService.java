@@ -30,7 +30,7 @@ public class ImageService {
      * @param prefix
      * @return message
      */
-    public String uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
+    public Image  uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
         try {
             // The content type from the file request something like img/jpeg or img/png
             String extension = "." + Optional.ofNullable(file.getContentType())
@@ -52,7 +52,7 @@ public class ImageService {
 
             Image saved = imageRepository.save(i);
 
-            return "file uploaded successfully: " + img.getName();
+            return saved;
 
         } catch (IOException e) {
             throw new UnableToSavePhotoException();

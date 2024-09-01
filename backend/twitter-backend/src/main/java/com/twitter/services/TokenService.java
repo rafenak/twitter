@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -45,10 +46,17 @@ public class TokenService {
      * @return
      */
     public String getUserNameFromToken(String token) {
-        Jwt decoded = jwtDecoder.decode(token);
+        if(!token.startsWith("Bearer")) throw  new InvalidBearerTokenException("Token is not a Bearer token");
+        Jwt decoded = jwtDecoder.decode(token.substring(7));
         String username = decoded.getSubject();
         return username;
     }
+
+//    public String getUserNameFromToken(String token) {
+//        Jwt decoded = jwtDecoder.decode(token);
+//        String username = decoded.getSubject();
+//        return username;
+//    }
 
 
 }

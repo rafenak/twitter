@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.sql.Date;
 import java.util.HashSet;
@@ -41,6 +40,34 @@ public class AppUser {
     @JsonIgnore
     private String password;
 
+    private String bio;
+
+    private String nickname;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_picture", referencedColumnName = "image_id")
+    private Image profilePicture;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "banner_picture", referencedColumnName = "image_id")
+    private Image bannerPicture;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "following", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "following_id")}
+    )
+    @JsonIgnore
+    private Set<AppUser> following;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "followers", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "follower_id")}
+    )
+    @JsonIgnore
+    private Set<AppUser> followers;
+
+    /* security related*/
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -58,6 +85,8 @@ public class AppUser {
     public AppUser() {
         this.authorities = new HashSet<>();
         this.enabled = false;
+        this.following = new HashSet<>();
+        this.followers = new HashSet<>();
     }
 
 }

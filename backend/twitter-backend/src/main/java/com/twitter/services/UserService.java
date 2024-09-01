@@ -1,10 +1,8 @@
 package com.twitter.services;
 
-import com.twitter.exceptions.EmailAlreadyTakenException;
-import com.twitter.exceptions.EmailFailedToSendException;
-import com.twitter.exceptions.IncorrectVerificationCodeException;
-import com.twitter.exceptions.UserDoesNotExistException;
+import com.twitter.exceptions.*;
 import com.twitter.models.AppUser;
+import com.twitter.models.Image;
 import com.twitter.models.Role;
 import com.twitter.repositories.RoleRepository;
 import com.twitter.repositories.UserRepository;
@@ -18,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.HashSet;
@@ -34,9 +33,11 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
     /**
-     *  find the username from the database
+     * find the username from the database
+     *
      * @param username
      * @return
      */
@@ -45,7 +46,8 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     *  Update user details into the database
+     * Update user details into the database
+     *
      * @param user
      * @return
      */
@@ -60,6 +62,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Registration request to create an account into the system
+     *
      * @param ro
      * @return
      * @throws EmailAlreadyTakenException
@@ -106,6 +109,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Generate Email Verification code and Send the code to the user inbox
+     *
      * @param username
      */
     public void generateEmailVerification(String username) {
@@ -125,6 +129,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Generate Random number
+     *
      * @return
      */
     private long generateVerificationNumber() {
@@ -133,6 +138,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Generate Random number to append at end of the username
+     *
      * @param name
      * @return
      */
@@ -143,6 +149,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * check the username is already in use or generate a new
+     *
      * @param username
      * @param attemptedUsernames
      * @return
@@ -158,6 +165,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Check the verification code is matching
+     *
      * @param username
      * @param code
      * @return
@@ -177,6 +185,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * update user password into db and encode the password
+     *
      * @param username
      * @param password
      * @return
@@ -190,6 +199,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * UserDetails to check the username and password is present
+     *
      * @param username the username identifying the user whose data is required.
      * @return
      * @throws UsernameNotFoundException
@@ -206,5 +216,56 @@ public class UserService implements UserDetailsService {
         UserDetails userDetails = new User(user.getUsername(), user.getPassword(), authorities);
 
         return userDetails;
+    }
+
+    public AppUser setProfileOrBannerPicture(String username, MultipartFile file, String prefix)
+            throws UnableToSavePhotoException {
+        AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+
+        Image photo = imageService.uploadImage(file, prefix);
+        if (prefix.equals("pfp")) {
+            user.setProfilePicture(photo);
+        } else {
+            user.setBannerPicture(photo);
+        }
+        return userRepository.save(user);
+    }
+
+    public Set<AppUser> followingUser(String user, String followee) {
+        AppUser loggedInUser = userRepository.findByUsername(user).orElseThrow(UserDoesNotExistException::new);
+        Set<AppUser> followingList = loggedInUser.getFollowing();
+
+        AppUser followedUser = userRepository.findByUsername(followee).orElseThrow(UserDoesNotExistException::new);
+        Set<AppUser> followersList = followedUser.getFollowers();
+
+        //Add the followed use to following list
+        followingList.add(followedUser);
+        loggedInUser.setFollowing(followingList);
+
+        //Add the current user into follower list of the followee
+        followersList.add(loggedInUser);
+        followedUser.setFollowers(followersList);
+
+        //update both  users
+        userRepository.save(loggedInUser);
+        userRepository.save(followedUser);
+
+        return loggedInUser.getFollowing();
+    }
+
+    public Set<AppUser> retrieveFollowingList(String username) {
+        AppUser user = userRepository
+                                .findByUsername(username)
+                                .orElseThrow(UserDoesNotExistException::new);
+
+        return  user.getFollowing();
+    }
+
+    public Set<AppUser> retrieveFollowersList(String username) {
+        AppUser user = userRepository
+                .findByUsername(username)
+                .orElseThrow(UserDoesNotExistException::new);
+
+        return  user.getFollowers();
     }
 }
