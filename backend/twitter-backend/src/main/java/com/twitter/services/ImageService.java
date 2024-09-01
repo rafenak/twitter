@@ -1,6 +1,8 @@
 package com.twitter.services;
 
 
+import com.twitter.exceptions.UnableToResolvePhotoException;
+import com.twitter.exceptions.UnableToSavePhotoException;
 import com.twitter.models.Image;
 import com.twitter.repositories.ImageRepository;
 import jakarta.transaction.Transactional;
@@ -28,7 +30,7 @@ public class ImageService {
      * @param prefix
      * @return message
      */
-    public String uploadImage(MultipartFile file, String prefix) {
+    public String uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
         try {
             // The content type from the file request something like img/jpeg or img/png
             String extension = "." + Optional.ofNullable(file.getContentType())
@@ -53,8 +55,7 @@ public class ImageService {
             return "file uploaded successfully: " + img.getName();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return "file upload unsuccessfully";
+            throw new UnableToSavePhotoException();
         }
     }
 
@@ -64,15 +65,14 @@ public class ImageService {
      * @param fileName
      * @return
      */
-    public byte[] downloadImage(String fileName) {
+    public byte[] downloadImage(String fileName) throws UnableToResolvePhotoException{
         try {
             Image image = imageRepository.findByImageName(fileName).get();
             String filePath = image.getImagePath();
             byte[] imagesBytes = Files.readAllBytes(new File(filePath).toPath());
             return imagesBytes;
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+           throw  new UnableToResolvePhotoException();
         }
     }
 

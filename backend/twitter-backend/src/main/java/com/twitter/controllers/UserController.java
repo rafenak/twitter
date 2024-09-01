@@ -1,6 +1,7 @@
 package com.twitter.controllers;
 
 
+import com.twitter.exceptions.UnableToSavePhotoException;
 import com.twitter.models.AppUser;
 import com.twitter.services.ImageService;
 import com.twitter.services.TokenService;
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/pfp")
-    public ResponseEntity<String> uploadProfilePicture(@RequestParam("image") MultipartFile file){
+    public ResponseEntity<String> uploadProfilePicture(@RequestParam("image") MultipartFile file) throws UnableToSavePhotoException {
         String uploadImage = imageService.uploadImage(file,"pfp");
         return  ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
