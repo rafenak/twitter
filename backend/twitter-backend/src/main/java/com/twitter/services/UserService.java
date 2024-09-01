@@ -18,6 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
@@ -223,15 +228,39 @@ public class UserService implements UserDetailsService {
         AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
 
         Image photo = imageService.uploadImage(file, prefix);
-        if (prefix.equals("pfp")) {
-            user.setProfilePicture(photo);
-        } else {
-            user.setBannerPicture(photo);
+
+        try{
+            if(prefix.equals("pfp")){
+                if(user.getProfilePicture() !=null  && !user.getProfilePicture()
+                            .getImageName().equals("defaultpfp.png")){
+                    Path path = Paths.get(user.getProfilePicture().getImagePath());
+                    Files.deleteIfExists(path);
+                }
+                user.setProfilePicture(photo);
+            }else {
+                if (user.getBannerPicture() != null && !user.getBannerPicture()
+                        .getImageName().equals("defaultbnr.png")) {
+                    Path path = Paths.get(user.getBannerPicture().getImagePath());
+                    Files.deleteIfExists(path);
+                }
+                user.setBannerPicture(photo);
+            }
+        }catch (IOException e){
+            throw  new UnableToSavePhotoException();
         }
+
+//        if (prefix.equals("pfp")) {
+//            user.setProfilePicture(photo);
+//        } else {
+//            user.setBannerPicture(photo);
+//        }
         return userRepository.save(user);
     }
 
-    public Set<AppUser> followingUser(String user, String followee) {
+    public Set<AppUser> followingUser(String user, String followee) throws FollowException {
+
+        if(user.equals(followee)) throw  new FollowException();
+
         AppUser loggedInUser = userRepository.findByUsername(user).orElseThrow(UserDoesNotExistException::new);
         Set<AppUser> followingList = loggedInUser.getFollowing();
 
@@ -266,6 +295,6 @@ public class UserService implements UserDetailsService {
                 .findByUsername(username)
                 .orElseThrow(UserDoesNotExistException::new);
 
-        return  user.getFollowers();
+        return  user.getFollowers() ;
     }
 }
