@@ -1,12 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
-import "./RegisterFormSix.css";
-import { updateRegister, updateUserPassword } from "../../../../redux/Slices/RegisterSlice";
+import { updateRegister } from "../../../../redux/Slices/RegisterSlice";
 import { useNavigate } from "react-router-dom";
+
+import "./RegisterForms.css";
+import "../../../../assets/global.css";
 
 export const RegisterFormSix: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
@@ -16,37 +18,38 @@ export const RegisterFormSix: React.FC = () => {
   const [active, setActive] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    dispatch(updateRegister({
-      name:"password",
-      value: e.target.value
-    }));
+    dispatch(
+      updateRegister({
+        name: "password",
+        value: e.target.value,
+      })
+    );
   };
 
   const toggleView = () => {
-    setActive(!(password.length> 0 )? true : false);
+    setActive(!active);
   };
 
-  
-
-  useEffect(()=>{
-    if(state.login){
+  useEffect(() => {
+    if (state.login) {
       /*store some user info into local storage, we can load the user into user slice when we hit
       the feed page*/
-      navigate('/home')
+      navigate("/home");
     }
-
-  },[state.login])
+  }, [state.login]);
 
   return (
-    <div className="reg-step-six-container">
-      <div className="reg-step-six-content">
-        <h1>You'all need a password</h1>
-        <p>Make sure it's 8 character or more.</p>
-        <div className="reg-step-six-password">
+    <div className="register-container">
+      <div className="register-content">
+        <h1 className="regsiter-header-2">You'all need a password</h1>
+        <p className="register-text color-gray">
+          Make sure it's 8 character or more.
+        </p>
+        <div className="register-six-password">
           <ValidatedTextInput
             valid={true}
             label={"password"}
@@ -57,7 +60,7 @@ export const RegisterFormSix: React.FC = () => {
               type: active ? "text" : "password",
             }}
           />
-          <div onClick={toggleView} className="reg-step-six-icon">
+          <div onClick={toggleView} className="register-six-icon">
             {active ? (
               <VisibilityOffOutlinedIcon
                 sx={{

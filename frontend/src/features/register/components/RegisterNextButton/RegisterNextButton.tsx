@@ -30,6 +30,7 @@ export const StyledNextButton = styled.button<StyledNextButtonProps>`
 export const StyledNextButtonFix = styled.button`
   width: 0%;
   height: 0%;
+  display: none;
 `;
 
 interface RegisterNextButtonProps {

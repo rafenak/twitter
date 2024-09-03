@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
-import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
-import "./RegisterFormFive.css";
 import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
-import { resendEmail,sendVerification, updateRegister } from "../../../../redux/Slices/RegisterSlice";
+import { resendEmail, updateRegister } from "../../../../redux/Slices/RegisterSlice";
+
+import './RegisterForms.css'
+import '../../../../assets/global.css'
 
 export const RegisterFormFive: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
 
   const dispatch: AppDisptach = useDispatch();
 
-  const [code, setSode] = useState<string>("");
+  const [code, setCode] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSode(e.target.value);
+    setCode(e.target.value);
     dispatch(updateRegister({
       name:"code",
       value: e.target.value
@@ -27,17 +28,19 @@ export const RegisterFormFive: React.FC = () => {
 
 
   return (
-    <div className="reg-step-five-container">
-      <div className="reg-step-five-content">
-        <h1>We have sent a code</h1>
-        <p>Please enter it below to verify {state.email}</p>
+    <div className="register-container">
+      <div className="register-content">
+        <h1 className="register-header-2">We have sent a code</h1>
+        <p className="register-text color-gray">Please enter it below to verify {state.email}</p>
+        <div className="register-five-input-wrapper">
         <ValidatedTextInput
           valid={true}
           name={"code"}
           label={"Verification Code"}
           changeValue={handleChange}
         />
-        <p className="reg-step-five-message" onClick={resend}>Didn't received a email?</p>
+        <p className="register-five-message color-blue" onClick={resend}>Didn't received a email?</p>
+        </div>
       </div>
     </div>
   );
