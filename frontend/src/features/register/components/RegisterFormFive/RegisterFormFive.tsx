@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import "./RegisterFormFive.css";
 import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
-import { resendEmail,sendVerification } from "../../../../redux/Slices/RegisterSlice";
+import { resendEmail,sendVerification, updateRegister } from "../../../../redux/Slices/RegisterSlice";
 
 export const RegisterFormFive: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
@@ -15,17 +15,14 @@ export const RegisterFormFive: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSode(e.target.value);
+    dispatch(updateRegister({
+      name:"code",
+      value: e.target.value
+    }))
   };
 
   const resend = () => {
     dispatch(resendEmail(state.username));
-  };
-
-  const verify= () => {
-    dispatch(sendVerification({
-      username: state.username,
-      code: code
-    }));
   };
 
 
@@ -42,14 +39,6 @@ export const RegisterFormFive: React.FC = () => {
         />
         <p className="reg-step-five-message" onClick={resend}>Didn't received a email?</p>
       </div>
-      <StyledNextButton
-          active={code ? true : false}
-          disabled={code ? false : true}
-          color={"black"}
-          onClick={verify}
-        >
-          Next
-        </StyledNextButton>
     </div>
   );
 };

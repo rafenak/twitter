@@ -1,31 +1,12 @@
 import React from "react";
-import { RootState, AppDisptach } from "../../../../redux/Store";
-import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../../redux/Store";
+import { useSelector } from "react-redux";
 import { stringifyDate } from "../../utils/DateUtils";
-import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import "./RegisterFormThree.css";
-import { registerUser } from "../../../../redux/Slices/RegisterSlice";
 import { ValidatedDisplay } from "../../../../components/ValidatedInput/ValidatedDisplay";
 
 export const RegisterFormThree: React.FC = () => {
   const state = useSelector((state: RootState) => state.register);
-  const dispatch: AppDisptach = useDispatch();
-
-  const pad = (num: number): string => num.toString().padStart(2, '0');
-
-  const submitUser = () => {
-    const user = {
-      firstName: state.firstName,
-      lastName: state.lastName,
-      email: state.email,
-      dob: `${state.dob.year}-${pad(state.dob.month)}-${pad(state.dob.day)}`,
-    };
-
-    console.log("We are attempting to register the user");
-
-    dispatch(registerUser(user));
-  };
-
   return (
     <div className="reg-step-three-container">
       <div className="reg-step-three-content">
@@ -53,7 +34,7 @@ export const RegisterFormThree: React.FC = () => {
             value={stringifyDate(state.dob)}
           />
         </div>
-        {/* <p className="reg-step-three-policy">
+        <p className="reg-step-three-policy">
           By signing up are agree{" "}
           <span className="reg-step-three-link">Terms and Services</span> and{" "}
           <span className="reg-step-three-link">Privacy Policy</span>, including{" "}
@@ -64,11 +45,8 @@ export const RegisterFormThree: React.FC = () => {
           <span className="reg-step-three-link">Learn More</span>. Others will{" "}
           be able to find you by email or phone number, when provided unless you{" "}
           choose otherwise <span className="reg-step-three-link">here</span>.
-        </p> */}
+        </p>
       </div>
-      <StyledNextButton onClick={submitUser} color={"black"} active={true}>
-        Sign Up
-      </StyledNextButton>
     </div>
   );
 };

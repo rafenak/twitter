@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { ValidatedTextInput } from "../../../../components/ValidatedInput/ValidatedTextInput";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
 import { RootState, AppDisptach } from "../../../../redux/Store";
 import { useSelector, useDispatch } from "react-redux";
 import "./RegisterFormSix.css";
-import { updateUserPassword } from "../../../../redux/Slices/RegisterSlice";
+import { updateRegister, updateUserPassword } from "../../../../redux/Slices/RegisterSlice";
 import { useNavigate } from "react-router-dom";
 
 export const RegisterFormSix: React.FC = () => {
@@ -21,24 +20,26 @@ export const RegisterFormSix: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    dispatch(updateRegister({
+      name:"password",
+      value: e.target.value
+    }));
   };
 
   const toggleView = () => {
-    setActive(!active);
+    setActive(!(password.length> 0 )? true : false);
   };
 
-  const sendPassword = async () => {
-    await dispatch(
-      updateUserPassword({
-        username: state.username,
-        password: password,
-      })
-    );
+  
 
-    console.log('naviagte to home');
-    navigate('/home')
+  useEffect(()=>{
+    if(state.login){
+      /*store some user info into local storage, we can load the user into user slice when we hit
+      the feed page*/
+      navigate('/home')
+    }
 
-  };
+  },[state.login])
 
   return (
     <div className="reg-step-six-container">
@@ -73,14 +74,6 @@ export const RegisterFormSix: React.FC = () => {
           </div>
         </div>
       </div>
-      <StyledNextButton
-        active={password.length >= 8}
-        disabled={!(password.length >= 8)}
-        onClick={sendPassword}
-        color={"black"}
-      >
-        Next
-      </StyledNextButton>
     </div>
   );
 };

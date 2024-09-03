@@ -16,6 +16,10 @@ interface RegisterSliceState {
   step: number;
   username: string;
   phoneNumber: string;
+  phoneNumberValid: boolean;
+  code: string;
+  password :string;
+  login : boolean;
 }
 
 interface UpdatePayload {
@@ -52,7 +56,11 @@ const initialState: RegisterSliceState = {
   dobValid: false,
   step: 1,
   username: "",
-  phoneNumber: ""
+  phoneNumber: "",
+  phoneNumberValid : false,
+  code : "",
+  password : "",
+  login : false
 };
 
 interface VerifyCode{
@@ -186,6 +194,7 @@ export const RegisterSlice = createSlice({
     },
     incrementStep(state) {
       state.step++;
+      state.error=false;
       return state;
     },
 
@@ -284,7 +293,8 @@ export const RegisterSlice = createSlice({
       state = {
         ...state,
         loading: false,
-        error: false
+        error: false,
+        login: true
       };
       console.log('forward user to home page')
       console.log('call the logib thunk to be made,to make sure they have a JWT token created')

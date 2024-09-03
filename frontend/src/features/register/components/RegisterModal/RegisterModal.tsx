@@ -1,12 +1,12 @@
 import React from "react";
 import { Modal } from "../../../../components/modal/Modal";
-import "./RegisterModal.css";
 import { RegisterStepCounter } from "../RegisterStepCounter/RegisterStepCounter";
 import { determineModalContent } from "../../utils/RegisterModalUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import { decrementStep } from "../../../../redux/Slices/RegisterSlice";
-import { StyledNextButton } from "../RegisterNextButton/RegisterNextButton";
+import { RegisterNextButton } from "../RegisterNextButton/RegisterNextButton";
+import "./RegisterModal.css";
 
 
 export const RegisterModal: React.FC = () => {
@@ -26,14 +26,7 @@ export const RegisterModal: React.FC = () => {
         <RegisterStepCounter step={state.step} changeStep={stepCheckBuild} />
       }
       content={determineModalContent(state.step)} 
-      bottomContent={<StyledNextButton
-        disabled={false}
-        active={true}
-        color={"black"}
-        onClick={()=>{}}
-      >
-        Next
-      </StyledNextButton>}
+      bottomContent={<RegisterNextButton step={state.step}></RegisterNextButton>}
     />
   );
 

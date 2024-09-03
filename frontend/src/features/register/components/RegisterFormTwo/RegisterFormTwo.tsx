@@ -1,19 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { incrementStep } from "../../../../redux/Slices/RegisterSlice";
-import { AppDisptach } from "../../../../redux/Store";
 import { Checkbox } from "../../../../components/Checkbox/Checkbox";
 import "./RegisterFormTwo.css";
-import {StyledNextButton} from '../RegisterNextButton/RegisterNextButton'
-
 
 export const RegisterFormTwo: React.FC = () => {
-  const dispatch: AppDisptach = useDispatch();
-
-  const nextStep = () => {
-    dispatch(incrementStep());
-  };
-
   return (
     <div className="reg-step-two-container">
       <div className="reg-step-two-content">
@@ -27,7 +16,6 @@ export const RegisterFormTwo: React.FC = () => {
             browing history will be stored with your name, email or phone
             number.
           </p>
-          {/* <input className="reg-step-two-checkbox" type="checkbox" /> */}
           <Checkbox />
         </div>
         <p className="reg-step-two-policy">
@@ -40,7 +28,6 @@ export const RegisterFormTwo: React.FC = () => {
           <span className="reg-step-two-link">Learn More</span>.
         </p>
       </div>
-      <StyledNextButton color={"blue"} active={true} onClick={nextStep}>Next</StyledNextButton>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
-import "./Modal.css";
 import "../../assets/global.css";
+import "./Modal.css";
+
 
 interface ModalProps {
   topContent: JSX.Element;
