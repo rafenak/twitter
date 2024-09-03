@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal } from "../../../../components/modal/Modal";
 import { RegisterStepCounter } from "../RegisterStepCounter/RegisterStepCounter";
 import { determineModalContent } from "../../utils/RegisterModalUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
-import { decrementStep } from "../../../../redux/Slices/RegisterSlice";
+import {
+  cleanRegisterState,
+  decrementStep,
+} from "../../../../redux/Slices/RegisterSlice";
 import { RegisterNextButton } from "../RegisterNextButton/RegisterNextButton";
 import "./RegisterModal.css";
-
 
 export const RegisterModal: React.FC = () => {
   //const [step, setStep] = useState<number>(3);
@@ -20,13 +22,21 @@ export const RegisterModal: React.FC = () => {
     dispatch(decrementStep());
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(cleanRegisterState());
+    };
+  }, []);
+
   return (
     <Modal
       topContent={
         <RegisterStepCounter step={state.step} changeStep={stepCheckBuild} />
       }
-      content={determineModalContent(state.step)} 
-      bottomContent={<RegisterNextButton step={state.step}></RegisterNextButton>}
+      content={determineModalContent(state.step)}
+      bottomContent={
+        <RegisterNextButton step={state.step}></RegisterNextButton>
+      }
     />
   );
 
