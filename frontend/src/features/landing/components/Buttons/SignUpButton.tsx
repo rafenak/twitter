@@ -8,7 +8,7 @@ interface SignUpButtonProps{
 export const SignUpButton:React.FC<SignUpButtonProps> = ({handleClick}) => {
   return (
     <div className='landing-button sign-up' onClick={handleClick}>
-        <p className='sign-up-text'>Sign Up with email</p>
+        <p className='sign-up-text'>Sign Up with Email</p>
     </div>
   )
 }
