@@ -11,20 +11,22 @@
     "one"
     "two"
     "three";
+  grid-template-rows: auto;
 }
 
 .landing-top-left {
   grid-area: one;
-  height: 33vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('../assets/white-background.png');
+  background-image: url("../assets/white-background.png");
+  height: auto;
+  padding: 20px;
 }
 
-.landing-top-left-logo{
-    max-width: auto;
-    height: 60%;
+.landing-top-left-logo {
+  max-width: 100%;
+  height: auto;
 }
 
 .landing-top-right {
@@ -33,14 +35,46 @@
   align-items: center;
   justify-content: center;
   grid-area: two;
-  height: 100vh;
+  height: auto;
+  padding: 20px;
 }
 
 .landing-bottom {
   grid-area: three;
   height: fit-content;
+  padding: 20px;
 }
 
+/* Mobile devices */
+@media (max-width: 768px) {
+  .landing-layout {
+    grid-template-areas:
+      "one"
+      "two"
+      "three";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .landing-top-left {
+    padding: 10px;
+  }
+
+  .landing-top-left-logo {
+    max-width: 80%;
+  }
+
+  .landing-top-right {
+    height: auto;
+    padding: 10px;
+  }
+
+  .landing-bottom {
+    padding: 10px;
+  }
+}
+
+/* Tablet and larger screens */
 @media (min-width: 1000px) {
   .landing-layout {
     height: 100%;
@@ -48,30 +82,31 @@
       "one two"
       "three three";
     grid-template-columns: 55% 45%;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto auto;
   }
+
   .landing-top-left {
     grid-area: one;
     height: 100%;
   }
+
   .landing-top-right {
     grid-area: two;
-    height: 100%;
     justify-content: flex-start;
   }
-  .landing-top-left-logo{
-    max-width: 35%;
-    height: auto;
-  }
 
+  .landing-top-left-logo {
+    max-width: 35%;
+  }
 }
 
+/* Larger desktops */
 @media (min-width: 1200px) {
   .landing-layout {
     height: 100%;
     grid-template-areas: "one two" "three three";
     grid-template-columns: 55% 45%;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto auto;
   }
 
   .landing-top-left {
@@ -81,12 +116,10 @@
 
   .landing-top-right {
     grid-area: two;
-    height: 100%;
     justify-content: flex-start;
   }
 
-  .landing-top-left-logo{
-    max-width: 35%;
-    height: auto;
+  .landing-top-left-logo {
+    max-width: 30%;
   }
 }
