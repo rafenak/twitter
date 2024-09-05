@@ -18,11 +18,13 @@ body,
 }
 
 .bg-blue {
-  background-color: #1d9bf0;
+  /* background-color: #1d9bf0; */
+  background-color: #1DA1F2;
 }
 
 .color-blue {
-  color: #1d9bf0;
+  /* color: #1d9bf0; */
+  color: #1DA1F2;
 }
 
 .bg-red {
@@ -39,4 +41,12 @@ body,
 
 .color-gray {
   color: #536471;
+}
+
+.link{
+  cursor: pointer;
+}
+
+.link:hover{
+  text-decoration: underline;
 }

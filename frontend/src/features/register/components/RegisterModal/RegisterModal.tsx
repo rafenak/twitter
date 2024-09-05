@@ -11,14 +11,22 @@ import {
 import { RegisterNextButton } from "../RegisterNextButton/RegisterNextButton";
 import "./RegisterModal.css";
 
-export const RegisterModal: React.FC = () => {
+interface RegisterModalProps{
+  toggleModal:()=>void;
+
+}
+
+export const RegisterModal: React.FC<RegisterModalProps> = ({toggleModal}) => {
   //const [step, setStep] = useState<number>(3);
 
   const state = useSelector((state: RootState) => state.register);
   const dispatch: AppDisptach = useDispatch();
 
   const stepCheckBuild = () => {
-    //step === 1 || step === 4 || step >= 6 ? setStep(step) : setStep(step - 1);
+    if(state.step ===1){
+      toggleModal();
+      return;
+    }
     dispatch(decrementStep());
   };
 

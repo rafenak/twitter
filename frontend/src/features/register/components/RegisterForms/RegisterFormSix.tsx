@@ -37,6 +37,10 @@ export const RegisterFormSix: React.FC = () => {
   useEffect(() => {
     if(state.user.loggedIn){
       navigate("/home")
+      //hack so it won't call disptach twice as user is logged in
+      return(()=>{
+
+      })
     }
 
     if(state.user.fromRegister){
