@@ -16,6 +16,15 @@
 .landing-top-left {
   grid-area: one;
   height: 33vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/white-background.png');
+}
+
+.landing-top-left-logo{
+    max-width: auto;
+    height: 60%;
 }
 
 .landing-top-right {
@@ -50,6 +59,11 @@
     height: 100%;
     justify-content: flex-start;
   }
+  .landing-top-left-logo{
+    max-width: 35%;
+    height: auto;
+  }
+
 }
 
 @media (min-width: 1200px) {
@@ -69,5 +83,10 @@
     grid-area: two;
     height: 100%;
     justify-content: flex-start;
+  }
+
+  .landing-top-left-logo{
+    max-width: 35%;
+    height: auto;
   }
 }
