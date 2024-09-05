@@ -2,6 +2,11 @@ import React from "react";
 import "./RightSideBar.css";
 import "../../../../assets/global.css";
 import logoBlue from "../../../../assets/twitter-logo-large-blue.png";
+import { GoogleButton } from "../Buttons/GoogleButton";
+import { AppleButton } from "../Buttons/AppleButton";
+import { SignUpButton } from "../Buttons/SignUpButton";
+import { SignInButton } from "../Buttons/SignInButton";
+
 
 interface RightSideBarProps {
   toggleRegister: () => void;
@@ -18,14 +23,14 @@ export const RightSideBar: React.FC<RightSideBarProps> = ({
       <h1 className="right-side-bar-h1">Happening Now</h1>
       <h2 className="right-side-bar-h2">Join Social Media today.</h2>
       <div className="right-side-bar-signup-wrapper">
-        <button>Sign up with Google</button>
-        <button>Sign up with Apple</button>
+        <GoogleButton />
+        <AppleButton />
         <div className="right-side-bar-divider">
           <div className="right-side-bar-line"></div>
           <p className="right-side-bar-or">or</p>
           <div className="right-side-bar-line"></div>
         </div>
-        <button onClick={toggleRegister}>Create account</button>
+        <SignUpButton handleClick={toggleRegister} />
         <p className="right-side-bar-legal color-gray">
           By Siging up, you agree to the
           <span className="link color-blue">Terms of Service</span> and{" "}
@@ -35,7 +40,7 @@ export const RightSideBar: React.FC<RightSideBarProps> = ({
       </div>
       <div className="right-side-bar-loggin-wrapper">
         <h3 className="right-side-bar-h3">Already have an account?</h3>
-        <button>Sign in</button>
+        <SignInButton handleClick={toggleLogin}/>
       </div>
     </div>
   );
