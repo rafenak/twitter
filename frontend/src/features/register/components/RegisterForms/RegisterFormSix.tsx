@@ -16,6 +16,7 @@ export const RegisterFormSix: React.FC = () => {
   const dispatch: AppDisptach = useDispatch();
 
   const [active, setActive] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ export const RegisterFormSix: React.FC = () => {
       //set the dispatch to set user.fromRegister
       dispatch(setFromReigster(true))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.register.login,state.user.loggedIn,state.user.fromRegister]);
 
   return (

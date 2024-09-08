@@ -34,6 +34,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({toggleModal}) => {
     return () => {
       dispatch(cleanRegisterState());
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

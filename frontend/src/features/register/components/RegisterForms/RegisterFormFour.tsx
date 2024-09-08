@@ -41,6 +41,7 @@ export const RegisterFormFour: React.FC = () => {
         })
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phoneCode, phoneNumber]);
 
   return (

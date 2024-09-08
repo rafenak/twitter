@@ -15,6 +15,7 @@
   align-items: flex-start;
 }
 
+
 .register-header {
   font-size: 31px;
   font-weight: 600;
@@ -188,13 +189,13 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .register-content {
     width: 100%;
   }
 
   .register-header, .register-header-2 {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .register-subheader {
@@ -207,5 +208,49 @@
 
   .register-text-sm, .register-text {
     font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-content {
+    width: 100%;
+  }
+
+  .register-header, .register-header-2 {
+    font-size: 20px;
+  }
+
+  .register-subheader {
+    font-size: 15px;
+  }
+
+  .register-h4 {
+    font-size: 12px;
+  }
+
+  .register-text-sm, .register-text {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  .register-content {
+    width: 100%;
+  }
+
+  .register-header, .register-header-2 {
+    font-size: 18px;
+  }
+
+  .register-subheader {
+    font-size: 14px;
+  }
+
+  .register-h4 {
+    font-size: 11px;
+  }
+
+  .register-text-sm, .register-text {
+    font-size: 9px;
   }
 }
