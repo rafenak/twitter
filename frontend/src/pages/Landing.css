@@ -22,11 +22,13 @@
   background-image: url("../assets/white-background.png");
   height: auto;
   padding: 20px;
+  
 }
 
 .landing-top-left-logo {
   max-width: 100%;
   height: auto;
+  mix-blend-mode: multiply;
 }
 
 .landing-top-right {

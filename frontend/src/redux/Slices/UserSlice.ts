@@ -4,6 +4,7 @@ import axios from "axios";
 
 interface UserSliceState {
   loggedIn: User | undefined;
+  username: string;
   fromRegister: boolean;
   error: boolean;
 }
@@ -13,10 +14,17 @@ interface LoginBody {
   password: string;
 }
 
+interface VerifyUserBody {
+  email: string;
+  phone: string;
+  username: string;
+}
+
 const initialState: UserSliceState = {
   loggedIn: undefined,
   fromRegister: false,
   error: false,
+  username: "",
 };
 
 /**
@@ -30,6 +38,26 @@ export const loginUser = createAsyncThunk(
       const req = await axios.post("http://localhost:8000/auth/login", {
         username: body.username,
         password: body.password,
+      });
+      return req.data;
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
+/**
+ * Verify User Name
+ */
+
+export const verifyUsername = createAsyncThunk(
+  "user/username",
+  async (body: VerifyUserBody, thuckAPI) => {
+    try {
+      const req = await axios.post("http://localhost:8000/auth/find", {
+        email: body.email,
+        phone: body.phone,
+        username: body.username,
       });
       return req.data;
     } catch (e) {
@@ -52,26 +80,49 @@ export const UserSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(loginUser.fulfilled, (state, action) => {
-        state = {
-            ...state,
-            loggedIn:{
-                userId: action.payload.user.userId,
-                firstName: action.payload.user.firstName,
-                lastName: action.payload.user.lastName,
-                email:action.payload.user.email,
-                phone:action.payload.user.phone,
-                dateOfBirth:action.payload.user.dateOfBirth,
-                username: action.payload.user.username,
-                bio: action.payload.user.bio,
-                nickname:action.payload.user.nickname,
-                profilePicture:action.payload.user.profilePicture,
-                bannerPicture:action.payload.user.bannerPicture
-            }
-            
-        }
-        
-        return state;
-      });
+      state = {
+        ...state,
+        loggedIn: {
+          userId: action.payload.user.userId,
+          firstName: action.payload.user.firstName,
+          lastName: action.payload.user.lastName,
+          email: action.payload.user.email,
+          phone: action.payload.user.phone,
+          dateOfBirth: action.payload.user.dateOfBirth,
+          username: action.payload.user.username,
+          bio: action.payload.user.bio,
+          nickname: action.payload.user.nickname,
+          profilePicture: action.payload.user.profilePicture,
+          bannerPicture: action.payload.user.bannerPicture,
+        },
+      };
+
+      return state;
+    });
+
+    builder.addCase(verifyUsername.fulfilled,(state,action)=>{
+      state ={
+        ...state,
+        username:action.payload
+      }
+      return state;
+    })
+
+    builder.addCase(verifyUsername.pending,(state,action)=>{
+      state ={
+        ...state,
+        error:false
+      }
+      return state;
+    })
+
+    builder.addCase(verifyUsername.rejected,(state,action)=>{
+      state ={
+        ...state,
+        error:true
+      }
+      return state;
+    })
   },
 });
 

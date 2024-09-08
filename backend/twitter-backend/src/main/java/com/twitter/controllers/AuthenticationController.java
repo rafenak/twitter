@@ -5,12 +5,15 @@ import com.twitter.exceptions.EmailFailedToSendException;
 import com.twitter.exceptions.IncorrectVerificationCodeException;
 import com.twitter.exceptions.UserDoesNotExistException;
 import com.twitter.models.AppUser;
+import com.twitter.request.FindUsernameRequest;
 import com.twitter.response.LoginResponse;
 import com.twitter.request.RegistrationRequest;
 import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -108,6 +111,15 @@ public class AuthenticationController {
         catch (AuthenticationException e){
             return new LoginResponse(null,"");
         }
+    }
+
+    @PostMapping("/find")
+    public ResponseEntity<String> verifyUsername(@RequestBody FindUsernameRequest credential){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+        String username=userService.verifyUsername(credential);
+        return  new ResponseEntity<String>(username,HttpStatus.OK);
+
     }
 
 }

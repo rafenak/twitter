@@ -67,10 +67,7 @@
   margin-bottom: 5px;
 }
 
-/*
-components specific styled
-*/
-
+/* Components specific styling */
 .register-one-dob-wrapper {
   width: 100%;
   height: fit-content;
@@ -144,4 +141,71 @@ components specific styled
   bottom: 2px;
   right: 15px;
   cursor: pointer;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 1024px) {
+  .register-content {
+    width: 85%;
+  }
+
+  .register-header, .register-header-2 {
+    font-size: 28px;
+  }
+
+  .register-subheader {
+    font-size: 18px;
+  }
+
+  .register-h4 {
+    font-size: 15px;
+  }
+
+  .register-text-sm, .register-text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-content {
+    width: 95%;
+  }
+
+  .register-header, .register-header-2 {
+    font-size: 24px;
+  }
+
+  .register-subheader {
+    font-size: 17px;
+  }
+
+  .register-h4 {
+    font-size: 14px;
+  }
+
+  .register-text-sm, .register-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-content {
+    width: 100%;
+  }
+
+  .register-header, .register-header-2 {
+    font-size: 20px;
+  }
+
+  .register-subheader {
+    font-size: 16px;
+  }
+
+  .register-h4 {
+    font-size: 13px;
+  }
+
+  .register-text-sm, .register-text {
+    font-size: 11px;
+  }
 }

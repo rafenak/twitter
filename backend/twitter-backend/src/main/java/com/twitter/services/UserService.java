@@ -6,6 +6,7 @@ import com.twitter.models.Image;
 import com.twitter.models.Role;
 import com.twitter.repositories.RoleRepository;
 import com.twitter.repositories.UserRepository;
+import com.twitter.request.FindUsernameRequest;
 import com.twitter.request.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -229,15 +229,15 @@ public class UserService implements UserDetailsService {
 
         Image photo = imageService.uploadImage(file, prefix);
 
-        try{
-            if(prefix.equals("pfp")){
-                if(user.getProfilePicture() !=null  && !user.getProfilePicture()
-                            .getImageName().equals("defaultpfp.png")){
+        try {
+            if (prefix.equals("pfp")) {
+                if (user.getProfilePicture() != null && !user.getProfilePicture()
+                        .getImageName().equals("defaultpfp.png")) {
                     Path path = Paths.get(user.getProfilePicture().getImagePath());
                     Files.deleteIfExists(path);
                 }
                 user.setProfilePicture(photo);
-            }else {
+            } else {
                 if (user.getBannerPicture() != null && !user.getBannerPicture()
                         .getImageName().equals("defaultbnr.png")) {
                     Path path = Paths.get(user.getBannerPicture().getImagePath());
@@ -245,8 +245,8 @@ public class UserService implements UserDetailsService {
                 }
                 user.setBannerPicture(photo);
             }
-        }catch (IOException e){
-            throw  new UnableToSavePhotoException();
+        } catch (IOException e) {
+            throw new UnableToSavePhotoException();
         }
 
 //        if (prefix.equals("pfp")) {
@@ -259,7 +259,7 @@ public class UserService implements UserDetailsService {
 
     public Set<AppUser> followingUser(String user, String followee) throws FollowException {
 
-        if(user.equals(followee)) throw  new FollowException();
+        if (user.equals(followee)) throw new FollowException();
 
         AppUser loggedInUser = userRepository.findByUsername(user).orElseThrow(UserDoesNotExistException::new);
         Set<AppUser> followingList = loggedInUser.getFollowing();
@@ -284,10 +284,10 @@ public class UserService implements UserDetailsService {
 
     public Set<AppUser> retrieveFollowingList(String username) {
         AppUser user = userRepository
-                                .findByUsername(username)
-                                .orElseThrow(UserDoesNotExistException::new);
+                .findByUsername(username)
+                .orElseThrow(UserDoesNotExistException::new);
 
-        return  user.getFollowing();
+        return user.getFollowing();
     }
 
     public Set<AppUser> retrieveFollowersList(String username) {
@@ -295,6 +295,17 @@ public class UserService implements UserDetailsService {
                 .findByUsername(username)
                 .orElseThrow(UserDoesNotExistException::new);
 
-        return  user.getFollowers() ;
+        return user.getFollowers();
+    }
+
+    public String verifyUsername(FindUsernameRequest credential) {
+        AppUser user = userRepository
+                .findByEmailOrPhoneOrUsername
+                        (credential.getEmail(),
+                                credential.getPhone(), credential.getUsername()).
+                orElseThrow(UserDoesNotExistException::new);
+
+        return  user.getUsername();
+
     }
 }
