@@ -35,14 +35,15 @@ export const LoginFormOne: React.FC = () => {
       body.username = credential;
     }
 
-    dispatch(verifyUsername(body))
+    dispatch(verifyUsername(body));
   };
-
 
   return (
     <div className="login-form-one-container">
       <h1 className="login-form-header">Sign in to Social Media</h1>
       <ModalButton
+        active={true}
+        height={40}
         fontColor={"#536471"}
         boderColor={"#536471"}
         backgroundColor={"white"}
@@ -69,6 +70,8 @@ export const LoginFormOne: React.FC = () => {
         Sign in with Google
       </ModalButton>
       <ModalButton
+        active={true}
+        height={40}
         fontColor={"black"}
         boderColor={"#536471"}
         backgroundColor={"white"}
@@ -101,8 +104,14 @@ export const LoginFormOne: React.FC = () => {
         label={"Phone,Email or Username"}
         changeValue={handleChange}
       />
-      {state.error ? <p className="login-form-one-error color-red">Unable to find user</p> :<></>}
+      {state.error ? (
+        <p className="login-form-error color-red">Unable to find user</p>
+      ) : (
+        <></>
+      )}
       <ModalButton
+        active={true}
+        height={40}
         fontColor={"white"}
         backgroundColor={"black"}
         fontSize={16}
@@ -119,6 +128,8 @@ export const LoginFormOne: React.FC = () => {
       </ModalButton>
 
       <ModalButton
+        active={true}
+        height={40}
         fontColor={"black"}
         boderColor={"#d3d3d3"}
         backgroundColor={"white"}

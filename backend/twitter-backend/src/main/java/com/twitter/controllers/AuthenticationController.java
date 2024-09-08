@@ -1,13 +1,10 @@
 package com.twitter.controllers;
 
-import com.twitter.exceptions.EmailAlreadyTakenException;
-import com.twitter.exceptions.EmailFailedToSendException;
-import com.twitter.exceptions.IncorrectVerificationCodeException;
-import com.twitter.exceptions.UserDoesNotExistException;
+import com.twitter.exceptions.*;
 import com.twitter.models.AppUser;
 import com.twitter.request.FindUsernameRequest;
-import com.twitter.response.LoginResponse;
 import com.twitter.request.RegistrationRequest;
+import com.twitter.response.LoginResponse;
 import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -97,28 +94,35 @@ public class AuthenticationController {
         return userService.setPassword(username, password);
     }
 
+
+    @ExceptionHandler({InvalidCredentialsException.class})
+    public ResponseEntity<String> handleInvalidCredentials() {
+        return new ResponseEntity<String>("Invalid credentials",
+                HttpStatus.FORBIDDEN);
+    }
+
+
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) {
+    public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) throws InvalidCredentialsException {
         String username = body.get("username");
         String password = body.get("password");
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username,password));
+                    new UsernamePasswordAuthenticationToken(username, password));
 
             String token = tokenService.generateToken(authentication);
-            return  new LoginResponse(userService.getUserByName(username),token);
-        }
-        catch (AuthenticationException e){
-            return new LoginResponse(null,"");
+            return new LoginResponse(userService.getUserByName(username), token);
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException();
         }
     }
 
     @PostMapping("/find")
-    public ResponseEntity<String> verifyUsername(@RequestBody FindUsernameRequest credential){
+    public ResponseEntity<String> verifyUsername(@RequestBody FindUsernameRequest credential) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
-        String username=userService.verifyUsername(credential);
-        return  new ResponseEntity<String>(username,HttpStatus.OK);
+        String username = userService.verifyUsername(credential);
+        return new ResponseEntity<String>(username, HttpStatus.OK);
 
     }
 

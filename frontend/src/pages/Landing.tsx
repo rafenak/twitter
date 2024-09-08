@@ -4,13 +4,17 @@ import RegisterModal from '../features/register'
 import './Landing.css'
 import '../assets/global.css'
 import { RightSideBar,LandingFooter } from '../features/landing'
-import whiteLogo from '../assets/twitter-logo-large-white.png'
+//import whiteLogo from '../assets/twitter-logo-large-white.png'
 import socialWhiteLogo from '../assets/social-media-white.png'
 import LoginModal from '../features/login'
+import { useDispatch } from 'react-redux'
+import { AppDisptach } from '../redux/Store'
+import { resetUsername } from '../redux/Slices/UserSlice'
 
 export const Landing:React.FC = () => {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false)
+  const dispatch:AppDisptach= useDispatch();
 
   const toggleRegister=()=>{
     setRegister(!register);
@@ -18,6 +22,7 @@ export const Landing:React.FC = () => {
 
   const toggleLogin=()=>{
     setLogin(!login);
+    dispatch(resetUsername())
   }
 
   return (

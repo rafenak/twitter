@@ -77,6 +77,13 @@ export const UserSlice = createSlice({
       };
       return state;
     },
+    resetUsername(state) {
+      state = {
+        ...state,
+        username: "",
+      };
+      return state;
+    },
   },
   extraReducers(builder) {
     builder.addCase(loginUser.fulfilled, (state, action) => {
@@ -100,32 +107,48 @@ export const UserSlice = createSlice({
       return state;
     });
 
-    builder.addCase(verifyUsername.fulfilled,(state,action)=>{
-      state ={
+    builder.addCase(verifyUsername.fulfilled, (state, action) => {
+      state = {
         ...state,
-        username:action.payload
-      }
+        username: action.payload,
+      };
       return state;
-    })
+    });
 
-    builder.addCase(verifyUsername.pending,(state,action)=>{
-      state ={
+    builder.addCase(loginUser.pending, (state, action) => {
+      state = {
         ...state,
-        error:false
-      }
+        error: false,
+      };
       return state;
-    })
+    });
 
-    builder.addCase(verifyUsername.rejected,(state,action)=>{
-      state ={
+    builder.addCase(verifyUsername.pending, (state, action) => {
+      state = {
         ...state,
-        error:true
-      }
+        error: false,
+      };
       return state;
-    })
+    });
+
+    builder.addCase(verifyUsername.rejected, (state, action) => {
+      state = {
+        ...state,
+        error: true,
+      };
+      return state;
+    });
+
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state = {
+        ...state,
+        error: true,
+      };
+      return state;
+    });
   },
 });
 
-export const { setFromReigster } = UserSlice.actions;
+export const { setFromReigster,resetUsername } = UserSlice.actions;
 
 export default UserSlice.reducer;
