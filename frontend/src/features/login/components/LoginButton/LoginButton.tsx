@@ -48,7 +48,7 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
       </ModalButton>
       <div className="login-button-text color-gray">
         Don't have an account?
-        <span className="link color-blue">Sign Up</span>
+        <span className="link color-blue">{" "}Sign Up</span>
       </div>
     </div>
   );

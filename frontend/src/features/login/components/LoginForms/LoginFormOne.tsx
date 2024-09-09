@@ -10,7 +10,11 @@ import "../../../../assets/global.css";
 import { verifyUsername } from "../../../../redux/Slices/UserSlice";
 import { validateEmail, validatePhone } from "../../../../services/Validators";
 
-export const LoginFormOne: React.FC = () => {
+interface LoginFormOneProps{
+  noAccount:()=>void;
+}
+
+export const LoginFormOne: React.FC<LoginFormOneProps> = ({noAccount}) => {
   const state = useSelector((state: RootState) => state.user);
 
   const dispatch: AppDisptach = useDispatch();
@@ -155,7 +159,7 @@ export const LoginFormOne: React.FC = () => {
         Forgot password?
       </button> */}
       <p className="login-form-one-text color-gray">
-        Don't have an account? <span className="link color-blue">Sign up</span>
+        Don't have an account? <span className="link color-blue" onClick={noAccount}>Sign up</span>
       </p>
     </div>
   );

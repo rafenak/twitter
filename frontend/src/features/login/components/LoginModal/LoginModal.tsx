@@ -12,9 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 interface LoginModalProps {
   toggleModal: () => void;
+  toggleRegister:()=>void;
 }
 
-export const LoginModal: React.FC<LoginModalProps> = ({ toggleModal }) => {
+export const LoginModal: React.FC<LoginModalProps> = ({ toggleModal,toggleRegister }) => {
   const state = useSelector((state: RootState) => state.user);
 
   const [password, setPassword] = useState<string>('')
@@ -34,10 +35,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({ toggleModal }) => {
     }
   })
 
+  const openRegister=()=>{
+    toggleModal();
+    toggleRegister();
+  }
+
   return (
     <Modal
       topContent={<LoginTopModal closeModal={toggleModal} />}
-      content={state.username ? <LoginFormTwo setPassword={handlePassword} />: <LoginFormOne />}
+      content={state.username ? <LoginFormTwo setPassword={handlePassword} />: <LoginFormOne noAccount={openRegister} />}
       bottomContent={state.username ? <LoginButton username={state.username} password={password}/>  :<></>}
     />
   );

@@ -28,7 +28,7 @@ export const Landing:React.FC = () => {
   return (
     <div className='home-container bg-color'>
       {register ? <RegisterModal toggleModal={toggleRegister} /> : <></>}
-      {login ? <LoginModal toggleModal={toggleLogin} />: <></>}
+      {login ? <LoginModal toggleModal={toggleLogin} toggleRegister={toggleRegister} />: <></>}
       <div className='landing-layout'>
         <div className='landing-top-left bg-blue'>
           <img src={socialWhiteLogo} className='landing-top-left-logo' alt='leftlogo'/>

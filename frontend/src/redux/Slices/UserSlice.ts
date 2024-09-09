@@ -5,6 +5,7 @@ import axios from "axios";
 interface UserSliceState {
   loggedIn: User | undefined;
   username: string;
+  token: string;
   fromRegister: boolean;
   error: boolean;
 }
@@ -25,6 +26,7 @@ const initialState: UserSliceState = {
   fromRegister: false,
   error: false,
   username: "",
+  token: ""
 };
 
 /**
@@ -84,6 +86,13 @@ export const UserSlice = createSlice({
       };
       return state;
     },
+    setToken(state,action: PayloadAction<string>){
+      state = {
+        ...state,
+        token: action.payload
+      };
+      return state;
+    }
   },
   extraReducers(builder) {
     builder.addCase(loginUser.fulfilled, (state, action) => {
@@ -102,6 +111,7 @@ export const UserSlice = createSlice({
           profilePicture: action.payload.user.profilePicture,
           bannerPicture: action.payload.user.bannerPicture,
         },
+        token: action.payload.token
       };
 
       return state;
@@ -149,6 +159,6 @@ export const UserSlice = createSlice({
   },
 });
 
-export const { setFromReigster,resetUsername } = UserSlice.actions;
+export const { setFromReigster,resetUsername,setToken } = UserSlice.actions;
 
 export default UserSlice.reducer;
