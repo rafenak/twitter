@@ -111,7 +111,7 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
           ) : (
             <ForgotButtonTwo onCancel={toggleModal} sendCode={sendReset} />
           )
-        }
+        } 
       />
     </div>
   );
