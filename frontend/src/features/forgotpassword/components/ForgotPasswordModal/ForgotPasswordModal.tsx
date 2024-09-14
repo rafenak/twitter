@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Modal } from "../../../../components/modal/Modal";
 import { ForgotModalTop } from "../ForgotModalTop/ForgotModalTop";
-import { ForgotFormOne } from "../ForgotForms/ForgotFormOne";
 import { validateEmail, validatePhone } from "../../../../services/Validators";
 import axios from "axios";
-import { ForgotButtonOne } from "../ForgotButtons/ForgotButtonOne";
-import { ForgotFormTwo } from "../ForgotForms/ForgotFormTwo";
-import { ForgotButtonTwo } from "../ForgotButtons/ForgotButtonTwo";
+import {
+  determineForgotButton,
+  determineForgotFormContent,
+} from "../../utils/ForgotPassowrdUtils";
 
 interface UserInfo {
   email: string;
@@ -26,10 +26,16 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
   const [error, setError] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
   const [resetCode, setResetCode] = useState<number>(0);
+  const [userInputCode,setUserInputCode] =useState<number>(0);
 
   const changeCredentials = (credential: string) => {
     setCredential(credential);
   };
+
+  const changeUserInputCode = (value: number) => {
+    setUserInputCode(value);
+  };
+
 
   const searchUser = async () => {
     let findUserDTO = {
@@ -74,7 +80,7 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     }
   };
 
-  const sendReset = async () => {
+  const sendResetCode = async () => {
     // const code = Math.floor(100000+ Math.random()*900000);
     const code =
       100000 + (window.crypto.getRandomValues(new Uint32Array(1))[0] % 900000);
@@ -91,27 +97,39 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     }
   };
 
+  const checkCode = () =>{
+    if(resetCode===userInputCode){
+      setStep(4);
+    }else{
+      setError(true)
+    }
+  }
+
+
+
   return (
     <div>
       <Modal
         topContent={<ForgotModalTop closeModal={toggleModal} />}
-        content={
-          step === 1 ? (
-            <ForgotFormOne setCredential={changeCredentials} error={error} />
-          ) : (
-            <ForgotFormTwo email={userInfo.email} phone={userInfo.phone} />
-          )
-        }
-        bottomContent={
-          step === 1 ? (
-            <ForgotButtonOne
-              value={credential}
-              handleClick={searchUser}
-            />
-          ) : (
-            <ForgotButtonTwo onCancel={toggleModal} sendCode={sendReset} />
-          )
-        } 
+        content={determineForgotFormContent(
+          step,
+          setCredential,
+          error,
+          userInfo.email,
+          userInfo.phone,
+          !error,
+          changeUserInputCode
+        )}
+        bottomContent={determineForgotButton(
+          step,
+          credential,
+          searchUser,
+          toggleModal,
+          sendResetCode,
+          userInputCode ? true : false,
+          checkCode,
+          ()=>{setStep(2)}
+        )}
       />
     </div>
   );

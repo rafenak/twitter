@@ -32,11 +32,11 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
         active={password !== "" ? true : false}
         disabled={password !== "" ? false : true}
         height={50}
-        fontcolor={"white"}
-        backgroundcolor={password !== "" ? "black" : "rgba(0,0,0,0.5)"}
-        fontsize={17}
-        fontweight={700}
-        hoverbackgound={{
+        fontColor={"white"}
+        backgroundColor={password !== "" ? "black" : "rgba(0,0,0,0.5)"}
+        fontSize={17}
+        fontWeight={700}
+        hoverBackgound={{
           r: 0,
           g: 0,
           b: 0,
