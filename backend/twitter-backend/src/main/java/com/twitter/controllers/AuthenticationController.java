@@ -3,8 +3,10 @@ package com.twitter.controllers;
 import com.twitter.exceptions.*;
 import com.twitter.models.AppUser;
 import com.twitter.request.FindUsernameRequest;
+import com.twitter.request.PasswordCodeRequest;
 import com.twitter.request.RegistrationRequest;
 import com.twitter.response.LoginResponse;
+import com.twitter.services.MailService;
 import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    private final MailService mailService;
 
     @ExceptionHandler({EmailAlreadyTakenException.class})
     public ResponseEntity<String> handleEmailTaken() {
@@ -123,7 +126,21 @@ public class AuthenticationController {
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
         String username = userService.verifyUsername(credential);
         return new ResponseEntity<String>(username, HttpStatus.OK);
-
     }
+
+    @PostMapping("/identifiers")
+    public FindUsernameRequest findIdentifiers(@RequestBody FindUsernameRequest credential) {
+       AppUser user = userService.getUserEmailAndPhone(credential);
+       return  new FindUsernameRequest(user.getEmail(),user.getPhone(),user.getUsername());
+    }
+
+    @PostMapping("/password/code")
+    public ResponseEntity<String> retreivePasswordCode(@RequestBody PasswordCodeRequest body) throws EmailFailedToSendException{
+        String email = body.getEmail();
+        int code = body.getCode();
+        mailService.sendEmail(email,"Your password reset code",""+code);
+        return new ResponseEntity<String>("Code sent Successfully",HttpStatus.OK);
+    }
+
 
 }

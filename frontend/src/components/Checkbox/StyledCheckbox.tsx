@@ -26,6 +26,6 @@ export const StyledCheckboxBackground = styled.div<StyledCheckboxProps>`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props.active ? "rgba(29,161,242,0.15)" : "rgba(0,0,0,0.07"};
+      props.active ? "rgba(29,161,242,0.15)" : "rgba(0,0,0,0.07)"};
   }
 `;

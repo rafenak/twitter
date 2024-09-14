@@ -16,11 +16,11 @@ export const ForgotButtonOne: React.FC<ForgotButtonOneProps> = ({
       <ModalButton
         active={value ? true : false}
         height={50}
-        fontColor={"white"}
-        backgroundColor={value ? "black" : "rgba(0,0,0,0.8)"}
-        fontSize={17}
-        fontWeight={700}
-        hoverBackgound={{
+        fontcolor={"white"}
+        backgroundcolor={value ? "black" : "rgba(0,0,0,0.8)"}
+        fontsize={17}
+        fontweight={700}
+        hoverbackgound={{
           r: 0,
           g: 0,
           b: 0,

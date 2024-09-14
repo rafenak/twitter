@@ -42,9 +42,10 @@ public class TwitterBackendApplication {
 			AppUser appUser = new AppUser();
 			appUser.setFirstName("Rafe");
 			appUser.setLastName("Nakhuda");
-            appUser.setEmail("rafe@mail.com");
+            appUser.setEmail("sipesa1674@ofionk.com");
             appUser.setUsername("rafen");
             appUser.setPassword(encoder.encode("password"));
+            appUser.setPhone("9876543210");
             appUser.setEnabled(true);
 			appUser.setAuthorities(roles);
 

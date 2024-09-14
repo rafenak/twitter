@@ -48,18 +48,18 @@ export const LoginFormOne: React.FC<LoginFormOneProps> = ({noAccount}) => {
       <ModalButton
         active={true}
         height={40}
-        fontColor={"#536471"}
-        boderColor={"#536471"}
-        backgroundColor={"white"}
-        fontSize={15}
-        fontWeight={600}
-        hoverBackgound={{
+        fontcolor={"#536471"}
+        bodercolor={"#536471"}
+        backgroundcolor={"white"}
+        fontsize={15}
+        fontweight={600}
+        hoverbackgound={{
           r: 179,
           g: 204,
           b: 255,
           a: 0.05,
         }}
-        hoverBorder={{
+        hoverborder={{
           r: 128,
           g: 170,
           b: 255,
@@ -76,18 +76,18 @@ export const LoginFormOne: React.FC<LoginFormOneProps> = ({noAccount}) => {
       <ModalButton
         active={true}
         height={40}
-        fontColor={"black"}
-        boderColor={"#536471"}
-        backgroundColor={"white"}
-        fontSize={16}
-        fontWeight={700}
-        hoverBackgound={{
+        fontcolor={"black"}
+        bodercolor={"#536471"}
+        backgroundcolor={"white"}
+        fontsize={16}
+        fontweight={700}
+        hoverbackgound={{
           r: 87,
           g: 87,
           b: 87,
           a: 0.1,
         }}
-        hoverBorder={{
+        hoverborder={{
           r: 87,
           g: 87,
           b: 87,
@@ -116,11 +116,11 @@ export const LoginFormOne: React.FC<LoginFormOneProps> = ({noAccount}) => {
       <ModalButton
         active={true}
         height={40}
-        fontColor={"white"}
-        backgroundColor={"black"}
-        fontSize={16}
-        fontWeight={700}
-        hoverBackgound={{
+        fontcolor={"white"}
+        backgroundcolor={"black"}
+        fontsize={16}
+        fontweight={700}
+        hoverbackgound={{
           r: 0,
           g: 0,
           b: 0,
@@ -134,18 +134,18 @@ export const LoginFormOne: React.FC<LoginFormOneProps> = ({noAccount}) => {
       <ModalButton
         active={true}
         height={40}
-        fontColor={"black"}
-        boderColor={"#d3d3d3"}
-        backgroundColor={"white"}
-        fontSize={16}
-        fontWeight={700}
-        hoverBackgound={{
+        fontcolor={"black"}
+        bodercolor={"#d3d3d3"}
+        backgroundcolor={"white"}
+        fontsize={16}
+        fontweight={700}
+        hoverbackgound={{
           r: 83,
           g: 100,
           b: 113,
           a: 0.2,
         }}
-        hoverBorder={{
+        hoverborder={{
           r: 211,
           g: 211,
           b: 211,

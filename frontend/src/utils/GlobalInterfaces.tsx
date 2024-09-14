@@ -71,11 +71,11 @@ export interface RGBA{
 export interface ModalButtonProps{
   active:boolean;
   height: number;
-  fontColor:string;
-  boderColor?:string;
-  backgroundColor:string;
-  fontSize:number;
-  fontWeight:number;
-  hoverBackgound: RGBA
-  hoverBorder?:RGBA
+  fontcolor:string;
+  bodercolor?:string;
+  backgroundcolor:string;
+  fontsize:number;
+  fontweight:number;
+  hoverbackgound: RGBA
+  hoverborder?:RGBA
 }

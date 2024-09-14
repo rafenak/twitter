@@ -12,22 +12,22 @@ export const ModalButton = styled.button<ModalButtonProps>`
   border-radius: 20px;
   padding: 12px;
   height: ${(props) => `${props.height}px`};
-  color: ${(props) => props.fontColor};
+  color: ${(props) => props.fontcolor};
   border: ${(props) =>
-    props.boderColor ? `solid 1px ${props.boderColor}` : "none"};
+    props.bodercolor ? `solid 1px ${props.bodercolor}` : "none"};
   border-radius: ${(props) => `${props.height / 2}px`};
-  background-color: ${(props) => props.backgroundColor};
-  font-weight: ${(props) => props.fontWeight};
-  font-size: ${(props) => props.fontSize};
+  background-color: ${(props) => props.backgroundcolor};
+  font-weight: ${(props) => props.fontweight};
+  font-size: ${(props) => `${props.fontsize}px`};
   &:hover {
     cursor: ${(props) => (props.active ? "pointer" : "auto")};
     background-color: ${(props) =>
       props.active
-        ? `rgba(${props.hoverBackgound.r},${props.hoverBackgound.g},${props.hoverBackgound.b},${props.hoverBackgound.a})`
-        : props.backgroundColor};
+        ? `rgba(${props.hoverbackgound.r},${props.hoverbackgound.g},${props.hoverbackgound.b},${props.hoverbackgound.a})`
+        : props.backgroundcolor};
     border: ${(props) =>
-      props.hoverBorder && props.active
-        ? `solid 1px rgba(${props.hoverBorder.r},${props.hoverBorder.g},${props.hoverBorder.b},${props.hoverBorder.a})`
+      props.hoverborder && props.active
+        ? `solid 1px rgba(${props.hoverborder.r},${props.hoverborder.g},${props.hoverborder.b},${props.hoverborder.a})`
         : "none"};
   }
 `;
