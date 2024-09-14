@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "../../../../components/modal/Modal";
 import { ForgotModalTop } from "../ForgotModalTop/ForgotModalTop";
 import { validateEmail, validatePhone } from "../../../../services/Validators";
@@ -26,7 +26,13 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
   const [error, setError] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
   const [resetCode, setResetCode] = useState<number>(0);
-  const [userInputCode,setUserInputCode] =useState<number>(0);
+  const [userInputCode, setUserInputCode] = useState<number>(0);
+  const [password, setPassword] = useState<Record<string, string>>({
+    password: "",
+    confirm: "",
+  });
+
+  const [matching, setMatching] = useState<boolean>(false);
 
   const changeCredentials = (credential: string) => {
     setCredential(credential);
@@ -36,6 +42,12 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     setUserInputCode(value);
   };
 
+  const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword({
+      ...password,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const searchUser = async () => {
     let findUserDTO = {
@@ -97,15 +109,19 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     }
   };
 
-  const checkCode = () =>{
-    if(resetCode===userInputCode){
+  const checkCode = () => {
+    if (resetCode === userInputCode) {
       setStep(4);
-    }else{
-      setError(true)
+    } else {
+      setError(true);
     }
-  }
+  };
 
-
+  useEffect(() => {
+    if (password.password && password.confirm) {
+      setMatching(password.password === password.confirm);
+    }
+  }, [password.password, password.confirm]);
 
   return (
     <div>
@@ -118,7 +134,9 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
           userInfo.email,
           userInfo.phone,
           !error,
-          changeUserInputCode
+          changeUserInputCode,
+          updatePassword,
+          matching
         )}
         bottomContent={determineForgotButton(
           step,
@@ -128,7 +146,9 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
           sendResetCode,
           userInputCode ? true : false,
           checkCode,
-          ()=>{setStep(2)}
+          () => {
+            setStep(2);
+          }
         )}
       />
     </div>

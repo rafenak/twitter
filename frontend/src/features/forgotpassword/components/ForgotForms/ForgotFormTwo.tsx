@@ -42,7 +42,7 @@ export const ForgotFormTwo: React.FC<ForgotFormTwoProps> = ({email,phone}) => {
 
   return (
     <div className="forgot-form-container">
-      <h1 className="forgot form header">
+      <h1 className="forgot-form-header">
         Where should we send a confirmation code?
       </h1>
       <p className="forgot-form-text color-gray">
