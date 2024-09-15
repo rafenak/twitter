@@ -1,45 +1,56 @@
 .landing-footer {
-    height: fit-content;
-    display: flex;
-    justify-content: space-evenly;
+  height: fit-content;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allows wrapping on small screens */
+  padding: 10px 0; /* Space around footer items */
+  background-color: #f8f9fa; /* Optional: Add a background color for better visibility */
+}
+
+.footer-link {
+  font-size: clamp(12px, 2vw, 14px); /* Scales between 12px and 14px depending on screen size */
+  font-weight: 400;
+  margin: 0 15px; /* Simplified margin for consistent spacing */
+  padding-top: 2px;
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+.footer-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: clamp(12px, 2vw, 14px); /* Similar scaling for copyright text */
+  font-weight: 400;
+  margin: 0 15px;
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+/* Mobile support: Adjust layout for small screens */
+@media (max-width: 768px) {
+  .landing-footer {
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center;
     align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap; /* This allows wrapping on small screens */
-    padding: 10px 0; /* Add padding to give space around footer items */
   }
-  
-  .footer-link {
-    font-size: 13px;
-    font-weight: 400;
-    margin: 0 15px; /* Combine margins for simpler layout */
-    padding-top: 2px;
-    white-space: nowrap; /* Prevent links from breaking onto multiple lines */
-  }
-  
-  .footer-link:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
+
+  .footer-link,
   .footer-copyright {
-    font-size: 13px;
-    font-weight: 400;
-    margin: 0 15px;
-    white-space: nowrap; /* Prevent copyright text from breaking onto multiple lines */
+    margin: 5px 0; /* Reduce margin for small screens */
+    font-size: 12px; /* Optionally reduce font size on smaller devices */
   }
-  
-  /* Mobile support: Adjust layout on small screens */
-  @media (max-width: 768px) {
-    .landing-footer {
-      flex-direction: column; /* Stack items vertically on mobile */
-      justify-content: center;
-      align-items: center;
-    }
-  
-    .footer-link,
-    .footer-copyright {
-      margin: 5px 0; /* Reduce margin for small screens */
-      font-size: 12px; /* Optionally reduce font size for smaller screens */
-    }
+}
+
+@media (max-width: 480px) {
+  .landing-footer {
+    padding: 5px 0; /* Adjust padding for very small screens */
   }
-  
+
+  .footer-link,
+  .footer-copyright {
+    font-size: 11px; /* Further reduce font size */
+  }
+}

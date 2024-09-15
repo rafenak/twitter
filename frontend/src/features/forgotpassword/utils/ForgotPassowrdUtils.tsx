@@ -2,10 +2,12 @@ import React from "react";
 import { ForgotButtonOne } from "../components/ForgotButtons/ForgotButtonOne";
 import { ForgotButtonThree } from "../components/ForgotButtons/ForgotButtonThree";
 import { ForgotButtonTwo } from "../components/ForgotButtons/ForgotButtonTwo";
+import { ForgotButtonFour } from "../components/ForgotButtons/ForgotButtonFour";
 import { ForgotFormFour } from "../components/ForgotForms/ForgotFormFour";
 import { ForgotFormOne } from "../components/ForgotForms/ForgotFormOne";
 import { ForgotFormThree } from "../components/ForgotForms/ForgotFormThree";
 import { ForgotFormTwo } from "../components/ForgotForms/ForgotFormTwo";
+
 
 export const determineForgotFormContent = (
   step: number,
@@ -39,7 +41,9 @@ export const determineForgotButton = (
   sendCode: () => void,
   formThreeActive:boolean,
   checkCode: () => void,
-  back:() => void
+  back:() => void,
+  submitNewPassword:()=> void,
+  formFourActive:boolean,
 ): JSX.Element => {
   switch (step) {
     case 1:
@@ -50,6 +54,9 @@ export const determineForgotButton = (
 
     case 3:
        return <ForgotButtonThree active={formThreeActive} checkCode={checkCode} back={back}/>; 
+
+    case 4:
+      return <ForgotButtonFour active={formFourActive} submitNewPassword={submitNewPassword} />   
   }
   return <></>;
 };

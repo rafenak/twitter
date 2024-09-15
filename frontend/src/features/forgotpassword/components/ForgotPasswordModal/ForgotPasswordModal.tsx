@@ -7,6 +7,7 @@ import {
   determineForgotButton,
   determineForgotFormContent,
 } from "../../utils/ForgotPassowrdUtils";
+import { machine } from "os";
 
 interface UserInfo {
   email: string;
@@ -32,7 +33,7 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     confirm: "",
   });
 
-  const [matching, setMatching] = useState<boolean>(false);
+  const [matching, setMatching] = useState<boolean>(true);
 
   const changeCredentials = (credential: string) => {
     setCredential(credential);
@@ -117,6 +118,20 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
     }
   };
 
+  const sendPassword = async()=>{
+    let body={
+      username:userInfo.username,
+      password:password.password
+    }
+    try {
+      let req = await axios.put("http://localhost:8000/auth/update/password", body);
+      let res = await req.data;
+      toggleModal();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     if (password.password && password.confirm) {
       setMatching(password.password === password.confirm);
@@ -148,7 +163,9 @@ export const ForgotPasswordModal: React.FC<{ toggleModal: () => void }> = ({
           checkCode,
           () => {
             setStep(2);
-          }
+          },
+          sendPassword,
+          (password.password && matching ? true  : false)
         )}
       />
     </div>

@@ -15,7 +15,7 @@ import ForgotPasswordModal from '../features/forgotpassword'
 export const Landing:React.FC = () => {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false)
-  const [forgotPassword, setforgotPassword] = useState<boolean>(true)
+  const [forgotPassword, setforgotPassword] = useState<boolean>(false)
   const dispatch:AppDisptach= useDispatch();
 
   const toggleRegister=()=>{
@@ -28,16 +28,18 @@ export const Landing:React.FC = () => {
   }
 
   const toggleForgotPassword=()=>{
+    //toggleLogin();
+    setLogin(false)
     setforgotPassword(!forgotPassword);
   }
 
   return (
     <div className='home-container bg-color'>
       {register ? <RegisterModal toggleModal={toggleRegister} /> : <></>}
-      {login ? <LoginModal toggleModal={toggleLogin} toggleRegister={toggleRegister} />: <></>}
+      {login ? <LoginModal toggleModal={toggleLogin} toggleRegister={toggleRegister} toggleForgot={toggleForgotPassword}/>: <></>}
       {forgotPassword ? <ForgotPasswordModal toggleModal={toggleForgotPassword}/>: <></>}
       <div className='landing-layout'>
-        <div className='landing-top-left bg-blue'>
+        <div className='landing-top-left'>
           <img src={socialWhiteLogo} className='landing-top-left-logo' alt='leftlogo'/>
         </div>
         <div className="landing-top-right">

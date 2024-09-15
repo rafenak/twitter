@@ -1,8 +1,8 @@
 import React from "react";
 import "./RightSideBar.css";
 import "../../../../assets/global.css";
-import logoBlue from "../../../../assets/twitter-logo-large-blue.png";
-//import logoSocial from '../../../../assets/social-media-no-bg.png'
+//import logoBlue from "../../../../assets/twitter-logo-large-blue.png";
+import logoSocial from '../../../../assets/social-media-no-bg.png'
 import { GoogleButton } from "../Buttons/GoogleButton";
 import { AppleButton } from "../Buttons/AppleButton";
 import { SignUpButton } from "../Buttons/SignUpButton";
@@ -20,7 +20,7 @@ export const RightSideBar: React.FC<RightSideBarProps> = ({
 }) => {
   return (
     <div className="right-side-bar">
-      <img src={logoBlue} className="right-side-bar-logo" alt="logoBlue" />
+      <img src={logoSocial} className="right-side-bar-logo" alt="logoBlue" />
       <h1 className="right-side-bar-h1">Happening Now</h1>
       <h2 className="right-side-bar-h2">Join Social Media today.</h2>
       <div className="right-side-bar-signup-wrapper">

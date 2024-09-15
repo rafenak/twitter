@@ -9,7 +9,7 @@
   left: 10px;
   width: 90%;
   line-height: 26px;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px); /* Responsive font size */
   font-weight: 300;
   background-color: rgba(255, 255, 255, 0);
   border: none;
@@ -22,31 +22,57 @@
   border: none;
 }
 
-.validated-date-selector{
+.validated-date-selector {
   -webkit-appearance: none;
   -moz-appearance: none;
   width: 100%; 
 }
 
-.validated-input-remainder{
-  position:absolute;
+.validated-input-remainder {
+  position: absolute;
   top: 5px;
   right: 10px;
-  font-size: 13px;
+  font-size: clamp(11px, 1.5vw, 13px); /* Responsive font size */
   font-weight: 500;
   color: #657786;
 }
 
-.dropdown-container{
+.dropdown-container {
   margin-bottom: 10px;
 }
 
-.disabled-validated-input{
+.disabled-validated-input {
   height: fit-content;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.validate-input-text-transparent{
-color: rgba(0, 0, 0, 0.4);
+.validate-input-text-transparent {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .validated-input-value {
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  .validated-input-remainder {
+    font-size: 12px;
+  }
+
+  .validated-input {
+    padding: 5px; /* Add padding for smaller devices */
+  }
+}
+
+/* Larger devices */
+@media (min-width: 1200px) {
+  .validated-input-value {
+    font-size: 18px;
+  }
+
+  .validated-input-remainder {
+    font-size: 14px;
+  }
 }
