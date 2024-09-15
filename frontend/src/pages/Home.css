@@ -51,7 +51,7 @@
     .home-layout {
       width: 1200px;
       height: 100%;
-      background-color: blue;
+      /* background-color: blue; */
       display: grid;
       grid-template-areas: "one two three";
       grid-template-columns: 260px 1fr 350px;
@@ -60,7 +60,7 @@
     .home-navigation-section {
       grid-area: one;
       height: 100%;
-      background-color: blueviolet;
+      /* background-color: blueviolet; */
     }
   
     .home-content-section {
@@ -71,7 +71,7 @@
     .home-info-section {
       grid-area: three;
       height: 100%;
-      background-color: brown;
+      /* background-color: brown; */
     }
   }
   
