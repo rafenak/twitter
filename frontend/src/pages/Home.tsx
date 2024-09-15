@@ -6,6 +6,7 @@ import { setToken } from "../redux/Slices/UserSlice";
 import { useNavigate } from "react-router-dom";
 import './Home.css'
 import { Navigation } from "../components/Navigation/Navigation";
+import { Feed } from "../features/feed/components/Feed/Feed";
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
@@ -35,7 +36,9 @@ export const Home: React.FC = () => {
         <div className="home-navigation-section">
           <Navigation />
         </div>
-        <div className="home-content-section"></div>
+        <div className="home-content-section">
+          <Feed />
+        </div>
         <div className="home-info-section"></div>
       </div>
     </div>
