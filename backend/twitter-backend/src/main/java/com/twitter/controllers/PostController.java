@@ -7,10 +7,13 @@ import com.twitter.models.AppUser;
 import com.twitter.models.Post;
 import com.twitter.request.CreatePostRequest;
 import com.twitter.services.PostService;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -37,6 +40,11 @@ public class PostController {
     @PostMapping("/")
     public Post createPost(@RequestBody CreatePostRequest request){
         return postService.createPost(request);
+    }
+
+    @PostMapping(value = "/media",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Post createMediaPost(@RequestPart("post") String post, @RequestPart("media")List<MultipartFile> files){
+        return  postService.createMediaPost(post,files);
     }
 
     @ExceptionHandler({PostDoesNotExistsException.class})

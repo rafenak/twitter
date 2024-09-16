@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ImageService {
 
-    private static final File DIRECTORY = new File("/Users/rafe/Desktop/Work/twitter/backend/twitter-backend/img");
+    private static final File DIRECTORY = new File(System.getProperty("user.dir") + "/img");
     private static final String URL = "http://localhost:8000/images/";
     private final ImageRepository imageRepository;
 
