@@ -15,16 +15,16 @@ export const Home: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-   if(jwt !=='' && state.token !==''){
-      dispatch(getUserByToken(state.token))
-   }else if( jwt ==='' && state.token !== ''){
-    setJwt(state.token)
-   }else if (jwt  !=='' && state.token ===''){
-    setToken(jwt)
-   }else{
-    navigate('/')
-   }
-  }, []);
+    if (jwt !== "" && state.token !== "") {
+      dispatch(getUserByToken(state.token));
+    } else if (jwt === "" && state.token !== "") {
+      setJwt(state.token);
+    } else if (jwt !== "" && state.token === "") {
+      setToken(jwt);
+    } else {
+      navigate("/");
+    }
+  }, [state.token]);
 
   return (
     <div className="home">
