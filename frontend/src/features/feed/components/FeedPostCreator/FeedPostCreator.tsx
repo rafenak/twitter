@@ -11,8 +11,17 @@ import ScheduleSVG from "../../../../components/SVGs/ScheduleSVG";
 import LocationSVG from "../../../../components/SVGs/LocationSVG";
 import "./FeedPostCreator.css";
 import { FeedPostCreatorProgress } from "../FeedPostCreatorProgress/FeedPostCreatorProgress";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDisptach, RootState } from "../../../../redux/Store";
+import {
+  initializeCurrentPost,
+  updateCurrentPost,
+} from "../../../../redux/Slices/PostSlice";
+import { Post } from "../../../../utils/GlobalInterfaces";
 
 export const FeedPostCreator: React.FC = () => {
+  const state = useSelector((state: RootState) => state);
+  const dispatch: AppDisptach = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [active, setActive] = useState<boolean>(false);
@@ -21,6 +30,21 @@ export const FeedPostCreator: React.FC = () => {
   const activate = () => {
     if (!active) {
       setActive(true);
+      if (state.user.loggedIn) {
+        let p: Post = {
+          postId: 0,
+          content: "",
+          author: state.user.loggedIn,
+          likes: 0,
+          images: [],
+          reposts: 0,
+          views: 0,
+          scheduled: false,
+          audience: "EVERYONE",
+          replyRestriction: "EVERYONE",
+        };
+        dispatch(initializeCurrentPost(p));
+      }
     }
     if (textAreaRef && textAreaRef.current) {
       textAreaRef.current.focus();
@@ -34,6 +58,13 @@ export const FeedPostCreator: React.FC = () => {
       textAreaRef.current.style.height =
         textAreaRef.current.scrollHeight + "px";
     }
+
+    dispatch(
+      updateCurrentPost({
+        name: "content",
+        vallue: e.target.value,
+      })
+    );
   };
 
   return (
@@ -108,15 +139,17 @@ export const FeedPostCreator: React.FC = () => {
             </div>
           </div>
           <div className="feed-post-creator-submit-cluster">
-            {
-              postContent !=='' ? <div className="feed-post-creator-submit-cluster-left">
+            {postContent !== "" ? (
+              <div className="feed-post-creator-submit-cluster-left">
                 <FeedPostCreatorProgress
                   percent={(postContent.length / 255) * 100}
                 />
                 <span className="feed-post-creator-submit-cluster-divider"></span>
                 <div className="feed-post-creator-submit-cluster-add">+</div>
-              </div> : <></>
-            }
+              </div>
+            ) : (
+              <></>
+            )}
             <button
               className={
                 postContent === ""
