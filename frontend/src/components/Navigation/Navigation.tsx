@@ -1,6 +1,7 @@
-import React from "react";
-
+import React,{useEffect} from "react";
 import { Link } from "react-router-dom";
+import { useSelector, UseSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 import logoSocial from "../../assets/social-media-no-bg.png";
 import HomeSVG from "../SVGs/HomeSVG";
 import ExploreSVG from "../SVGs/ExploreSVG";
@@ -12,10 +13,12 @@ import VerifiedSVG from "../SVGs/VerifiedSVG";
 import ProfileSVG from "../SVGs/ProfileSVG";
 import MoreSVG from "../SVGs/MoreSVG";
 import defaultProfile from '../../assets/Generic-Profile.jpg'
-
-
 import "./Navigation.css";
+
 export const Navigation: React.FC = () => {
+
+    const state = useSelector((state:RootState)=>state.user)
+
   return (
     <div className="navigation">
       <nav className="navigation-container">
@@ -89,8 +92,8 @@ export const Navigation: React.FC = () => {
           alt="pfp"
         />
         <div className="navigation-options-info">
-          <p className="navigation-options-info-display-name">Rafe</p>
-          <p className="navigation-options-info-handle">@rafen</p>
+          <p className="navigation-options-info-display-name">{state.loggedIn && state.loggedIn.nickname ? state.loggedIn.nickname : state.loggedIn?.username}</p>
+          <p className="navigation-options-info-handle">{state.username ? state.username : "" }</p>
         </div>
         <p className="navigation-options-dotdotdot">...</p>
       </div>

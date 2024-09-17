@@ -26,7 +26,7 @@ const initialState: UserSliceState = {
   fromRegister: false,
   error: false,
   username: "",
-  token: ""
+  token: "",
 };
 
 /**
@@ -68,6 +68,22 @@ export const verifyUsername = createAsyncThunk(
   }
 );
 
+export const getUserByToken = createAsyncThunk(
+  "user/gettoken",
+  async (token: string, thuckAPI) => {
+    try {
+      const req = await axios.get("http://localhost:8000/auth/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return req.data;
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
 export const UserSlice = createSlice({
   name: "user",
   initialState,
@@ -86,13 +102,13 @@ export const UserSlice = createSlice({
       };
       return state;
     },
-    setToken(state,action: PayloadAction<string>){
+    setToken(state, action: PayloadAction<string>) {
       state = {
         ...state,
-        token: action.payload
+        token: action.payload,
       };
       return state;
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(loginUser.fulfilled, (state, action) => {
@@ -111,7 +127,7 @@ export const UserSlice = createSlice({
           profilePicture: action.payload.user.profilePicture,
           bannerPicture: action.payload.user.bannerPicture,
         },
-        token: action.payload.token
+        token: action.payload.token,
       };
 
       return state;
@@ -156,9 +172,35 @@ export const UserSlice = createSlice({
       };
       return state;
     });
+
+    builder.addCase(getUserByToken.fulfilled, (state, action) => {
+      state = {
+        ...state,
+        loggedIn: action.payload,
+        username: action.payload.username,
+      };
+      return state;
+    });
+
+    builder.addCase(getUserByToken.pending, (state, action) => {
+      state = {
+        ...state,
+        error: false,
+      };
+      return state;
+    });
+
+    builder.addCase(getUserByToken.rejected, (state, action) => {
+      state = {
+        ...state,
+        error: true,
+      };
+      return state;
+    });
+    
   },
 });
 
-export const { setFromReigster,resetUsername,setToken } = UserSlice.actions;
+export const { setFromReigster, resetUsername, setToken } = UserSlice.actions;
 
 export default UserSlice.reducer;
