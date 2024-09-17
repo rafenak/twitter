@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 
 import RegisterModal from '../features/register'
 import './Landing.css'
@@ -11,11 +11,17 @@ import { useDispatch } from 'react-redux'
 import { AppDisptach } from '../redux/Store'
 import { resetUsername } from '../redux/Slices/UserSlice'
 import ForgotPasswordModal from '../features/forgotpassword'
+import { useNavigate } from 'react-router-dom'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 export const Landing:React.FC = () => {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false)
   const [forgotPassword, setforgotPassword] = useState<boolean>(false)
+
+  const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
+  const navigate=useNavigate();
+
   const dispatch:AppDisptach= useDispatch();
 
   const toggleRegister=()=>{
@@ -32,6 +38,15 @@ export const Landing:React.FC = () => {
     setLogin(false)
     setforgotPassword(!forgotPassword);
   }
+
+  useEffect(()=>{
+    if(jwt !==''){
+      navigate('/home')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[jwt])
+
+
 
   return (
     <div className='home-container bg-color'>
