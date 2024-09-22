@@ -69,10 +69,10 @@ export const verifyUsername = createAsyncThunk(
 );
 
 export const getUserByToken = createAsyncThunk(
-  "user/gettoken",
+  "user/token",
   async (token: string, thuckAPI) => {
     try {
-      const req = await axios.get("http://localhost:8000/auth/verify", {
+      const req = await axios.get("http://localhost:8000/user/verify", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

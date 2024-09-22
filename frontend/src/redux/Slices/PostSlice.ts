@@ -9,9 +9,9 @@ interface PostSliceState {
   posts: Post[];
 }
 
-interface updatePostPayLoad {
+interface UpdatePostPayload {
   name: string;
-  vallue: string | number | boolean;
+  value: string | number | boolean;
 }
 
 interface CreatePostBody {
@@ -19,7 +19,7 @@ interface CreatePostBody {
   author: User;
   replies: Post[];
   scheduled: boolean;
-  scheduledDate: boolean | undefined;
+  scheduledDate: Date | undefined;
   audience: "EVERYONE" | "CIRCLE";
   replyRestriction: "EVERYONE" | "FOLLOW" | "MENTION";
   token: string;
@@ -73,25 +73,45 @@ export const PostSlice = createSlice({
       return state;
     },
 
-    updateCurrentPost(state, action: PayloadAction<updatePostPayLoad>) {
+    updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
       if (state.currentPost) {
         state.currentPost = {
           ...state.currentPost,
-          [action.payload.name]: action.payload.vallue,
+          [action.payload.name]: action.payload.value,
         };
-      }
+      }  
       return state;
     },
   },
-  extraReducers(builder){
-    builder.addCase(createPost.pending,(state,action)=>{
-        state={
-            ...state,
-            loading:true
-        }
-        return state;
-    })
-  }
+  extraReducers(builder) {
+    builder.addCase(createPost.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
+      return state;
+    });
+
+    builder.addCase(createPost.fulfilled, (state, action) => {
+      let post: Post = action.payload;
+      state = {
+        ...state,
+        posts: [post, ...state.posts],
+        loading: false,
+        error: false,
+        currentPost: undefined,
+      };
+      return state;
+    });
+
+    builder.addCase(createPost.rejected, (state, action) => {
+      state = {
+        ...state,
+        error: true,
+      };
+      return state;
+    });
+  },
 });
 
 export const { initializeCurrentPost, updateCurrentPost } = PostSlice.actions;
