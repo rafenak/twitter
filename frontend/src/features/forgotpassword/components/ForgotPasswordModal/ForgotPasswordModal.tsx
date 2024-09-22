@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal } from "../../../../components/modal/Modal";
+import { Modal } from "../../../../components/Modal/Modal";
 import { ForgotModalTop } from "../ForgotModalTop/ForgotModalTop";
 import { validateEmail, validatePhone } from "../../../../services/Validators";
 import axios from "axios";

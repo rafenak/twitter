@@ -108,5 +108,5 @@ export interface Post{
   scheduled:boolean;
   scheduledDate?:Date;
   audience: 'EVERYONE' | 'CIRCLE';
-  replyRestriction: 'EVERYONE' | 'FOLLOW' | 'MENTION'
+  replyRestriction: 'EVERYONE' | 'FOLLOW' | 'CIRCLE' | 'MENTION'
 }

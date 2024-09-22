@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import { Modal } from "../../../../components/modal/Modal";
+import { Modal } from "../../../../components/Modal/Modal";
 import { LoginTopModal } from "../LoginTopModal/LoginTopModal";
 import { LoginFormOne } from "../LoginForms/LoginFormOne";
 import { RootState } from "../../../../redux/Store";

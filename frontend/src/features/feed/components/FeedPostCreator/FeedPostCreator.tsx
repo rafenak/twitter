@@ -19,6 +19,7 @@ import {
   updateCurrentPost,
 } from "../../../../redux/Slices/PostSlice";
 import { Post } from "../../../../utils/GlobalInterfaces";
+import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -102,7 +103,8 @@ export const FeedPostCreator: React.FC = () => {
         <img className="feed-post-creator-pfp" src={defaultProfile} alt="pfd" />
       </Link>
       <div className="feed-post-creator-right">
-        <div
+        <FeedPostAudienceDropDown />
+        {/* <div
           className={
             active
               ? "feed-post-creator-audience"
@@ -115,7 +117,7 @@ export const FeedPostCreator: React.FC = () => {
               fontSize: "22px",
             }}
           />
-        </div>
+        </div> */}
         <textarea
           className={
             active
