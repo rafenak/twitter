@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import defaultProfile from "../../../../assets/Generic-Profile.jpg";
 import { ExpandMore } from "@mui/icons-material";
@@ -14,6 +14,7 @@ import { FeedPostCreatorProgress } from "../FeedPostCreatorProgress/FeedPostCrea
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import {
+  createPost,
   initializeCurrentPost,
   updateCurrentPost,
 } from "../../../../redux/Slices/PostSlice";
@@ -27,6 +28,7 @@ export const FeedPostCreator: React.FC = () => {
   const [active, setActive] = useState<boolean>(false);
   const [postContent, setPostContent] = useState<string>("");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const activate = () => {
     if (!active) {
       setActive(true);
@@ -58,14 +60,41 @@ export const FeedPostCreator: React.FC = () => {
       textAreaRef.current.style.height =
         textAreaRef.current.scrollHeight + "px";
     }
-
     dispatch(
       updateCurrentPost({
         name: "content",
-        vallue: e.target.value,
+        value: e.target.value,
       })
     );
   };
+
+  const submitPost = () => {
+    if (state.post.currentPost && state.user.loggedIn) {
+      let body = {
+        content: state.post.currentPost.content,
+        author: state.post.currentPost.author,
+        replies: [],
+        scheduled: state.post.currentPost.scheduled,
+        scheduledDate: state.post.currentPost.scheduledDate,
+        audience: state.post.currentPost.audience,
+        replyRestriction: state.post.currentPost.replyRestriction,
+        token: state.user.token,
+      };
+      dispatch(createPost(body));
+    }
+    setActive(false);
+
+    if (textAreaRef && textAreaRef.current?.focus) {
+      textAreaRef.current.blur();
+      textAreaRef.current.value = "";
+    }
+  };
+
+  useEffect(() => {
+    if (!state.post.currentPost) {
+      setPostContent("");
+    }
+  }, [state.post.currentPost, postContent, activate]);
 
   return (
     <div className="feed-post-creartor" onClick={activate}>
@@ -157,6 +186,7 @@ export const FeedPostCreator: React.FC = () => {
                   : "feed-post-creator-post-button post-active"
               }
               disabled={postContent === ""}
+              onClick={submitPost}
             >
               Post
             </button>

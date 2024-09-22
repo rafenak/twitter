@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
     } else if (jwt === "" && state.token !== "") {
       setJwt(state.token);
     } else if (jwt !== "" && state.token === "") {
-      setToken(jwt);
+      dispatch(setToken(jwt)); 
     } else {
       navigate("/");
     }
