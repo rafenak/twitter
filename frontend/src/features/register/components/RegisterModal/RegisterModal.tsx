@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Modal } from "../../../../components/modal/Modal";
+import { Modal } from "../../../../components/Modal/Modal";
 import { RegisterStepCounter } from "../RegisterStepCounter/RegisterStepCounter";
 import { determineModalContent } from "../../utils/RegisterModalUtils";
 import { useDispatch, useSelector } from "react-redux";
