@@ -1,6 +1,6 @@
 import { SVGProps } from "../../utils/GlobalInterfaces";
 
-export default function CircleSVG(props: SVGProps) {
+export default function LockSVG(props: SVGProps) {
   return (
     <svg
       viewBox="0 0 24 24"

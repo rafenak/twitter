@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Post, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 
-interface PostSliceState {
+export interface PostSliceState {
   loading: boolean;
   error: boolean;
   currentPost: Post | undefined;

@@ -20,6 +20,7 @@ import {
 } from "../../../../redux/Slices/PostSlice";
 import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
+import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -103,7 +104,7 @@ export const FeedPostCreator: React.FC = () => {
         <img className="feed-post-creator-pfp" src={defaultProfile} alt="pfd" />
       </Link>
       <div className="feed-post-creator-right">
-        <FeedPostAudienceDropDown />
+       { active ?  <FeedPostAudienceDropDown /> : <></> }
         {/* <div
           className={
             active
@@ -130,14 +131,15 @@ export const FeedPostCreator: React.FC = () => {
           cols={50}
           maxLength={256}
         />
-        <div
+        {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
+        {/* <div
           className={
             active ? "feed-post-creator-reply" : "feed-post-creator-reply hide"
           }
         >
           <GlobeSVG height={14} width={14} color={"#1DA1F2"} />
           Everyone can Reply
-        </div>
+        </div> */}
         <div
           className={
             active
