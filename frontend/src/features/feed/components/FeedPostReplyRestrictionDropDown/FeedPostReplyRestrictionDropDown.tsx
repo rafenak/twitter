@@ -45,10 +45,10 @@ export const FeedPostReplyRestrictionDropDown:React.FC = () => {
                 <p className="feed-post-reply-restriction-dropdown-sub-title">Any mentioned can always reply.</p>
                 <div id="Everyone" className="feed-post-reply-restriction-dropdown-choice" onClick={handleChangeSelection}>
                     <div className="feed-post-reply-restriction-dropdown-choice-left">
-                        <div  className="feed-post-reply-restriction-dropdown-choice-everyone-bg">
+                        <div  className="feed-post-reply-restriction-dropdown-choice-bg">
                             <GlobeSVG height={20} width={20} color={'#FFF'} />
                         </div>
-                        <p className="feed-post-reply-restriction-dropdown-choice-tesr">Everyone</p>
+                        <p className="feed-post-reply-restriction-dropdown-choice-text">Everyone</p>
                     </div>
                     {selection === 'Everyone' ? <Check sx={{
                                 color: '#1DA1F2',
@@ -60,7 +60,7 @@ export const FeedPostReplyRestrictionDropDown:React.FC = () => {
                         <div  className="feed-post-reply-restriction-dropdown-choice-bg">
                             <PeopleYouFollowSVG height={20} width={20} color={'#FFF'} />
                         </div>
-                        <p className="feed-post-reply-restriction-dropdown-choice-tesr">People yor follow</p>
+                        <p className="feed-post-reply-restriction-dropdown-choice-text">People yor follow</p>
                     </div>
                     {selection === 'Follow' ? <Check sx={{
                                 color: '#1DA1F2',
@@ -72,7 +72,7 @@ export const FeedPostReplyRestrictionDropDown:React.FC = () => {
                         <div  className="feed-post-reply-restriction-dropdown-choice-bg">
                             <MentionedSVG height={20} width={20} color={'#FFF'} />
                         </div>
-                        <p className="feed-post-reply-restriction-dropdown-choice-tesr">Only people you mention</p>
+                        <p className="feed-post-reply-restriction-dropdown-choice-text">Only people you mention</p>
                     </div>
                     {selection === 'Mention' ? <Check sx={{
                                 color: '#1DA1F2',
