@@ -17,6 +17,7 @@ import {
   createPost,
   initializeCurrentPost,
   updateCurrentPost,
+  updateCurrentPostImages,
 } from "../../../../redux/Slices/PostSlice";
 import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
@@ -26,9 +27,12 @@ export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
   const dispatch: AppDisptach = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const imageSelectorRef = useRef<HTMLInputElement>(null);
 
   const [active, setActive] = useState<boolean>(false);
   const [postContent, setPostContent] = useState<string>("");
+
+  const [overLoadedImages,setOverLoadedImages] = useState<boolean>(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const activate = () => {
@@ -92,6 +96,36 @@ export const FeedPostCreator: React.FC = () => {
     }
   };
 
+  const handleGetImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageURLList: string[] = [];
+
+    if (imageSelectorRef.current && e.target.files) {
+      if (e.target.files.length > 5) {
+        console.log("Selected too many files");
+        imageSelectorRef.current.value = "";
+        setOverLoadedImages(true);
+        return;
+      }
+
+      for (let i=0; i< e.target.files.length ; i++ ) {
+        let file = e.target.files.item(i);
+        if(file?.type === 'image/gif' && e.target.files.length >1 ){
+          console.log("only one gif and no other images are allowed");
+          imageSelectorRef.current.value = "";
+          setOverLoadedImages(true);
+          return;
+        }
+        const localImageUrl = window.URL.createObjectURL(e.target.files[i])
+        imageURLList.push(localImageUrl )    
+      }
+
+      console.log(imageURLList);
+      
+
+      dispatch(updateCurrentPostImages(imageURLList))
+    }
+  }; 
+
   useEffect(() => {
     if (!state.post.currentPost) {
       setPostContent("");
@@ -105,20 +139,6 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
        { active ?  <FeedPostAudienceDropDown /> : <></> }
-        {/* <div
-          className={
-            active
-              ? "feed-post-creator-audience"
-              : "feed-post-creator-audience hide"
-          }
-        >
-          Everyone
-          <ExpandMore
-            sx={{
-              fontSize: "22px",
-            }}
-          />
-        </div> */}
         <textarea
           className={
             active
@@ -132,14 +152,6 @@ export const FeedPostCreator: React.FC = () => {
           maxLength={256}
         />
         {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
-        {/* <div
-          className={
-            active ? "feed-post-creator-reply" : "feed-post-creator-reply hide"
-          }
-        >
-          <GlobeSVG height={14} width={14} color={"#1DA1F2"} />
-          Everyone can Reply
-        </div> */}
         <div
           className={
             active
@@ -148,8 +160,12 @@ export const FeedPostCreator: React.FC = () => {
           }
         >
           <div className="feed-post-creator-botton-icons-left">
-            <div className="feed-post-creator-icon-bg">
+            <div className="feed-post-creator-icon-bg-media">
+              <input className="feed-post-creator-file-update" onChange={handleGetImages} type="file" id="images" accept="image/*" multiple={true} 
+              ref={imageSelectorRef} hidden/>
+              <label  htmlFor="images" className="feed-post-creator-icon-bg">
               <MediaSVG height={20} width={20} color={"#1DA1F2"} />
+              </label>
             </div>
             <div className="feed-post-creator-icon-bg">
               <GifSVG height={20} width={20} color={"#1DA1F2"} />
