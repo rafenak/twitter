@@ -1,0 +1,36 @@
+.feed-post-reply-restriction-dropdown{
+   position: relative;
+   width: fit-content;
+   height: fit-content;
+}
+
+.feed-post-reply-restriction-drop-down-button{
+    width: fit-content;
+   height: 24px;
+   padding:  2px 8px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 14px;
+   color: #1Da1f2;
+   font-weight: 600;
+}
+
+.feed-post-reply-restriction-drop-down-button:hover{
+    border-radius: 75px;
+    background-color: rgba(29, 161, 242, 0.1);
+    cursor: pointer;
+}
+
+.feed-post-reply-restriction-drop-down-button-disabled{
+    height: 24px;
+    padding:  2px;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: rgba(29, 161, 242, 0.5);
+    font-weight: 600;
+    cursor:  default;
+}
