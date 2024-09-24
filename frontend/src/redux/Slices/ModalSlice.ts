@@ -1,11 +1,13 @@
 import {createSlice } from "@reduxjs/toolkit";
 
 interface ModalSliceState {
-    displayEditPostImage: boolean
+    displayEditPostImage: boolean;
+    displayTagPeople:boolean;
 }
 
 const initialState: ModalSliceState = {
-    displayEditPostImage:false
+    displayEditPostImage:false,
+    displayTagPeople:false
 };
 
 
@@ -20,9 +22,17 @@ const initialState: ModalSliceState = {
                 }
                 return state;
             }
+            ,
+            updateDisplayTagPeople(state){
+                state ={
+                    ...state,
+                    displayTagPeople: !state.displayTagPeople
+                }
+                return state;
+            }
         }
   })
 
-  export const { updateDisplayEditPostImage } = ModalSlice.actions;
+  export const { updateDisplayEditPostImage ,updateDisplayTagPeople } = ModalSlice.actions;
 
 export default ModalSlice.reducer;
