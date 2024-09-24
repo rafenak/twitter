@@ -22,6 +22,7 @@ import {
 import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
+import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -151,6 +152,7 @@ export const FeedPostCreator: React.FC = () => {
           cols={50}
           maxLength={256}
         />
+        <FeedPostCreatorImages />
         {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
         <div
           className={
