@@ -12,6 +12,12 @@ export const store = configureStore({
     post: postReducer,
     modal:modalReducer
   },
+  middleware : (getDefaultMiddleware) =>  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions : ['post/updateCurrentPostImages'],
+      ignoredPaths:  ['post.currentPostImages']
+    }
+  })
 });
 
 export type RootState = ReturnType<typeof store.getState>;

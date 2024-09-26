@@ -1,6 +1,6 @@
-import React,{useEffect} from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
-import { useSelector, UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
 import logoSocial from "../../assets/social-media-no-bg.png";
 import HomeSVG from "../SVGs/HomeSVG";
@@ -100,3 +100,7 @@ export const Navigation: React.FC = () => {
     </div>
   );
 };
+
+
+
+
