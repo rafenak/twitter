@@ -44,31 +44,35 @@ export function getReplyDropDownButton(
 }
 
 
-export function createImageContainer(images:string[]):JSX.Element {
+export function createImageContainer(images:File[]):JSX.Element {
     if(images.length % 2 ===0){
         return (
             <div className="feed-post-creator-images-container container-even">
                 {images.map((image)=> {
-                    return <FeedPostCreatorImage image={image} key={image}/>
+                    const url = window.URL.createObjectURL(image);
+                    return <FeedPostCreatorImage image={url} name={image.name} key={url}/>
                 })}
             </div>
         )
     }
 
     if(images.length === 3){
-        let reversed:string[] = JSON.parse(JSON.stringify(images))
+        let reversed:File[] = structuredClone(images)
         reversed.reverse();
         return (
             <div  className="feed-post-creator-images-container container-odd">
                 {images.map((image)=> {
-                    return <FeedPostCreatorImage image={image} key={image}/>
+                    const url = window.URL.createObjectURL(image);
+                    return <FeedPostCreatorImage image={url}name={image.name} key={url}/>
                 })}
             </div>
         )
     }
     return (
-        <div  className="feed-post-creator-images-container container-odd">
-         <FeedPostCreatorImage image={images[0]} key={images[0]}/>
+        <div  className="feed-post-creator-images-container container-odd"> 
+         <FeedPostCreatorImage image={window.URL.createObjectURL(images[0])} 
+         name={images[0].name}
+         key={window.URL.createObjectURL(images[0])}/>
     </div>
     )
 }

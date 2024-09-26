@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useMemo} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
@@ -14,6 +14,9 @@ export const FeedPostCreatorImages:React.FC = () => {
 
     const dispatch:AppDisptach  = useDispatch();
 
+    const imageContainer = 
+    useMemo(()=> createImageContainer(state.currentPostImages),[state.currentPostImages])
+
     const toggleTagPeople = () =>{
         dispatch(updateDisplayTagPeople())
     }
@@ -21,11 +24,10 @@ export const FeedPostCreatorImages:React.FC = () => {
     const toggleEditImage = () =>{
         dispatch(updateDisplayEditPostImage())
     }
-
+ 
   return (
     <div className='feed-post-creator-images'>
-        {/* generate the image container */}
-        {createImageContainer(state.currentPostImages)}
+        {imageContainer}
         <div className='feed-post-creator-images-options'>
             <p className='feed-post-creator-images-option' onClick={toggleTagPeople}>
                 <TagPeopleSVG height={16} width={16} color={'#536471'}/>
