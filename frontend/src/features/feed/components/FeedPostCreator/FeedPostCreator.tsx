@@ -22,6 +22,7 @@ import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
+import { updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -157,6 +158,10 @@ export const FeedPostCreator: React.FC = () => {
     return false;
   }
 
+  const diplayGif =()=>{
+    dispatch(updateDisplayGif());
+  }
+
 
   useEffect(() => {
     if (!state.post.currentPost) {
@@ -200,7 +205,7 @@ export const FeedPostCreator: React.FC = () => {
               <MediaSVG height={20} width={20} color={ determineFull() ? "rgba(19,161,242,0.5)":"#1DA1F2"} /> 
               </label>
             </div>
-            <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"}>
+            <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={diplayGif}>
               <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
             </div>
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"}>

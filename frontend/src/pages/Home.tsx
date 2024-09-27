@@ -9,11 +9,13 @@ import { Navigation } from "../components/Navigation/Navigation";
 import { Feed } from "../features/feed/components/Feed/Feed";
 import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/FeedPostCreatorImageEditImageModal/FeedPostCreatorImageEditImageModal";
 import { FeedPostCreatorTagPeopleModal } from "../features/feed/components/FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
+import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPosterGifCreatorModal/FeedPosterGifCreatorModal";
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
   const displayEditImageModal  = useSelector((state: RootState) => state.modal.displayEditPostImage);
   const displayTagPeopleModal  = useSelector((state: RootState) => state.modal.displayTagPeople);
+  const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
   const dispatch: AppDisptach = useDispatch();
   const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ export const Home: React.FC = () => {
     <div className="home">
       {displayEditImageModal && <FeedPostCreatorImageEditImageModal />}
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
+      {displayGifModal && <FeedPosterGifCreatorModal />}
       <div className="home-layout">
         <div className="home-navigation-section">
           <Navigation />
