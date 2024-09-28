@@ -9,7 +9,7 @@ import { Navigation } from "../components/Navigation/Navigation";
 import { Feed } from "../features/feed/components/Feed/Feed";
 import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/FeedPostCreatorImageEditImageModal/FeedPostCreatorImageEditImageModal";
 import { FeedPostCreatorTagPeopleModal } from "../features/feed/components/FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
-import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPosterGifCreatorModal/FeedPosterGifCreatorModal";
+import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPostGifCreatorModal/FeedPostGifCreatorModal";
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
