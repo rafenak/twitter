@@ -37,16 +37,30 @@ export const fetchGifCategories = createAsyncThunk(
       let clientKey = "Twitter";
       let url = `https://tenor.googleapis.com/v2/categories?key=${TENOR_KEY}&client_key=${clientKey}`;
       let res = await axios.get(url);
-      console.log(res);
-
       let data = [];
-
       for (let i = 0; i < 8; i++) {
         data.push(res.data.tags[i]);
       }
-
       return data;
     } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
+export const fetchGifsByTerm = createAsyncThunk(
+  "gif/term",
+  async (payload:string, thuckAPI) => {
+    try {
+      let clientKey = "Twitter";
+      let url = `https://tenor.googleapis.com/v2/search?q=${payload}&key=${TENOR_KEY}&client_key=${clientKey}&limit=32`;
+      let res = await axios.get(url); 
+      return {
+        data: res.data,
+        term: payload
+      };
+    }
+    catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
   }
@@ -56,7 +70,7 @@ export const GifSlice = createSlice({
   name: "gif",
   initialState,
   reducers: {
-    updateSerachTerm(state, action: PayloadAction<string>) {
+    updateSearchTerms(state, action: PayloadAction<string>) {
       state = {
         ...state,
         searchTerm: action.payload,
@@ -91,6 +105,22 @@ export const GifSlice = createSlice({
         return state;
       });
 
+      builder.addCase(fetchGifsByTerm.fulfilled, (state, action) => {
+        let results = action.payload.data.results;
+        let gifUrls: string[] = [];
+        results.forEach((item: any) => {
+          gifUrls.push(item.media_formats.gif.url);
+        });
+        state = {
+          ...state,
+          searchTerm: action.payload.term,
+          gifs: gifUrls,
+          next: action.payload.data.next,
+          loading: false,
+        };
+        return state;
+      });
+
     builder.addMatcher(isPending, (state, action) => {
       state = {
         ...state,
@@ -110,6 +140,6 @@ export const GifSlice = createSlice({
   },
 });
 
-export const { updateSerachTerm, updatePerview, clearGifs } = GifSlice.actions;
+export const { updateSearchTerms, updatePerview, clearGifs } = GifSlice.actions;
 
 export default GifSlice.reducer;

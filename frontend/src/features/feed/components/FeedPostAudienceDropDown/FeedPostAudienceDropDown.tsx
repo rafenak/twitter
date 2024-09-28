@@ -8,7 +8,7 @@ import CircleSVG from "../../../../components/SVGs/CircleSVG";
 import { updateCurrentPost } from "../../../../redux/Slices/PostSlice";
 
 export const FeedPostAudienceDropDown: React.FC = () => {
-  const state = useSelector((state: RootState) => state);
+  //const state = useSelector((state: RootState) => state);
   const dispatch: AppDisptach = useDispatch();
 
   const [active, setActive] = useState<boolean>(false);
