@@ -17,18 +17,33 @@ export const FeedPosterGifCreatorModal: React.FC = () => {
     };
   }, []);
  
+  // useEffect(() => {
+  //   return () => {
+  //     if (state.gifCategories.length < 1) {
+  //       dispatch(fetchGifCategories());
+  //     }
+  //     console.log(state.searchTerm);
+  //     if (state.searchTerm) {
+  //       dispatch(updatePerview(false));
+  //     } else {
+  //       dispatch(updatePerview(true));
+  //     }
+  //   };
+  // }, [state.searchTerm]);
+
   useEffect(() => {
-    return () => {
-      if (state.gifCategories.length < 1) {
-        dispatch(fetchGifCategories());
-      }
-      console.log(state.searchTerm);
-      if (state.searchTerm) {
-        dispatch(updatePerview(false));
-      } else {
-        dispatch(updatePerview(true));
-      }
-    };
+   // if (state.gifCategories.length === 0 && !state.loading) {
+    if (state.gifCategories.length === 0) {
+      dispatch(fetchGifCategories());
+    }
+  }, [state.gifCategories]);
+  
+  useEffect(() => {
+    if (state.searchTerm) {
+      dispatch(updatePerview(false));
+    } else {
+      dispatch(updatePerview(true));
+    }
   }, [state.searchTerm]);
 
   return (

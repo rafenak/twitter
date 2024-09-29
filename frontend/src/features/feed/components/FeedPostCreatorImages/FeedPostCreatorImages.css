@@ -4,11 +4,13 @@
 }
 
 .feed-post-creator-images-container{
-    height: 345px;
+    height: 200px;
     width: 98%;
     display: flex;
     row-gap: 12px;
     column-gap: 12px;
+    justify-content: flex-start; /* Align images to the start */
+    margin: 10px;
 }
 
 .container-even{
@@ -43,7 +45,7 @@
     padding-bottom: 8px;
     font-size: 13px;
     color: #536471;
-     font-weight: 400;
+    font-weight: 400;
 }
 
 .feed-post-creator-images-option:hover{

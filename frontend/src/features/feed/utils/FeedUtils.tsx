@@ -1,9 +1,11 @@
+import { MouseEventHandler } from "react";
 import GlobeSVG from "../../../components/SVGs/GlobeSVG";
 import LockSVG from "../../../components/SVGs/LockSVG";
 import MentionedSVG from "../../../components/SVGs/MentionedSVG";
 import PeopleYouFollowSVG from "../../../components/SVGs/PeopleYouFollowSVG";
 import { PostSliceState } from "../../../redux/Slices/PostSlice";
 import { FeedPostCreatorImage } from "../components/FeedPostCreatorImage/FeedPostCreatorImage";
+import TagPeopleSVG from "../../../components/SVGs/TagPeopleSVG";
 
 export function getReplyDropDownButton(
   state: PostSliceState,
@@ -43,36 +45,83 @@ export function getReplyDropDownButton(
   }
 }
 
-
-export function createImageContainer(images:File[]):JSX.Element {
-    if(images.length % 2 ===0){
+export function createImageContainer(images: File[]): JSX.Element {
+    // Even number of images
+    if (images.length % 2 === 0) {
         return (
             <div className="feed-post-creator-images-container container-even">
-                {images.map((image)=> {
+                {images.map((image) => {
                     const url = window.URL.createObjectURL(image);
-                    return <FeedPostCreatorImage image={url} name={image.name} key={url}/>
+                    return (
+                        <FeedPostCreatorImage
+                            image={url}
+                            name={image.name}
+                            key={`${image.name}-${image.lastModified}`} // Ensuring unique key
+                            type={image.type}
+                        />
+                    );
                 })}
             </div>
-        )
+        );
     }
 
-    if(images.length === 3){
-        let reversed:File[] = structuredClone(images)
-        reversed.reverse();
+    // Special handling when there are exactly 3 images
+    if (images.length === 3) {
+        let reversed: File[] = structuredClone(images);
+        reversed.reverse(); // Reverse the images for the specific container-odd layout
         return (
-            <div  className="feed-post-creator-images-container container-odd">
-                {images.map((image)=> {
+            <div className="feed-post-creator-images-container container-odd">
+                {reversed.map((image) => {
                     const url = window.URL.createObjectURL(image);
-                    return <FeedPostCreatorImage image={url}name={image.name} key={url}/>
+                    return (
+                        <FeedPostCreatorImage
+                            image={url}
+                            name={image.name}
+                            key={`${image.name}-${image.lastModified}`} // Ensuring unique key
+                            type={image.type}
+                        />
+                    );
                 })}
             </div>
-        )
+        );
     }
+
+    // Single image or odd count other than 3
     return (
-        <div  className="feed-post-creator-images-container container-odd"> 
-         <FeedPostCreatorImage image={window.URL.createObjectURL(images[0])} 
-         name={images[0].name}
-         key={window.URL.createObjectURL(images[0])}/>
-    </div>
-    )
+        <div className="feed-post-creator-images-container container-odd">
+            {images.map((image) => {
+                const url = window.URL.createObjectURL(image);
+                return (
+                    <FeedPostCreatorImage
+                        image={url}
+                        name={image.name}
+                        key={`${image.name}-${image.lastModified}`} // Ensuring unique key
+                        type={image.type}
+                    />
+                );
+            })}
+        </div>
+    );
+}
+
+
+
+export function dispalyTagPeople(
+  state: PostSliceState,
+  toggleTagPeople: MouseEventHandler<HTMLParagraphElement>
+): JSX.Element {
+  if (state.currentPost && state.currentPost.images.length > 0) {
+    return <div className="feed-post-creator-images-option">via Tenor</div>;
+  }
+
+  if (state.currentPostImages[0].type === "image/gif") {
+    return <></>;
+  }
+
+  return (
+    <p className="feed-post-creator-images-option" onClick={toggleTagPeople}>
+      <TagPeopleSVG height={16} width={16} color={"#536471"} />
+      Tag People
+    </p>
+  );
 }
