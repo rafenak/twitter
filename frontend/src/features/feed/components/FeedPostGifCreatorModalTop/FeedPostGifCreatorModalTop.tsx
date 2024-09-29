@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateDisplayGif } from '../../../../redux/Slices/ModalSlice'
 
 import './FeedPostGifCreatorModalTop.css'
-import { clearGifs, updateSearchTerms } from '../../../../redux/Slices/GifSlice'
+import { clearGifs, fetchGifsByTerm, updateSearchTerms } from '../../../../redux/Slices/GifSlice'
 
 export const FeedPostGifCreatorModalTop:React.FC = () => {
 
@@ -15,12 +15,14 @@ export const FeedPostGifCreatorModalTop:React.FC = () => {
     const [inputFocused,setInputFocused] = useState<boolean>(false)
     // const [inputValue,setInputValue] = useState<string>("")
     const inputref = useRef<HTMLInputElement>(null); 
+    const [timer,setTimer] = useState<any> ();
 
     const handleFocus =()=>{
         if(!inputFocused){
             setInputFocused(true)
         }
     }
+
     const handleBlur =(e:React.FocusEvent<HTMLInputElement>) =>{
         e.preventDefault()
         const relatedTarget:any  = e.nativeEvent.relatedTarget;
@@ -31,10 +33,20 @@ export const FeedPostGifCreatorModalTop:React.FC = () => {
             setInputFocused(false)
         }
     }
+
+    const handleKeyUp = () =>{
+        clearTimeout(timer)
+        let t = setTimeout(searchForGifs,1000)
+        setTimer(t);
+    }
+
+    const searchForGifs = () =>{
+        if(inputref && inputref.current && inputref.current.value !==''){
+            dispatch(fetchGifsByTerm(inputref.current.value))
+        }
+    }
+
     const handleChangeValue =  (e:React.ChangeEvent<HTMLInputElement>)  => {
-        //Searching logic goes
-        // setInputValue(e.target.value)
-        console.log(e.target.value)
         dispatch(updateSearchTerms(e.target.value) )
     }
 
@@ -70,7 +82,7 @@ export const FeedPostGifCreatorModalTop:React.FC = () => {
                         onChange={handleChangeValue}
                         onBlur={handleBlur} 
                         onFocus={handleFocus} 
-                        ref={inputref}/>
+                        ref={inputref} onKeyUp={handleKeyUp}/> 
                     {searchTerm && inputFocused ? <div className='feed-post-creator-gif-modal-top-clear-border'>
                         <button id="clear" className='feed-post-creator-gif-top-clear-input'>x</button>
                     </div> : <></>}

@@ -82,6 +82,7 @@ export const FeedPostCreator: React.FC = () => {
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
+          images: state.post.currentPost.images,
           replies: [],
           scheduled: state.post.currentPost.scheduled,
           scheduledDate: state.post.currentPost.scheduledDate,
@@ -100,7 +101,8 @@ export const FeedPostCreator: React.FC = () => {
           audience: state.post.currentPost.audience,
           replyRestriction: state.post.currentPost.replyRestriction,
           token: state.user.token,
-          images: state.post.currentPostImages 
+          images: [],
+          imagesFiles : state.post.currentPostImages
         };
         dispatch(createPostWithMedia(body))
       }
@@ -188,7 +190,8 @@ export const FeedPostCreator: React.FC = () => {
           cols={50}
           maxLength={256}
         />
-       { state.post.currentPostImages.length > 0 && <FeedPostCreatorImages />}
+       { ((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
+        <FeedPostCreatorImages />}
         {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
         <div
           className={
@@ -239,11 +242,11 @@ export const FeedPostCreator: React.FC = () => {
             )}
             <button
               className={
-                postContent === "" && state.post.currentPostImages.length < 1
+                postContent === "" && state.post.currentPostImages.length < 1 && (state.post.currentPost && state.post.currentPost.images.length <1)
                   ? "feed-post-creator-post-button"
                   : "feed-post-creator-post-button post-active"
-              }
-              disabled={postContent === "" &&  state.post.currentPostImages.length < 1}
+              } 
+              disabled={postContent === "" &&  state.post.currentPostImages.length < 1 && (state.post.currentPost && state.post.currentPost.images.length <1) }
               onClick={submitPost}
             >
               Post

@@ -4,8 +4,9 @@ import { AppDisptach, RootState } from '../../../../redux/Store';
 import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
 import ListSVG from '../../../../components/SVGs/ListSVG';
 import './FeedPostCreatorImages.css'
-import { createImageContainer } from '../../utils/FeedUtils';
+import { createImageContainer, dispalyTagPeople } from '../../utils/FeedUtils';
 import { updateDisplayEditPostImage, updateDisplayTagPeople } from '../../../../redux/Slices/ModalSlice';
+import { FeedPostCreatorImage } from '../FeedPostCreatorImage/FeedPostCreatorImage';
 
 
 export const FeedPostCreatorImages:React.FC = () => {
@@ -27,12 +28,13 @@ export const FeedPostCreatorImages:React.FC = () => {
  
   return (
     <div className='feed-post-creator-images'>
-        {imageContainer}
+        {state .currentPost?.images.length ===0 ? imageContainer : 
+        <div className='feed-post-creator-images-container container-odd'> 
+        <FeedPostCreatorImage image={state.currentPost?.images[0].imageUrl || ''} 
+                name={state.currentPost?.images[0].imageName || ''} type={'gif'} />
+        </div>}
         <div className='feed-post-creator-images-options'>
-            <p className='feed-post-creator-images-option' onClick={toggleTagPeople}>
-                <TagPeopleSVG height={16} width={16} color={'#536471'}/>
-                Tag People
-            </p> 
+            {dispalyTagPeople(state,toggleTagPeople)}
             <p className='feed-post-creator-images-option'  onClick={toggleEditImage}>
                 <ListSVG height={16} width={16} color={'#536471'} />
                 Add Description

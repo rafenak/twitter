@@ -3,28 +3,32 @@ import './FeedPostCreatorImage.css'
 import { Close } from '@mui/icons-material'
 import { AppDisptach, RootState } from '../../../../redux/Store'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateCurrentPostImages } from '../../../../redux/Slices/PostSlice'
+import { updateCurrentPost, updateCurrentPostImages } from '../../../../redux/Slices/PostSlice'
 import { updateDisplayEditPostImage } from '../../../../redux/Slices/ModalSlice'
 
 interface FeedPostCreatorImageProps{
 image:string
 name:string
+type:string
 }
 
-export const FeedPostCreatorImage:React.FC<FeedPostCreatorImageProps> = ({image,name}) => {
+export const FeedPostCreatorImage:React.FC<FeedPostCreatorImageProps> = ({image,name,type}) => {
 
     const state = useSelector((state: RootState) => state.post);
     const dispatch:AppDisptach = useDispatch();
 
     const removeImage = (e:React.MouseEvent<HTMLDivElement>) =>{
-
         e.stopPropagation();
-       // let imageArrayCopy:string[] = JSON.parse(JSON.stringify(state.currentPostImages))
-        //let imageArrayCopy = state.currentPostImages.slice();
-        let imageArrayCopy:File[] = state.currentPostImages;
-        imageArrayCopy = imageArrayCopy.filter((img) => img.name !== name); // Filter out the selected image
-        //imageArrayCopy.splice(imageArrayCopy.indexOf(image),1)
-        dispatch(updateCurrentPostImages(imageArrayCopy))
+        if(state.currentPost && state.currentPost.images.length > 0){
+          dispatch(updateCurrentPost({
+            name:"images",
+            value : []
+          }))
+        }else{
+          let imageArrayCopy:File[] = state.currentPostImages;
+          imageArrayCopy = imageArrayCopy.filter((img) => img.name !== name); // Filter out the selected image
+          dispatch(updateCurrentPostImages(imageArrayCopy))
+        }      
     }
 
     const editImage = () =>{
@@ -40,9 +44,12 @@ export const FeedPostCreatorImage:React.FC<FeedPostCreatorImageProps> = ({image,
                 color:"white"
             }} />
          </div>
-         <div className='feed-post-creator-image-edit' onClick={editImage}>
-            Edit
-         </div>
+         {
+            type === 'image/gif' || 'gif' ? <></> :
+            <div className='feed-post-creator-image-edit' onClick={editImage}>
+              Edit
+            </div>
+          }
     </div>
   )
 }

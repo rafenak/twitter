@@ -25,6 +25,21 @@ public class PostService {
     private final  ImageService imageService;
 
     public Post createPost(CreatePostRequest request) {
+
+        Image savedGif;
+
+        //if true, there will a single gif from tenor
+        if(request.getImages().size() > 0){
+            List<Image> gifList = request.getImages();
+            Image gif =  gifList.get(0);
+            gif.setImagePath(gif.getImageURL());
+
+            savedGif = imageService.saveGifFromPost(gif);
+            gifList.remove(0);
+            gifList.add((savedGif));
+            request.setImages(gifList);
+        }
+
         Post p = new Post();
         p.setContent(request.getContent());
 
@@ -39,6 +54,7 @@ public class PostService {
         p.setScheduledDate(request.getScheduledDate());
         p.setAudience(request.getAudience());
         p.setReplyRestriction(request.getReplyRestriction());
+        p.setImages(request.getImages());
 
         try {
             return postRepository.save(p);

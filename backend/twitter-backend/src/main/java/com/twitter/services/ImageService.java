@@ -24,6 +24,16 @@ public class ImageService {
     private static final String URL = "http://localhost:8000/images/";
     private final ImageRepository imageRepository;
 
+
+    /**
+     * Saved image type=gif saved service
+     * @param image
+     * @return
+     */
+    public Image saveGifFromPost(Image image){
+        return imageRepository.save(image);
+    }
+
     /**
      * Use to upload the image into File director and save meta into database
      * @param file
