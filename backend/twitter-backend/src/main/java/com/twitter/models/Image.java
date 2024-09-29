@@ -19,13 +19,17 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "image_id")
     private Long imageId;
-    @Column(name = "image_name",unique = true)
+
+    @Column(name = "image_name", unique = true)
     private String imageName;
+
     @Column(name = "image_type")
     private String imageType;
+
     @Column(name = "image_path")
     @JsonIgnore
     private String imagePath;
+
     @Column(name = "image_url")
     private String imageURL;
 
