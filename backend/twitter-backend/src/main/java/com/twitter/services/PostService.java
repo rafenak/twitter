@@ -4,12 +4,11 @@ package com.twitter.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twitter.exceptions.PostDoesNotExistsException;
 import com.twitter.exceptions.UnableToCreatePostException;
-import com.twitter.models.AppUser;
-import com.twitter.models.Image;
-import com.twitter.models.Post;
+import com.twitter.models.*;
 import com.twitter.repositories.PostRepository;
 import com.twitter.request.CreatePostRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Pool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,23 +21,44 @@ import java.util.*;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final  ImageService imageService;
+    private final ImageService imageService;
+    private final PollService   pollService;
 
     public Post createPost(CreatePostRequest request) {
 
         Image savedGif;
 
         //if true, there will a single gif from tenor
-        if(request.getImages().size() > 0){
+        if(request.getImages() !=null && request.getImages().size() > 0){
             List<Image> gifList = request.getImages();
-            Image gif =  gifList.get(0);
+            Image gif =  gifList.getFirst();
             gif.setImagePath(gif.getImageURL());
 
             savedGif = imageService.saveGifFromPost(gif);
-            gifList.remove(0);
+            gifList.removeFirst();
             gifList.add((savedGif));
             request.setImages(gifList);
         }
+
+        //if true, there is a poll needs to be created
+        Poll savedPoll = null;
+        if(request.getPoll() != null){
+            Poll p = new Poll();
+            p.setEndTime(request.getPoll().getEndTime());
+            p.setChoices(new ArrayList<>());
+            savedPoll = pollService.generatePoll(p);
+            List<PollChoice> pollChoices =new ArrayList<PollChoice>();
+            List<PollChoice> choices = request.getPoll().getChoices();
+            for (int i = 0; i < choices.size(); i++) {
+                PollChoice choice = choices.get(i);
+                choice.setPoll(savedPoll);
+                choice=pollService.generateChoice(choice);
+                pollChoices.add(choice);
+            }
+            savedPoll.setChoices(pollChoices);
+            savedPoll = pollService.generatePoll(savedPoll);
+        }
+
 
         Post p = new Post();
         p.setContent(request.getContent());
@@ -55,6 +75,7 @@ public class PostService {
         p.setAudience(request.getAudience());
         p.setReplyRestriction(request.getReplyRestriction());
         p.setImages(request.getImages());
+        p.setPoll(savedPoll);
 
         try {
             return postRepository.save(p);
@@ -109,8 +130,7 @@ public class PostService {
     }
 
     public Set<Post> getAllPostsByAuthor(AppUser author) {
-        Set<Post> userPosts = postRepository.findByAuthor(author).orElse(new HashSet<>());
-        return userPosts;
+        return postRepository.findByAuthor(author).orElse(new HashSet<>());
     }
 
     public  void deletePost(Post post){

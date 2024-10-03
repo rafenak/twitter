@@ -4,6 +4,7 @@ import com.twitter.enums.Audience;
 import com.twitter.enums.ReplyRestriction;
 import com.twitter.models.AppUser;
 import com.twitter.models.Image;
+import com.twitter.models.Poll;
 import com.twitter.models.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,11 @@ import java.util.Set;
 public class CreatePostRequest {
     private String content;
     private AppUser author;
-    Set<Post> replies;
+    private Set<Post> replies;
     private List<Image> images;
     private boolean scheduled;
     private Date scheduledDate;
     private Audience audience;
     private ReplyRestriction replyRestriction;
+    private Poll poll;
 }

@@ -28,8 +28,9 @@ public class PollService {
        return pollRepository.save(poll);
     }
 
+    // TODO: Update the voteForChoice method to take userID and choiceID
     //Place a vote on a poll
-    public Poll VoteChoice(PollChoice choice, AppUser user){
+    public Poll voteForChoice(PollChoice choice, AppUser user){
         //update the choice itself
         Set<AppUser> currentVotes = choice.getVotes();
         currentVotes.add(user);
