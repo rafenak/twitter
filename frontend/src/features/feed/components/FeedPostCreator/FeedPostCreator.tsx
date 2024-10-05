@@ -23,20 +23,23 @@ import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAu
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
 import { updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
+import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
   const dispatch: AppDisptach = useDispatch();
+
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const imageSelectorRef = useRef<HTMLInputElement>(null);
 
   const [active, setActive] = useState<boolean>(false);
   const [postContent, setPostContent] = useState<string>("");
-
   const [overLoadedImages,setOverLoadedImages] = useState<boolean>(false)
+  // const [showPoll, setShowPoll] = useState<boolean>(false); 
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const activate = () => {
+  const activate = (e:React.MouseEvent<HTMLDivElement>) => {
     if (!active) {
       setActive(true);
       if (state.user.loggedIn) {
@@ -55,8 +58,12 @@ export const FeedPostCreator: React.FC = () => {
         dispatch(initializeCurrentPost(p));
       }
     }
-    if (textAreaRef && textAreaRef.current) {
-      textAreaRef.current.focus();
+
+    let targetElement:any = e.target;
+    if(targetElement.id === 'post-text'){
+      if (textAreaRef && textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
     }
   };
 
@@ -189,9 +196,11 @@ export const FeedPostCreator: React.FC = () => {
           onChange={autoGrow}
           cols={50}
           maxLength={256}
+          id={"post-text"}
         />
        { ((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
         <FeedPostCreatorImages />}
+         <FeedPostCreatorPoll />
         {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
         <div
           className={

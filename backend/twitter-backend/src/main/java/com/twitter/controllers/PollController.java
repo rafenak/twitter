@@ -18,7 +18,7 @@ public class PollController {
 
     @PutMapping("/vote")
     public Poll caseVote(@RequestBody PollVoteRequest request){
-        return pollService.voteForChoice(request.getChoice(),request.getUser());
+        return pollService.voteForChoice(request.getChoiceId(),request.getUserId());
     }
 
 }

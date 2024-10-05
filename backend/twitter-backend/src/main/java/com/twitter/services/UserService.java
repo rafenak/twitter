@@ -40,6 +40,10 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
 
+    public AppUser getUserById(Integer userId){
+        return  userRepository.findById(userId).orElseThrow(UserDoesNotExistException::new);
+    }
+
     /**
      * find the username from the database
      *
