@@ -13,6 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PollVoteRequest {
 
-    private PollChoice choice;
-    private AppUser user;
+    private Integer choiceId;
+    private Integer userId;
 }
