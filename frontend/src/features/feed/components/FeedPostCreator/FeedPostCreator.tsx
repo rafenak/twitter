@@ -16,7 +16,8 @@ import {
   initializeCurrentPost,
   updateCurrentPost,
   updateCurrentPostImages,
-  createPostWithMedia
+  createPostWithMedia,
+  createPoll
 } from "../../../../redux/Slices/PostSlice";
 import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
@@ -84,8 +85,19 @@ export const FeedPostCreator: React.FC = () => {
 
   const submitPost = () => {
     if (state.post.currentPost && state.user.loggedIn) {
-
       if(state.post.currentPostImages.length ===0){
+
+        if(state.post.currentPost.poll !==undefined && state.post.currentPost.images.length < 1){
+          let timeString = state.post.currentPost.poll.endTime
+          let days=timeString.split(":")[0]
+          let hours=timeString.split(":")[1]
+          let minutes=timeString.split(":")[2]
+
+          console.log(days)
+          console.log(hours)
+          console.log(minutes)
+
+        } 
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
@@ -97,8 +109,10 @@ export const FeedPostCreator: React.FC = () => {
           replyRestriction: state.post.currentPost.replyRestriction,
           token: state.user.token,
         };
-        dispatch(createPost(body));
+       // dispatch(createPost(body));
       } else{
+
+       
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
@@ -111,7 +125,7 @@ export const FeedPostCreator: React.FC = () => {
           images: [],
           imagesFiles : state.post.currentPostImages
         };
-        dispatch(createPostWithMedia(body))
+       dispatch(createPostWithMedia(body))
       }
       
     }
@@ -171,12 +185,37 @@ export const FeedPostCreator: React.FC = () => {
     dispatch(updateDisplayGif());
   }
 
+  const generatePoll=(e:React.MouseEvent<HTMLDivElement>)=>{
+    if(state.post.currentPost ===undefined){
+        activate(e);
+    }
+    else{
+      dispatch(createPoll());
+    }
+  }
+
+  const generateButtonClass=():string=>{
+    return postContent !=='' 
+    || state.post.currentPostImages.length > 0
+    || (state.post.currentPost && state.post.currentPost.images.length >= 1) 
+    || (state.post.currentPost && state.post.currentPost.poll !==undefined)
+    ? "feed-post-creator-post-button post-active": "feed-post-creator-post-button"
+  }
+
+  const activateButton=():boolean=>{
+      return !(postContent !== '' 
+        || state.post.currentPostImages.length > 0 
+        || (state.post.currentPost && state.post.currentPost.images.length >= 1)
+        || (state.post.currentPost && state.post.currentPost.poll !==undefined)) 
+  }
+
 
   useEffect(() => {
     if (!state.post.currentPost) {
       setPostContent("");
     }
-  }, [state.post.currentPost, postContent, activate]);
+    console.log(state.post.currentPost?.poll)
+  }, [state.post.currentPost, postContent, activate, state.post.currentPost?.poll]);
 
   return (
     <div className="feed-post-creartor" onClick={activate}>
@@ -200,7 +239,7 @@ export const FeedPostCreator: React.FC = () => {
         />
        { ((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
         <FeedPostCreatorImages />}
-         <FeedPostCreatorPoll />
+        {state.post.currentPost &&state.post.currentPost.poll && <FeedPostCreatorPoll /> }
         {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
         <div
           className={
@@ -220,7 +259,7 @@ export const FeedPostCreator: React.FC = () => {
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={diplayGif}>
               <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
             </div>
-            <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"}>
+            <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={generatePoll} >
               <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
             </div>
             <div className="feed-post-creator-icon-bg">
@@ -249,13 +288,20 @@ export const FeedPostCreator: React.FC = () => {
             ) : (
               <></>
             )}
-            <button
+            {/* <button
               className={
                 postContent === "" && state.post.currentPostImages.length < 1 && (state.post.currentPost && state.post.currentPost.images.length <1)
                   ? "feed-post-creator-post-button"
                   : "feed-post-creator-post-button post-active"
               } 
               disabled={postContent === "" &&  state.post.currentPostImages.length < 1 && (state.post.currentPost && state.post.currentPost.images.length <1) }
+              onClick={submitPost}
+            >
+              Post
+            </button> */}
+            <button 
+              className={generateButtonClass()}
+              disabled={ activateButton()}
               onClick={submitPost}
             >
               Post

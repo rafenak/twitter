@@ -33,7 +33,6 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
 
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setValue(+e.target.value);
-    console.log("Dispatch this change to reducer");
     dispatcher(name.toLowerCase(), +e.target.value);
   };
 
