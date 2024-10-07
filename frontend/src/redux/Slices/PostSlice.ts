@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Post, PostImage, User } from "../../utils/GlobalInterfaces";
+import { Poll, PollChoice, Post, PostImage, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -30,6 +30,11 @@ interface CreatePostBody {
 
 interface CreatePostWithMedia extends CreatePostBody{
   imagesFiles: File[]
+}
+
+interface UpdatePollPayLoad{
+  index:number;
+  choiceText:string;
 }
 
 export const createPost = createAsyncThunk(
@@ -142,6 +147,113 @@ export const PostSlice = createSlice({
       return state;
     },
 
+    createPoll(state){
+      let choices: PollChoice[] = [
+        {
+          pollChoiceId: 0,
+          choiceText: "",
+          votes: [],
+        },
+        {
+          pollChoiceId: 0,
+          choiceText: "",
+          votes: [],
+        },
+      ];
+      let poll:Poll ={
+        pollId:0,
+        endTime: "1:0:0",
+        choices:choices,
+      }
+
+      let post = JSON.parse(JSON.stringify(state.currentPost))
+      post={
+        ...post,
+        poll
+      }
+
+      state={
+        ...state,
+        currentPost:post
+      };
+      return state;
+    },
+    updatePoll(state,action:PayloadAction<UpdatePollPayLoad>){
+
+      if(state.currentPost && state.currentPost.poll){
+        let post=JSON.parse(JSON.stringify(state.currentPost))
+        let poll=post.poll;
+        let choices= poll.choices;
+        if(choices.length-1 < action.payload.index){
+            let choice:PollChoice={
+              pollChoiceId:0,
+              choiceText:action.payload.choiceText,
+              votes:[]
+            }
+            choices[action.payload.index]=choice
+        }else{
+          let choice:PollChoice= choices[action.payload.index]
+
+          choice={
+            ...choice,
+            choiceText:action.payload.choiceText
+          }
+          choices[action.payload.index]=choice
+
+        }
+        poll={
+          ...poll,
+          choices:choices
+        }
+        post={
+          ...post,
+          poll:poll
+        }
+        state={
+          ...state,
+          currentPost:post
+        }
+      }
+      return state;
+    },
+
+    removePoll(state){
+      if(state.currentPost && state.currentPost.poll){
+        let post=JSON.parse(JSON.stringify(state.currentPost))
+        post={
+          ...post,
+          poll:undefined
+        }
+        state={
+          ...state,
+          currentPost:post
+        }
+        return state;
+      }
+    },
+
+    setPollData(state,action:PayloadAction<string>){
+      if(state.currentPost && state.currentPost.poll !== undefined){
+        let post=JSON.parse(JSON.stringify(state.currentPost))
+        let poll = post.poll;
+
+        poll={
+          ...poll,
+          endTime:action.payload
+        }
+        post={
+          ...post,
+          poll:poll
+        }
+        state={
+          ...state,
+          currentPost:post
+        }
+      }
+
+      return state;
+    }
+
     
   },
   extraReducers(builder) {
@@ -205,6 +317,6 @@ export const PostSlice = createSlice({
   },
 });
 
-export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages } = PostSlice.actions;
+export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages,createPoll ,updatePoll, removePoll ,setPollData} = PostSlice.actions;
 
 export default PostSlice.reducer;
