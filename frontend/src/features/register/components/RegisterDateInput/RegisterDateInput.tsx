@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getMonths, getDays, getYears } from "../../utils/DateUtils";
+import { getMonths, getDays, getYears } from "../../../../utils/DateUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import { updateRegister } from "../../../../redux/Slices/RegisterSlice";

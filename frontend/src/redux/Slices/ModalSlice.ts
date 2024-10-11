@@ -3,13 +3,16 @@ import {createSlice } from "@reduxjs/toolkit";
 interface ModalSliceState {
     displayEditPostImage: boolean;
     displayTagPeople:boolean;
-    displayGif:boolean
+    displayGif:boolean;
+    displaySchedule:boolean;
 }
 
 const initialState: ModalSliceState = {
     displayEditPostImage:false,
     displayTagPeople:false,
-    displayGif:false
+    displayGif:false,
+    displaySchedule:false
+
 };
 
 
@@ -39,10 +42,18 @@ const initialState: ModalSliceState = {
                     displayGif : ! state.displayGif
                 }
                 return state;
+            },
+
+            updateDiplaySchedule(state){
+                state ={
+                    ...state,
+                    displaySchedule : ! state.displaySchedule
+                }
+                return state;
             }
         }
   })
 
-  export const { updateDisplayEditPostImage ,updateDisplayTagPeople ,updateDisplayGif} = ModalSlice.actions;
+  export const { updateDisplayEditPostImage ,updateDisplayTagPeople ,updateDisplayGif ,updateDiplaySchedule} = ModalSlice.actions;
 
 export default ModalSlice.reducer;

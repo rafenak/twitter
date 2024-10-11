@@ -19,7 +19,8 @@ interface UpdatePostPayload {
 interface CreatePostBody {
   content: string;
   author: User;
-  images: PostImage[]
+  images: PostImage[];
+  poll: Poll | undefined;
   replies: Post[];
   scheduled: boolean;
   scheduledDate: Date | undefined;
@@ -45,6 +46,7 @@ export const createPost = createAsyncThunk(
         content: body.content,
         author: body.author,
         images:body.images,
+        poll:body.poll,
         replies: body.replies,
         scheduled: body.scheduled,
         scheduledDate: body.scheduledDate,
@@ -162,7 +164,7 @@ export const PostSlice = createSlice({
       ];
       let poll:Poll ={
         pollId:0,
-        endTime: "1:0:0",
+        endTime: " :0:0",
         choices:choices,
       }
 

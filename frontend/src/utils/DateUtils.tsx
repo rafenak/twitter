@@ -1,6 +1,6 @@
-import { Dob } from "../../../utils/GlobalInterfaces";
+import { Dob } from "./GlobalInterfaces";
 
-const MONTHS: string[] = [
+export const MONTHS: string[] = [
   "",
   "January",
   "February",

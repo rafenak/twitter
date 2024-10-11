@@ -23,8 +23,10 @@ import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
-import { updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
+import { updateDiplaySchedule, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
+import { Poll } from "@mui/icons-material";
+import { Console } from "console";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -86,22 +88,30 @@ export const FeedPostCreator: React.FC = () => {
   const submitPost = () => {
     if (state.post.currentPost && state.user.loggedIn) {
       if(state.post.currentPostImages.length ===0){
-
-        if(state.post.currentPost.poll !==undefined && state.post.currentPost.images.length < 1){
+        let poll = undefined;
+        if(state.post.currentPost.poll !== undefined && state.post.currentPost.images.length < 1){
+          poll=JSON.parse(JSON.stringify(state.post.currentPost.poll))
           let timeString = state.post.currentPost.poll.endTime
           let days=timeString.split(":")[0]
           let hours=timeString.split(":")[1]
           let minutes=timeString.split(":")[2]
 
-          console.log(days)
-          console.log(hours)
-          console.log(minutes)
-
+          let endTime = new Date();
+          endTime.setDate(endTime.getDate() + (+days))
+          endTime.setHours(endTime.getHours() + (+hours))
+          endTime.setMinutes(endTime.getMinutes() + (+minutes))
+          console.log(endTime)
+          poll ={
+            ...poll,
+             endTime: `${endTime.getFullYear()}-${(endTime.getMonth() + 1).toString().padStart(2, '0')}-${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`
+          }
         } 
+
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
           images: state.post.currentPost.images,
+          poll:poll,
           replies: [],
           scheduled: state.post.currentPost.scheduled,
           scheduledDate: state.post.currentPost.scheduledDate,
@@ -109,7 +119,7 @@ export const FeedPostCreator: React.FC = () => {
           replyRestriction: state.post.currentPost.replyRestriction,
           token: state.user.token,
         };
-       // dispatch(createPost(body));
+       dispatch(createPost(body));
       } else{
 
        
@@ -123,6 +133,7 @@ export const FeedPostCreator: React.FC = () => {
           replyRestriction: state.post.currentPost.replyRestriction,
           token: state.user.token,
           images: [],
+          poll: undefined,
           imagesFiles : state.post.currentPostImages
         };
        dispatch(createPostWithMedia(body))
@@ -209,12 +220,15 @@ export const FeedPostCreator: React.FC = () => {
         || (state.post.currentPost && state.post.currentPost.poll !==undefined)) 
   }
 
+  const openScheduleModal = () =>{
+    dispatch(updateDiplaySchedule());
+  }
+
 
   useEffect(() => {
     if (!state.post.currentPost) {
       setPostContent("");
     }
-    console.log(state.post.currentPost?.poll)
   }, [state.post.currentPost, postContent, activate, state.post.currentPost?.poll]);
 
   return (
@@ -262,10 +276,10 @@ export const FeedPostCreator: React.FC = () => {
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={generatePoll} >
               <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
             </div>
-            <div className="feed-post-creator-icon-bg">
+            <div className="feed-post-creator-icon-bg icon-active">
               <EmojiSVG height={20} width={20} color={"#1DA1F2"} />
             </div>
-            <div className="feed-post-creator-icon-bg">
+            <div className="feed-post-creator-icon-bg icon-active" onClick={openScheduleModal}>
               <ScheduleSVG height={20} width={20} color={"#1DA1F2"} />
             </div>
             <div className="feed-post-creator-icon-location">
