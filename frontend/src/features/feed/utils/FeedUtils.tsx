@@ -128,7 +128,7 @@ export function dispalyTagPeople(
 
 export const generatePollDaysSelection = (): JSX.Element[] => {
     let options: JSX.Element[] = [];
-    for (let i = 0; i <= 7; i++) {
+    for (let i = 1; i <= 8; i++) {
             options.push(<option value={i} key={i}>{i}</option>);
         }
     return options;

@@ -1,7 +1,7 @@
 import React from "react";
 import { RootState } from "../../../../redux/Store";
 import { useSelector } from "react-redux";
-import { stringifyDate } from "../../utils/DateUtils";
+import { stringifyDate } from "../../../../utils/DateUtils";
 import { ValidatedDisplay } from "../../../../components/ValidatedInput/ValidatedDisplay";
 import './RegisterForms.css'
 import '../../../../assets/global.css'

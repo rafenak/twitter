@@ -10,17 +10,19 @@ import { Feed } from "../features/feed/components/Feed/Feed";
 import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/FeedPostCreatorImageEditImageModal/FeedPostCreatorImageEditImageModal";
 import { FeedPostCreatorTagPeopleModal } from "../features/feed/components/FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
 import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPostGifCreatorModal/FeedPostGifCreatorModal";
+import { SchedulePostModal } from "../features/schedulepost/components/SchedulePostModal/SchedulePostModal";
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
   const displayEditImageModal  = useSelector((state: RootState) => state.modal.displayEditPostImage);
   const displayTagPeopleModal  = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
+  const displayScheduleModal = useSelector((state:RootState) => state.modal.displaySchedule);
   const dispatch: AppDisptach = useDispatch();
   const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(() => { 
     if (jwt !== "" && state.token !== "") {
       dispatch(getUserByToken(state.token));
     } else if (jwt === "" && state.token !== "") {
@@ -37,6 +39,7 @@ export const Home: React.FC = () => {
       {displayEditImageModal && <FeedPostCreatorImageEditImageModal />}
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
+      {displayScheduleModal && <SchedulePostModal />}
       <div className="home-layout">
         <div className="home-navigation-section">
           <Navigation />

@@ -81,9 +81,9 @@ export const FeedPostCreatorPoll:React.FC = () => {
                 Poll Length
             </p>
             <div className='feed-post-creator-poll-length-wrapper'>
-            <ValidatedDateSelector style='' valid={true}  name={"Days"} dropDown={generatePollDaysSelection} dispatcher={updateTime} data={+time.days}/>
-            <ValidatedDateSelector style='' valid={true}  name={"Hours"} dropDown={generatePollHoursSelection} dispatcher={updateTime} data={+time.hours}/>
-            <ValidatedDateSelector style='' valid={true}  name={"Minutes"} dropDown={generatePollMinutesSelection} dispatcher={updateTime} data={+time.minutes}/>
+            <ValidatedDateSelector valid={true}  name={"Days"} dropDown={generatePollDaysSelection} dispatcher={updateTime} data={+time.days}/>
+            <ValidatedDateSelector valid={true}  name={"Hours"} dropDown={generatePollHoursSelection} dispatcher={updateTime} data={+time.hours}/>
+            <ValidatedDateSelector valid={true}  name={"Minutes"} dropDown={generatePollMinutesSelection} dispatcher={updateTime} data={+time.minutes}/>
             </div> 
         </div>
         <div className='feed-post-creator-poll-button' onClick={deletePoll}>
