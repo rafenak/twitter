@@ -12,7 +12,7 @@ interface ValidateDatedSelectorProps {
   name: string;
   dropDown(): JSX.Element[];
   dispatcher(name: string, value: string | number | boolean): void;
-  data?: number|string;
+  data?: number;
 }
 
 export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
@@ -24,7 +24,7 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
   data,
 }) => {
   const [active, setActive] = useState<boolean>(false);
-  const [value, setValue] = useState<number | string>(0);
+  const [value, setValue] = useState<number>(0);
   const [color, setColor] = useState<string>("gray");
 
   useEffect(() => {
@@ -32,15 +32,15 @@ export const ValidatedDateSelector: React.FC<ValidateDatedSelectorProps> = ({
   }, [active, valid, value]);
 
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (name === "AM/PM") {
-      setValue(e.target.value);
-      dispatcher(name.toLowerCase(), e.target.value);
-      console.log(e.target.value);
-    } else {
+    // if (name === "AM/PM") {
+    //   setValue(e.target.value);
+    //   dispatcher(name.toLowerCase(), e.target.value);
+    //   console.log(e.target.value);
+    // } else {
       setValue(+e.target.value);
       dispatcher(name.toLowerCase(), +e.target.value);
       console.log(+e.target.value);
-    }
+   // }
   };
 
   const toogleActive = (e: React.FormEvent<HTMLSelectElement>) => {

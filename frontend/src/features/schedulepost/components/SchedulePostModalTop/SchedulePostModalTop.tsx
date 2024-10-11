@@ -21,7 +21,7 @@ export const SchedulePostModalTop:React.FC = () => {
                 <p className='schedule-post-modal-top-bar-text'>Schedule</p>
         </div>
         <div className='schedule-post-modal-top-bar-right'>
-            <button className='schedule-post-modal-top-bar-confirm' onClick={()=>{}}>Confirm</button>
+            <button className='schedule-post-modal-top-bar-confirm' onClick={hanldeCloseModal}>Confirm</button>
         </div>
     </div>
    

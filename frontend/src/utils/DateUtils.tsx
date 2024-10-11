@@ -30,6 +30,16 @@ export const getMonths = (): JSX.Element[] => {
   });
 };
 
+// export const getMonths = (): JSX.Element[] => {
+//   return MONTHS.map((month, index) => {
+//       return (
+//         <option value={index} key={month}>
+//           {month}
+//         </option>
+//       );
+//   });
+// };
+
 export const getDays = (): JSX.Element[] => {
   let options: JSX.Element[] = [];
 

@@ -11,7 +11,7 @@ export const getScheduleYear = ():JSX.Element[] => {
 
 export const getScheduleHours = ():JSX.Element[] => {
     let options: JSX.Element[] = [];
-    for (let i = 1; i<25; i++) {
+    for (let i = 1; i<13; i++) {
         options.push(<option value={i} key={i}>{i}</option>);
     }
     return options;
@@ -35,8 +35,8 @@ export const getScheduleMinutes = ():JSX.Element[] => {
 
 export const getScheduleAmPm = ():JSX.Element[] => {
     let options: JSX.Element[] = [];
-        options.push(<option value={"AM"} key={"AM"}>{"AM"}</option>);
-        options.push(<option value={"PM"} key={"PM"}>{"PM"}</option>);
+        options.push(<option value={0} key={"AM"}>AM</option>);
+        options.push(<option value={1} key={"PM"}>PM</option>);
 
     return options;
 } 
