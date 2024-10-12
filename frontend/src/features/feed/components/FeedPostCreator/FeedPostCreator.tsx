@@ -27,6 +27,7 @@ import { updateDiplaySchedule, updateDisplayGif } from "../../../../redux/Slices
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { Poll } from "@mui/icons-material";
 import { Console } from "console";
+import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -323,6 +324,7 @@ export const FeedPostCreator: React.FC = () => {
           </div>
         </div>
       </div>
+      <EmojiDropDown />
     </div>
   );
 };
