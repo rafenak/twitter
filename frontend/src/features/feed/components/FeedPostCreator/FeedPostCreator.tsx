@@ -25,8 +25,6 @@ import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDro
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
 import { updateDiplaySchedule, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
-import { Poll } from "@mui/icons-material";
-import { Console } from "console";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
 
 export const FeedPostCreator: React.FC = () => {
@@ -171,7 +169,7 @@ export const FeedPostCreator: React.FC = () => {
       let fileArr:File[] = [...imageList]
       for (let i=0; i< e.target.files.length ; i++ ) {
         let file = e.target.files.item(i);
-        if(file?.type === 'image/gif' && imageList.length >1  || file?.type === 'image/gif' && e.target.files.length >1 ){
+        if((file?.type === 'image/gif' && imageList.length >1)  || (file?.type === 'image/gif' && e.target.files.length >1) ){
           console.log("only one gif and no other images are allowed");
           imageSelectorRef.current.value = "";
           setOverLoadedImages(true);

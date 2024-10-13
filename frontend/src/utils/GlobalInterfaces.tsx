@@ -129,3 +129,48 @@ export interface Poll{
   endTime: string;
   choices: PollChoice[]
 }
+
+
+// interface EmojiSupport {
+//   apple: boolean;
+//   google: boolean;
+//   facebook: boolean;
+//   windows: boolean;
+//   twitter: boolean;
+//   joypixels: boolean;
+//   samsung: boolean;
+//   gmail: boolean;
+//   softbank: boolean;
+//   docomo: boolean;
+//   kddi: boolean;
+// }
+
+// interface EmojiImages {
+//   apple: string | boolean;
+//   google: string | boolean;
+//   facebook: string | boolean;
+//   twitter: string | boolean;
+//   softbank: string | boolean;
+//   docomo: string | boolean;
+//   kddi: string |boolean;
+// }
+
+// interface Emoji {
+//   code: string[];
+//   emoji: string;
+//   name: string;
+//   category: string;
+//   subcategory: string;
+//   support: EmojiSupport;
+//   images: EmojiImages;
+// }
+
+// export interface EmojiCollection {
+//   version?: string;
+//   author?: string;
+//   copyright?: string;
+//   see?: string;
+//   license?: string;
+//   emojis: Emoji[];
+// }
+
