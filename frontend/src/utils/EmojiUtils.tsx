@@ -1,4 +1,4 @@
-import data from "../data/list.json";
+import data from "../data/list.with.modifiers.json";
 
 import dataWithImg from "../data/list.with.images.json";
 
@@ -12,7 +12,12 @@ let supported =
     ? "apple"
     : "windows";
 
-export const generateSimleyAndPeople = (): string[] => {
+ interface EmojiData{
+  emoji:string;
+  name:string;
+ }   
+
+export const generateSimleyAndPeople = (): EmojiData[] => {
   const simleyAndPeople = EMOJIS.filter((emoji) => {
     let supportedPlatform: any = emoji.support;
     if (
@@ -23,7 +28,12 @@ export const generateSimleyAndPeople = (): string[] => {
       return emoji;
     }
     return null;
-  }).map((emoji) => emoji.emoji);
+  }).map((emoji) => {
+    return {
+      emoji: emoji.emoji,
+      name: emoji.name,
+    };
+  });
 
   return simleyAndPeople;
 };
@@ -125,42 +135,73 @@ export const generateFlags = (): string[] => {
 };
 
 export const generateTopRows = () => {
-  const imgs: string[] = [];
-  for (let emoji of EMOJIS_IMG) {
+  interface TopRowData{
+    img:string,
+    id:string
+  }
+  const data: TopRowData[] = [];
+  for (let emoji of EMOJIS_IMG) { 
     let images:any = emoji.images ;
     if(emoji.name === "two o’clock"){
-        imgs[0]= images[supported] 
+      data[0]={
+        img:images[supported],
+        id:"Recent"
+       }
     }
     if(emoji.name === "grinning face"){
-        imgs[1]= images[supported] 
+      data[1]={
+        img:images[supported],
+        id:"Smileys & Emotion"
+       }
     }
 
     if(emoji.name === "bear"){
-        imgs[2]= images[supported] 
+      data[2]={
+        img:images[supported],
+        id:"Animals & Nature"
+       }
     }
 
     if(emoji.name === "hamburger"){
-        imgs[3]= images[supported] 
+      data[3]={
+        img:images[supported],
+        id:"Food & Drink"
+       }
     }
 
     if(emoji.name === "soccer ball"){
-        imgs[4]= images[supported] 
+      data[4]={
+        img:images[supported],
+        id:"Activities"
+       }
     }
 
     if(emoji.name === "oncoming automobile"){
-        imgs[5]= images[supported] 
+      data[5]={
+        img:images[supported],
+        id:"Activities"
+       }
     }
 
     if(emoji.name === "light bulb"){
-        imgs[6]= images[supported] 
+      data[6]={
+        img:images[supported],
+        id:"Objects"
+       }
     }
 
     if(emoji.name === "input symbols"){
-        imgs[7]= images[supported] 
+      data[7]={
+        img:images[supported],
+        id:"Symbols"
+       }
     }
 
     if(emoji.name === "triangular flag"){
-        imgs[8]= images[supported] 
+      data[8]={
+        img:images[supported],
+        id:"Flags"
+       }
     }
     // if (
     //   emoji.name === "two o’clock" ||
@@ -177,5 +218,23 @@ export const generateTopRows = () => {
     // imgs.push(images[supported]);
     // }
   }
-  return imgs;
+  return data;
 };
+
+
+export const determineSkinToneColor = (currentSkinTone: string): string => {
+  switch (currentSkinTone) {
+    case "light":
+      return "rgb(247,222,206)";
+    case "medium-light":
+      return "rgb(243,210,162)";
+    case "medium":
+      return "rgb(213,171,136)";
+    case "medium-dark":
+      return "rgb(175,126,87)";
+    case "dark":
+      return  "rgb(124,83,62)";
+    default:
+      return "rgb(255,220,93)";
+  }
+}
