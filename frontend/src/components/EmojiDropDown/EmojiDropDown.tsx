@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
 import {
-  determineSkinToneColor,
-  generateActivities, generateAninamlAndNature, generateFlags,
-  generateFoodAndDrink, generateObjects, generateSimleyAndPeople, generateSymbols,
-  generateTopRows, generateTravelAndPlaces
+  defaultImageURI,
+  determineSkinToneColor,generateEmojiCategory,
+  generateTopRows,
+  // generateActivities, generateAninamlAndNature, generateFlags,
+  // generateFoodAndDrink, generateObjects, generateSymbols,
+  // generateTopRows, generateTravelAndPlaces
 } from '../../utils/EmojiUtils'
 import './EmojiDropDown.css'
 import SearchIcon from '@mui/icons-material/Search'
@@ -14,7 +16,8 @@ import DoneIcon from '@mui/icons-material/Done'
 export const EmojiDropDown: React.FC = () => {
 
   const [activeCategory, setActiveCategory] = useState<number>(1);
-  const [currentEmoji, setCurrentEmoji] = useState<string>("😂");
+  const [currentEmoji, setCurrentEmoji] = useState<string>(defaultImageURI());
+  const [currentEmojiName, setCurrentEmojiName] = useState<string>("face with tears of joy")
   const [skinToneSelectorActive, setSkinToneSelectionActive] = useState<boolean>(false);
   const [currentSkinTone, setCurrentSkinTone] = useState<string>("none")
 
@@ -82,14 +85,14 @@ export const EmojiDropDown: React.FC = () => {
   const getCurrentEmoji = (e: React.MouseEvent<HTMLDivElement>) => {
     const element: any = e.target;
     if (element.id) {
-      setCurrentEmoji(element.innerText);
+      setCurrentEmoji(element.style.backgroundImage);
+      setCurrentEmojiName(element.id); 
     }
-    console.log(currentEmoji);
-
   }
 
   const resetCurrentEmoji = (e: React.MouseEvent<HTMLDivElement>) => {
-    setCurrentEmoji("😂")
+    setCurrentEmoji(defaultImageURI())
+    setCurrentEmojiName("face with tears of joy");
   }
 
   const selectSkinTone = (e: React.MouseEvent<HTMLDivElement>) =>{
@@ -131,46 +134,51 @@ export const EmojiDropDown: React.FC = () => {
             }
           }
           )}
-        </div>
+        </div> 
       </div>
       <div className='emoji-drop-down-selector' onMouseOver={getCurrentEmoji} onMouseLeave={resetCurrentEmoji}>
         <div className='emoji-drop-down-selector-section' id="Smileys & Emotion">
           <h2 className='emoji-drop-down-selector-section-title'>Smileys & Emotion</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateSimleyAndPeople().map((emoji, index) => {
-              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'>{emoji.emoji}</div>
+            {generateEmojiCategory("Smileys & Emotion","People & Body",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Animals & Nature">
           <h2 className='emoji-drop-down-selector-section-title'>Animals & Nature</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateAninamlAndNature().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Animals & Nature","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Food & Drink">
           <h2 className='emoji-drop-down-selector-section-title'>Food & Drink</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateFoodAndDrink().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Food & Drink","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Activities">
           <h2 className='emoji-drop-down-selector-section-title'>Activities</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateActivities().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Activities","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Travel & Places">
           <h2 className='emoji-drop-down-selector-section-title'>Travel & Places</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateTravelAndPlaces().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Travel & Places","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
 
@@ -178,24 +186,27 @@ export const EmojiDropDown: React.FC = () => {
         <div className='emoji-drop-down-selector-section' id="Objects">
           <h2 className='emoji-drop-down-selector-section-title'>Objects</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateObjects().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Travel & Places","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Symbols">
           <h2 className='emoji-drop-down-selector-section-title'>Symbols</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateSymbols().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Symbols","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
         <div className='emoji-drop-down-selector-section' id="Flags">
           <h2 className='emoji-drop-down-selector-section-title'>Flags</h2>
           <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateFlags().map((emoji, index) => {
-              return <div key={index} className='emoji-drop-down-emoji'>{emoji}</div>
+          {generateEmojiCategory("Flags","",currentSkinTone).map((emoji, index) => {
+              return <div key={index} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji' 
+              style={{backgroundImage: `url("${emoji.image}")`}}></div>
             })}
           </div>
         </div>
@@ -203,7 +214,10 @@ export const EmojiDropDown: React.FC = () => {
       </div>
 
       <div className='emoji-drop-down-bottom'>
-        <div className='emoji-drop-down-bottom-current-emoji'>{currentEmoji}</div>
+        <div className='emoji-drop-down-bottom-current-emoji' style={{
+          backgroundImage : `${currentEmoji}` 
+        }}></div>
+        <div className='emoji-drop-down-bottom-current-emoji-name'>{currentEmojiName}</div>
         <div className='emoji-drop-down-bottom-skin-tone-selector'>
           {
             skinToneSelectorActive ?

@@ -33,7 +33,14 @@ public class EmojiFileProcessor {
                 // Process each emoji
                 for (Map<String, Object> emoji : originalData.get("emojis")) {
                     String name = (String) emoji.get("name");
-                    String baseName = name.split(":")[0].trim(); // Get base name without skin tone
+
+                    String baseName;
+                    if ("Flags".equals(emoji.get("category"))) {
+                        baseName = name; // Keep the entire name for flags
+                    } else {
+                        baseName = name.split(":")[0].trim(); // Default base name extraction without skin tone
+                    }
+                    // String baseName = name.split(":")[0].trim(); // Get base name without skin tone
 
                     // Initialize the entry if it doesn't exist
                     Map<String, Object> combined = combinedEmojis.getOrDefault(baseName, new HashMap<>());
@@ -80,8 +87,23 @@ public class EmojiFileProcessor {
 
                     // Check for skin tone and add the emoji to modifiers
                     if (name.contains("skin tone")) {
+                        // Add the emoji to modifiers list
                         List<String> modifiers = (List<String>) combined.get("modifiers");
-                        modifiers.add((String) emoji.get("emoji")); // Add the skin tone emoji
+                        modifiers.add((String) emoji.get("emoji"));
+
+                        // Add corresponding modifier images to the main emoji's images list
+                        List<String> imageList = (List<String>) combined.get("images");
+                        Map<String, Object> images = (Map<String, Object>) emoji.get("images");
+
+                        // Check if modifier has images and add to the images list
+                        if (images != null) {
+                            for (Map.Entry<String, Object> entry : images.entrySet()) {
+                                if (entry.getValue() instanceof String) {
+                                    imageList.add((String) entry.getValue()); // Add image for modifier
+                                    break; // Only take one image
+                                }
+                            }
+                        }
                     }
 
                     // Update the combinedEmojis map
