@@ -128,7 +128,7 @@
   width: 100%;
   height: fit-content;
   display: flex;
-  justify-content: space-between;
+  justify-content:flex-start;
   align-items: center;
   flex-wrap: wrap;
   padding-left: 12px;
@@ -140,9 +140,13 @@
   width: 33px;
   font-size: 18px;
   cursor: default;
-  display: flex;
+  background-size: 20px;
+  /* background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: center center;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .emoji-drop-down-emoji:hover {
@@ -158,12 +162,26 @@
   align-items: center;
   padding-left: 16px;
   padding-right: 20px;
+  border-top: 1px solid  #E1E8ED;
 }
 
 .emoji-drop-down-bottom-current-emoji {
-  height: fit-content;
-  width: fit-content;
-  font-size: 20px;
+  height: 25px;
+  width: 25px;
+  /* font-size: 20px; */
+  background-size: cover;
+  background-position:  center center;
+  background-repeat:  no-repeat;
+}
+
+.emoji-drop-down-bottom-current-emoji-name{
+  width: 180px;
+  height: 20px;
+  text-overflow: clip;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 300;
+  color: #AAB8C2;
 }
 
 
@@ -182,8 +200,8 @@
 }
 
 .emoji-drop-down-bottom-skin-tone-selected{
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 100%;
   border: 2px solid #1da1f2;
   display: flex;
@@ -194,12 +212,14 @@
 .emoji-drop-down-bottom-skin-tone-option{
   width: 20px;
   height: 20px;
+  margin: 0;
   border-radius: 100%;
 }
 
 #light{
   background-color: rgb(247,222,206)
 }
+
 #light:hover{
   border: 1px solid  rgba(247,222,206,0.3)
 }
@@ -236,11 +256,34 @@
   background-color: rgb(255,220,93)
 }
 #none:hover{
-  border: 1px solid  rgba(255,220,93,0.3)
+  border: 1px solid  rgba(247,222,206,0.3)
+}
+
+.no-modified-wrapper{
+  width: 24px;
+  height: 24 px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+}
+
+.no-modified-wrapper:hover{
+  background-color:  rgba(247,222,206,0.3);
+  border-radius: 100%;
 }
 
 
-@media (min-width: 1050px) and (max-width: 1300px) {
+@media (min-width: 1200px) and (max-width: 1299px) {
+  .emoji-drop-down {
+    width: 80vw;
+    top: 100%;
+    left: 36%;
+  }
+}
+
+
+@media (min-width: 1050px) and (max-width: 1200px) {
   .emoji-drop-down {
     width: 80vw;
     top: 100%;
@@ -251,7 +294,7 @@
 @media (min-width: 900px) and (max-width: 1050px) {
   .emoji-drop-down {
     width: 500px;
-    top: 100%;
+    top: 97%;
     left: 30%;
   }
 }
@@ -259,7 +302,7 @@
 @media (min-width: 770px) and (max-width: 899px) {
   .emoji-drop-down {
     width: 500px;
-    top: 100%;
+    top: 97%;
     left: 22%;
   }
 }
