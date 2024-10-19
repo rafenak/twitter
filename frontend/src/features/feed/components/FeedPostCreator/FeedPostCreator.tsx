@@ -237,6 +237,7 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
        { active ?  <FeedPostAudienceDropDown /> : <></> }
+       <p className="feed-post-creator-post-content">{state.post.currentPost ? state.post.currentPost.content : postContent }</p>
         <textarea
           className={
             active
@@ -249,6 +250,7 @@ export const FeedPostCreator: React.FC = () => {
           cols={50}
           maxLength={256}
           id={"post-text"}
+          value={state.post.currentPost ? state.post.currentPost.content : postContent }
         />
        { ((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
         <FeedPostCreatorImages />}
