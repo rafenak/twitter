@@ -172,16 +172,18 @@
   background-size: cover;
   background-position:  center center;
   background-repeat:  no-repeat;
+  padding: 10px;
 }
 
 .emoji-drop-down-bottom-current-emoji-name{
-  width: 180px;
+  width: 150px;
   height: 20px;
   text-overflow: clip;
   overflow: hidden;
   font-size: 14px;
   font-weight: 300;
   color: #AAB8C2;
+  margin-left: 10px;
 }
 
 

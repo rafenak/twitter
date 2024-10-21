@@ -26,6 +26,7 @@ import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorI
 import { updateDiplaySchedule, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
+import { covertPostContentToParagraph } from "../../../../utils/EmojiUtils";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -237,7 +238,7 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
        { active ?  <FeedPostAudienceDropDown /> : <></> }
-       <p className="feed-post-creator-post-content">{state.post.currentPost ? state.post.currentPost.content : postContent }</p>
+       {state.post.currentPost ? covertPostContentToParagraph(state.post.currentPost.content) : covertPostContentToParagraph(postContent) }
         <textarea
           className={
             active

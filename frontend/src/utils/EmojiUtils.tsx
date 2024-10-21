@@ -1,4 +1,4 @@
-import { log } from 'console';
+import { createElement } from 'react';
 import emojis from '../data/all-emojis.json'
 
 interface Emoji{
@@ -17,7 +17,14 @@ interface EmojiData{
   category:string;
 }
 
+interface MappedEmoji{
+  emoji:string,
+  image:string
+}
+
 const EMOJIS:Emoji[]= emojis.emojis;
+
+export const EMOJIS_IMG_MAP:MappedEmoji[] = mapEmojisWithImages();
 
 // TODO: Need to create a type
 //const EMOJIS_IMG = dataWithImg.emojis; // tslint:disable-next-line:no-inferrable-types
@@ -29,7 +36,30 @@ const EMOJIS:Emoji[]= emojis.emojis;
 //  interface EmojiData{
 //   emoji:string;
 //   name:string;
-//  }  
+//  } 
+
+
+
+export function mapEmojisWithImages():MappedEmoji[]{
+  let mappedEmojis:MappedEmoji[] = [];
+  EMOJIS.forEach((emoji)=>{
+    if(emoji.images.length === 1){
+       mappedEmojis.push({
+        emoji:emoji.emoji,
+        image:emoji.images[0]
+       })
+    }else{
+      for(let i=0; i<emoji.modifiers.length ; i++){
+        mappedEmojis.push({
+          emoji:emoji.modifiers[0],
+          image:emoji.images[i+1]
+         })
+      }
+    }
+
+  })
+  return mappedEmojis;
+}
 
 export const generateEmojiCategory  = (category1:string,category2:string,modifier:string):EmojiData[]=>{
 
@@ -203,4 +233,65 @@ export const getEmojiCharacterByNameAndModifier = (name: string, modifier: strin
   }
   
   return "";
+}
+
+
+export const covertPostContentToParagraph = (content:string):JSX.Element=>{
+
+  // let paragraph = document.createElement('p')
+  // paragraph.setAttribute('className','feed-post-creator-post-content');
+
+  let characters:any = Array.from(content)
+
+  
+
+//   for (let i = 0; i < characters.length; i++) {
+    
+//     if (EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])){
+//       let image = EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])?.image ? EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])?.image : ""
+//       console.log(image);
+      
+//       let spanTemplate = `<img class="feed-post-creator-post-content-emoji" 
+//           src="${image}" />`
+//        characters[i]=spanTemplate   
+//     }
+//   }
+
+//   let updatedContent ="";
+
+//   for(let i of characters){
+//     updatedContent = updatedContent + i;
+//   }
+
+//   // let paragraph = createElement('p',{className:"feed-post-creator-post-content"},updatedContent)
+//   //console.log('updatedContent',updatedContent);
+  
+
+  
+//   return <p className='feed-post-creator-post-content' dangerouslySetInnerHTML={{
+//     __html:updatedContent
+//   }}></p>;
+// }
+// Map emojis to their corresponding image tags
+for (let i = 0; i < characters.length; i++) {
+  const currentChar = characters[i].trim().normalize();
+  const emojiData = EMOJIS_IMG_MAP.find(e => e.emoji.trim().normalize() === currentChar);
+  console.log(emojiData?.emoji);
+  
+  
+  if (emojiData) {
+    const image = emojiData.image || "";
+    
+    const spanTemplate = `<img class="feed-post-creator-post-content-emoji" src="${image}" alt="${image}"/>`;
+    characters[i] = spanTemplate;
+  }
+}
+
+// Join the characters array into a single string
+const updatedContent = characters.join("");
+
+// Return the updated content wrapped in a <p> tag with dangerouslySetInnerHTML
+return (
+  <p className="feed-post-creator-post-content" dangerouslySetInnerHTML={{ __html: updatedContent }}></p>
+)
 }
