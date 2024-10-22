@@ -1,7 +1,6 @@
-import { createElement } from 'react';
 import emojis from '../data/all-emojis.json'
 
-interface Emoji{
+export interface Emoji{
   images:string[];
   name:string;
   emoji:string;
@@ -10,7 +9,7 @@ interface Emoji{
   modifiers:string[]
 }
 
-interface EmojiData{
+export interface EmojiData{
   image:string;
   name:string;
   emoji:string;
@@ -19,25 +18,11 @@ interface EmojiData{
 
 interface MappedEmoji{
   emoji:string,
-  image:string
+  image:string,
+  modifiers?: string[]
 }
 
-const EMOJIS:Emoji[]= emojis.emojis;
-
-export const EMOJIS_IMG_MAP:MappedEmoji[] = mapEmojisWithImages();
-
-// TODO: Need to create a type
-//const EMOJIS_IMG = dataWithImg.emojis; // tslint:disable-next-line:no-inferrable-types
-// let supported =
-//   window.navigator.platform.toUpperCase().indexOf("MAC") >= 0
-//     ? "apple"
-//     : "windows";
-
-//  interface EmojiData{
-//   emoji:string;
-//   name:string;
-//  } 
-
+export const EMOJIS:Emoji[]= emojis.emojis;
 
 
 export function mapEmojisWithImages():MappedEmoji[]{
@@ -51,7 +36,7 @@ export function mapEmojisWithImages():MappedEmoji[]{
     }else{
       for(let i=0; i<emoji.modifiers.length ; i++){
         mappedEmojis.push({
-          emoji:emoji.modifiers[0],
+          emoji:emoji.modifiers[i],
           image:emoji.images[i+1]
          })
       }
@@ -60,6 +45,9 @@ export function mapEmojisWithImages():MappedEmoji[]{
   })
   return mappedEmojis;
 }
+
+export const EMOJIS_IMG_MAP:MappedEmoji[] = mapEmojisWithImages();
+
 
 export const generateEmojiCategory  = (category1:string,category2:string,modifier:string):EmojiData[]=>{
 
@@ -236,62 +224,32 @@ export const getEmojiCharacterByNameAndModifier = (name: string, modifier: strin
 }
 
 
-export const covertPostContentToParagraph = (content:string):JSX.Element=>{
+export const covertPostContentToParagraph = (content: string): JSX.Element => {
+  let characters: any = Array.from(content)
+  let currentPTag = ['<span class="feed-post-creator-post-content-paragraph">', '', '</span>'];
+  let currentInnerHtml = [];
+  let innerHtmlIndex = 0;
 
-  // let paragraph = document.createElement('p')
-  // paragraph.setAttribute('className','feed-post-creator-post-content');
+  for (let i = 0; i < characters.length; i++) {
+    if (EMOJIS_IMG_MAP.find(e => e.emoji === characters[i])) {
+      if(currentInnerHtml[0]===undefined) {
+          currentInnerHtml[innerHtmlIndex] = currentPTag[0] + currentPTag[1] + currentPTag[2];
+      }
 
-  let characters:any = Array.from(content)
-
-  
-
-//   for (let i = 0; i < characters.length; i++) {
-    
-//     if (EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])){
-//       let image = EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])?.image ? EMOJIS_IMG_MAP.find(e=> e.emoji === characters[i])?.image : ""
-//       console.log(image);
-      
-//       let spanTemplate = `<img class="feed-post-creator-post-content-emoji" 
-//           src="${image}" />`
-//        characters[i]=spanTemplate   
-//     }
-//   }
-
-//   let updatedContent ="";
-
-//   for(let i of characters){
-//     updatedContent = updatedContent + i;
-//   }
-
-//   // let paragraph = createElement('p',{className:"feed-post-creator-post-content"},updatedContent)
-//   //console.log('updatedContent',updatedContent);
-  
-
-  
-//   return <p className='feed-post-creator-post-content' dangerouslySetInnerHTML={{
-//     __html:updatedContent
-//   }}></p>;
-// }
-// Map emojis to their corresponding image tags
-for (let i = 0; i < characters.length; i++) {
-  const currentChar = characters[i].trim().normalize();
-  const emojiData = EMOJIS_IMG_MAP.find(e => e.emoji.trim().normalize() === currentChar);
-  console.log(emojiData?.emoji);
-  
-  
-  if (emojiData) {
-    const image = emojiData.image || "";
-    
-    const spanTemplate = `<img class="feed-post-creator-post-content-emoji" src="${image}" alt="${image}"/>`;
-    characters[i] = spanTemplate;
+      innerHtmlIndex++;
+      currentPTag[1] = '';
+      let image = EMOJIS_IMG_MAP.find(e => e.emoji === characters[i])?.image || "";
+      const imageTemplate = `<img class="feed-post-creator-post-content-emoji" src="${image}" alt="emoji" />`
+      currentInnerHtml[innerHtmlIndex++] = imageTemplate
+    } else {
+      currentPTag[1] = currentPTag[1] + characters[i]
+      currentInnerHtml[innerHtmlIndex] = currentPTag[0] + currentPTag[1] + currentPTag[2]
+    }
   }
-}
 
-// Join the characters array into a single string
-const updatedContent = characters.join("");
-
-// Return the updated content wrapped in a <p> tag with dangerouslySetInnerHTML
-return (
-  <p className="feed-post-creator-post-content" dangerouslySetInnerHTML={{ __html: updatedContent }}></p>
-)
+  let dangerousHtml = '';
+  for (let el of currentInnerHtml) {
+    dangerousHtml += el
+  }
+  return <p className='feed-post-creator-post-content' dangerouslySetInnerHTML={{ __html: dangerousHtml }} ></p>;
 }
