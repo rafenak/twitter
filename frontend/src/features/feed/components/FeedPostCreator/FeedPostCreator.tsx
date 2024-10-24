@@ -23,7 +23,7 @@ import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
-import { updateDiplaySchedule, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
+import { updateDiplaySchedule, updateDisplayEmojis, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
 import { covertPostContentToParagraph } from "../../../../utils/EmojiUtils";
@@ -224,6 +224,10 @@ export const FeedPostCreator: React.FC = () => {
     dispatch(updateDiplaySchedule());
   }
 
+  const openEmojiModal = () =>{
+    dispatch(updateDisplayEmojis())
+  }
+
 
   useEffect(() => {
     if (!state.post.currentPost) {
@@ -278,8 +282,8 @@ export const FeedPostCreator: React.FC = () => {
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={generatePoll} >
               <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
             </div>
-            <div className="feed-post-creator-icon-bg icon-active">
-              <EmojiSVG height={20} width={20} color={"#1DA1F2"} />
+            <div className="feed-post-creator-icon-bg icon-active" onClick={openEmojiModal}>
+              <EmojiSVG height={20} width={20} color={"#1DA1F2"}/>
             </div>
             <div className="feed-post-creator-icon-bg icon-active" onClick={openScheduleModal}>
               <ScheduleSVG height={20} width={20} color={"#1DA1F2"} />
@@ -325,7 +329,6 @@ export const FeedPostCreator: React.FC = () => {
           </div>
         </div>
       </div>
-      <EmojiDropDown />
     </div>
   );
 };

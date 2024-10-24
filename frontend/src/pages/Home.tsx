@@ -11,6 +11,8 @@ import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/
 import { FeedPostCreatorTagPeopleModal } from "../features/feed/components/FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
 import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPostGifCreatorModal/FeedPostGifCreatorModal";
 import { SchedulePostModal } from "../features/schedulepost/components/SchedulePostModal/SchedulePostModal";
+import { EmojiDropDown } from "../components/EmojiDropDown/EmojiDropDown";
+import { updateDisplayEmojis } from "../redux/Slices/ModalSlice";
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
@@ -18,6 +20,8 @@ export const Home: React.FC = () => {
   const displayTagPeopleModal  = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
   const displayScheduleModal = useSelector((state:RootState) => state.modal.displaySchedule);
+  const displayEmoji = useSelector((state:RootState) => state.modal.displayEmojis);
+
   const dispatch: AppDisptach = useDispatch();
   const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
   const navigate = useNavigate();
@@ -34,12 +38,22 @@ export const Home: React.FC = () => {
     }
   }, [state.token]);
 
+  const closedOpenedModals = (e:React.MouseEvent) =>{
+    let element:any = e.currentTarget
+    let className=element.firstChild.getAttribute('class');
+
+    if(displayEmoji && className !=='emoji-drop-down') {
+      dispatch(updateDisplayEmojis())
+    }
+
+  }
   return (
-    <div className="home">
+    <div className="home" onClick={closedOpenedModals}>
       {displayEditImageModal && <FeedPostCreatorImageEditImageModal />}
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
       {displayScheduleModal && <SchedulePostModal />}
+      {displayEmoji && <EmojiDropDown />}
       <div className="home-layout">
         <div className="home-navigation-section">
           <Navigation />

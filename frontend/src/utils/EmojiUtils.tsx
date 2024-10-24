@@ -229,14 +229,14 @@ export const covertPostContentToParagraph = (content: string): JSX.Element => {
   let currentPTag = ['<span class="feed-post-creator-post-content-paragraph">', '', '</span>'];
   let currentInnerHtml = [];
   let innerHtmlIndex = 0;
-
+  
   for (let i = 0; i < characters.length; i++) {
     if (EMOJIS_IMG_MAP.find(e => e.emoji === characters[i])) {
-      if(currentInnerHtml[0]===undefined) {
-          currentInnerHtml[innerHtmlIndex] = currentPTag[0] + currentPTag[1] + currentPTag[2];
+      if(currentInnerHtml[0]===undefined || currentPTag[1]==='') {
+          currentInnerHtml[innerHtmlIndex++] = currentPTag[0] + currentPTag[1] + currentPTag[2];
       }
 
-      innerHtmlIndex++;
+      //innerHtmlIndex++;
       currentPTag[1] = '';
       let image = EMOJIS_IMG_MAP.find(e => e.emoji === characters[i])?.image || "";
       const imageTemplate = `<img class="feed-post-creator-post-content-emoji" src="${image}" alt="emoji" />`

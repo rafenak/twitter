@@ -239,9 +239,9 @@ export const EmojiDropDown: React.FC = () => {
             <ClosedRoundedIcon sx={{
               fontSize: "12px",
               color: "white",
-              fontWeight: "800",
-              height:'fit-content',
-              width:'fit-content',
+              fontWeight: "600",
+              height: '12px',
+              width: '12px',
 
             }} />
           </div> : <></>
@@ -272,93 +272,114 @@ export const EmojiDropDown: React.FC = () => {
             </div> :
             <div className='emoji-drop-down-categories'>
               {generateTopRows().map((data, index) => {
-                  return <div key={index} className='emoji-drop-down-category-wrapper'>
-                    <div key={index} id={`${index}`} className='emoji-drop-down-category emoji-inactive-search' style={{
-                      backgroundImage: `url("${data.img}")`,
-                    }} onClick={navigateToEmojiCategory}> </div>
-                    <div className='emoji-drop-down-category-underline-inactive'></div>
-                  </div>
-                }
+                return <div key={index} className='emoji-drop-down-category-wrapper'>
+                  <div key={index} id={`${index}`} className='emoji-drop-down-category emoji-inactive-search' style={{
+                    backgroundImage: `url("${data.img}")`,
+                  }} onClick={navigateToEmojiCategory}> </div>
+                  <div className='emoji-drop-down-category-underline-inactive'></div>
+                </div>
+              }
               )}
             </div>
           }
         </>
       </div>
-      <div className='emoji-drop-down-selector' onMouseOver={getCurrentEmoji} onMouseLeave={resetCurrentEmoji} id="emoji-scroll-area">
-        <div className='emoji-drop-down-selector-section' id="Smileys & Emotion">
-          <h2 className='emoji-drop-down-selector-section-title' id="smileysAndEmotionHeader">Smileys & Emotion</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Smileys & Emotion", "People & Body", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Animals & Nature">
-          <h2 className='emoji-drop-down-selector-section-title' id="animalsAndNatureHeader">Animals & Nature</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Animals & Nature", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Food & Drink">
-          <h2 className='emoji-drop-down-selector-section-title' id="foodAndDrinkHeader">Food & Drink</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Food & Drink", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Activities">
-          <h2 className='emoji-drop-down-selector-section-title' id="activitiesHeader">Activities</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Activities", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Travel & Places">
-          <h2 className='emoji-drop-down-selector-section-title' id='travelAndPlacesHeader'>Travel & Places</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Travel & Places", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
+      <div className='emoji-drop-down-selector' onMouseOver={!emojiSearchContent ?  getCurrentEmoji : ()=>{}} 
+      onMouseLeave={!emojiSearchContent ? resetCurrentEmoji :()=>{}} id="emoji-scroll-area">
+        {
+          !emojiSearchContent ?
+            <>
+              <div className='emoji-drop-down-selector-section' id="Smileys & Emotion">
+                <h2 className='emoji-drop-down-selector-section-title' id="smileysAndEmotionHeader">Smileys & Emotion</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'> 
+                  {generateEmojiCategory("Smileys & Emotion", "People & Body", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Animals & Nature">
+                <h2 className='emoji-drop-down-selector-section-title' id="animalsAndNatureHeader">Animals & Nature</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Animals & Nature", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Food & Drink">
+                <h2 className='emoji-drop-down-selector-section-title' id="foodAndDrinkHeader">Food & Drink</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Food & Drink", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Activities">
+                <h2 className='emoji-drop-down-selector-section-title' id="activitiesHeader">Activities</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Activities", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Travel & Places">
+                <h2 className='emoji-drop-down-selector-section-title' id='travelAndPlacesHeader'>Travel & Places</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Travel & Places", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
 
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Objects">
-          <h2 className='emoji-drop-down-selector-section-title' id='objectsHeader'>Objects</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Travel & Places", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Symbols">
-          <h2 className='emoji-drop-down-selector-section-title' id="symbolsHeader">Symbols</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Symbols", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-        <div className='emoji-drop-down-selector-section' id="Flags">
-          <h2 className='emoji-drop-down-selector-section-title' id="flagsHeader">Flags</h2>
-          <div className='emoji-drop-down-selector-section-wrapper'>
-            {generateEmojiCategory("Flags", "", currentSkinTone).map((emoji, index) => {
-              return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-            })}
-          </div>
-        </div>
-
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Objects">
+                <h2 className='emoji-drop-down-selector-section-title' id='objectsHeader'>Objects</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Travel & Places", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Symbols">
+                <h2 className='emoji-drop-down-selector-section-title' id="symbolsHeader">Symbols</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Symbols", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+              <div className='emoji-drop-down-selector-section' id="Flags">
+                <h2 className='emoji-drop-down-selector-section-title' id="flagsHeader">Flags</h2>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {generateEmojiCategory("Flags", "", currentSkinTone).map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>
+            </>
+            :
+            <div className='emoji-drop-down-selector-section' id="Search">
+              <h2 className='emoji-drop-down-selector-section-title'>Search</h2>
+              { searchEmojis.length > 1 ?
+              <div className='emoji-drop-down-selector-section-wrapper'>
+                {searchEmojis.map((emoji, index) => {
+                  return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                    style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                })}
+              </div>
+              : <div className='emoji-drop-down-selector-section-no-results'>
+                    <h2 className='emoji-drop-down-selector-section-no-results-header'>No Emoji Found</h2>
+                    <p className='emoji-drop-down-selector-section-no-results-message'>Try searching for something else instead.</p>
+                </div>
+              }
+            </div>
+        }
       </div>
 
       <div className='emoji-drop-down-bottom'>
