@@ -1,59 +1,69 @@
-import {createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface ModalSliceState {
     displayEditPostImage: boolean;
-    displayTagPeople:boolean;
-    displayGif:boolean;
-    displaySchedule:boolean;
+    displayTagPeople: boolean;
+    displayGif: boolean;
+    displaySchedule: boolean;
+    displayEmojis: boolean;
 }
 
 const initialState: ModalSliceState = {
-    displayEditPostImage:false,
-    displayTagPeople:false,
-    displayGif:false,
-    displaySchedule:false
+    displayEditPostImage: false,
+    displayTagPeople: false,
+    displayGif: false,
+    displaySchedule: false,
+    displayEmojis: false
 
 };
 
 
-  export const ModalSlice = createSlice({
+export const ModalSlice = createSlice({
     name: "modal",
     initialState,
-        reducers:{
-            updateDisplayEditPostImage(state){
-                state ={
-                    ...state,
-                    displayEditPostImage: !state.displayEditPostImage
-                }
-                return state;
+    reducers: {
+        updateDisplayEditPostImage(state) {
+            state = {
+                ...state,
+                displayEditPostImage: !state.displayEditPostImage
             }
-            ,
-            updateDisplayTagPeople(state){
-                state ={
-                    ...state,
-                    displayTagPeople: !state.displayTagPeople
-                }
-                return state;
-            },
-
-            updateDisplayGif(state){
-                state ={
-                    ...state,
-                    displayGif : ! state.displayGif
-                }
-                return state;
-            },
-
-            updateDiplaySchedule(state){
-                state ={
-                    ...state,
-                    displaySchedule : ! state.displaySchedule
-                }
-                return state;
-            }
+            return state;
         }
-  })
+        ,
+        updateDisplayTagPeople(state) {
+            state = {
+                ...state,
+                displayTagPeople: !state.displayTagPeople
+            }
+            return state;
+        },
 
-  export const { updateDisplayEditPostImage ,updateDisplayTagPeople ,updateDisplayGif ,updateDiplaySchedule} = ModalSlice.actions;
+        updateDisplayGif(state) {
+            state = {
+                ...state,
+                displayGif: !state.displayGif
+            }
+            return state;
+        },
+
+        updateDiplaySchedule(state) {
+            state = {
+                ...state,
+                displaySchedule: !state.displaySchedule
+            }
+            return state;
+        },
+
+        updateDisplayEmojis(state) {
+            state = {
+                ...state,
+                displayEmojis: !state.displayEmojis
+            }
+            return state;
+        }
+    }
+})
+
+export const { updateDisplayEditPostImage, updateDisplayTagPeople, updateDisplayGif, updateDiplaySchedule, updateDisplayEmojis } = ModalSlice.actions;
 
 export default ModalSlice.reducer;
