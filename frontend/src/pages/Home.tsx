@@ -39,10 +39,11 @@ export const Home: React.FC = () => {
   }, [state.token]);
 
   const closedOpenedModals = (e:React.MouseEvent) =>{
-    let element:any = e.currentTarget
-    let className=element.firstChild.getAttribute('class');
+    // let element:any = e.currentTarget
+    // let className=element.firstChild.getAttribute('class');
 
-    if(displayEmoji && className !=='emoji-drop-down') {
+   // if(displayEmoji && className !=='emoji-drop-down') {
+    if(displayEmoji) {
       dispatch(updateDisplayEmojis())
     }
 

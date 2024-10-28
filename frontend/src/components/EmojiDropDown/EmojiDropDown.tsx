@@ -18,6 +18,7 @@ import { AppDisptach, RootState } from '../../redux/Store'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateCurrentPost } from '../../redux/Slices/PostSlice'
 import ClosedRoundedIcon from '@mui/icons-material/CloseRounded'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 
 export const EmojiDropDown: React.FC = () => {
@@ -26,29 +27,35 @@ export const EmojiDropDown: React.FC = () => {
   let currentPost = useSelector((state: RootState) => state.post.currentPost)
   const dispatch: AppDisptach = useDispatch()
 
-  const [activeCategory, setActiveCategory] = useState<number>(1);
+  const [activeCategory, setActiveCategory] = useState<number>(0);
   const [currentEmoji, setCurrentEmoji] = useState<string>(defaultImageURI());
   const [currentEmojiName, setCurrentEmojiName] = useState<string>("face with tears of joy")
   const [skinToneSelectorActive, setSkinToneSelectionActive] = useState<boolean>(false);
   const [currentSkinTone, setCurrentSkinTone] = useState<string>("none")
   const [emojiSearchContent, setEmojiSearchContent] = useState<string>("")
   const [searchEmojis, setSearchEmojis] = useState<EmojiData[]>([])
+  const [recentEmojis, setRecentEmojis, removeRecentEmojis] = useLocalStorage("recentEmojis", "");
+
 
   // let options = {
   //   root: document.querySelector("#emoji-scroll-area"),
   //   rootMargin: "0px",
-  //   threshold: 0.1
+  //   threshold: 0
   // }
 
   // let debouncedCalculateCategory = debounce(calculateCategory, 50);
   // let observer = new IntersectionObserver(debouncedCalculateCategory, options);
   // //let observer = new IntersectionObserver(calculateCategory, options);
   // let header = document.querySelectorAll(".emoji-drop-down-selector-section-title")
+  // let recentHeader = document.querySelectorAll(".emoji-drop-down-selector-recent-title")
   // header.forEach((elem) => {
   //   if (elem !== null) {
   //     observer.observe(elem)
   //   }
-  // });
+  // })
+  // if (recentHeader.length > 0) {
+  //   recentHeader.forEach((header) => observer.observe(header));
+  // }
 
   const navigateToEmojiCategory = (e: React.MouseEvent<HTMLDivElement>) => {
     switch (e.currentTarget.id) {
@@ -203,6 +210,30 @@ export const EmojiDropDown: React.FC = () => {
         value: newContent
       }));
     }
+
+    let emojis: EmojiData[] = JSON.parse(recentEmojis);
+    let emojiData = EMOJIS.find(e => e.name === name)
+    if (!emojis.find(e => e.name === name)) {
+      emojis.unshift({
+        name: name,
+        category: emojiData?.category || '',
+        emoji: emoji,
+        image: emojiData?.images[convertModifierToIndex(currentSkinTone)] || ''
+      })
+    } else {
+      for (let i = 0; i < emojis.length; i++) {
+        if (emojis[i].name === name) {
+          emojis.splice(i, 1);
+        }
+      }
+      emojis.unshift({
+        name: name,
+        category: emojiData?.category || '',
+        emoji: emoji,
+        image: emojiData?.images[convertModifierToIndex(currentSkinTone)] || ''
+      })
+    }
+    setRecentEmojis(JSON.stringify(emojis.slice(0, 9)))
   }
 
   const updateEmojiSerachContent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,11 +252,15 @@ export const EmojiDropDown: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log(searchEmojis);
+
+    if (!recentEmojis) {
+      setRecentEmojis(JSON.stringify([]));
+    }
+
   }, [searchEmojis.length])
 
   return (
-    <div className='emoji-drop-down'>
+    <div className='emoji-drop-down' onClick={(e)=> e.stopPropagation()}>
       <div className='emoji-drop-down-top'>
         <div className='emoji-drop-down-search-border'>
           <SearchIcon sx={{
@@ -284,14 +319,30 @@ export const EmojiDropDown: React.FC = () => {
           }
         </>
       </div>
-      <div className='emoji-drop-down-selector' onMouseOver={!emojiSearchContent ?  getCurrentEmoji : ()=>{}} 
-      onMouseLeave={!emojiSearchContent ? resetCurrentEmoji :()=>{}} id="emoji-scroll-area">
+      <div className='emoji-drop-down-selector' onMouseOver={!emojiSearchContent ? getCurrentEmoji : () => { }}
+        onMouseLeave={!emojiSearchContent ? resetCurrentEmoji : () => { }} id="emoji-scroll-area">
         {
           !emojiSearchContent ?
             <>
+              { JSON.parse(recentEmojis).length > 0 ? 
+                <div className='emoji-drop-down-selector-section' id="Recent">
+                <div className='emoji-drop-down-selector-recent-section'>
+                  <h2 className='emoji-drop-down-selector-recent-title' id="recentHeader">Recent</h2>
+                  <h3 className='emoji-drop-down-selector-clear-recent' onClick={() => setRecentEmojis(JSON.stringify([]))}>
+                    Clear All
+                  </h3>
+                </div>
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {JSON.parse(recentEmojis).map((emoji: EmojiData, index: number) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+              </div>  : <></>
+              }
               <div className='emoji-drop-down-selector-section' id="Smileys & Emotion">
                 <h2 className='emoji-drop-down-selector-section-title' id="smileysAndEmotionHeader">Smileys & Emotion</h2>
-                <div className='emoji-drop-down-selector-section-wrapper'> 
+                <div className='emoji-drop-down-selector-section-wrapper'>
                   {generateEmojiCategory("Smileys & Emotion", "People & Body", currentSkinTone).map((emoji, index) => {
                     return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
                       style={{ backgroundImage: `url("${emoji.image}")` }}></div>
@@ -366,16 +417,16 @@ export const EmojiDropDown: React.FC = () => {
             :
             <div className='emoji-drop-down-selector-section' id="Search">
               <h2 className='emoji-drop-down-selector-section-title'>Search</h2>
-              { searchEmojis.length > 1 ?
-              <div className='emoji-drop-down-selector-section-wrapper'>
-                {searchEmojis.map((emoji, index) => {
-                  return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                    style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-                })}
-              </div>
-              : <div className='emoji-drop-down-selector-section-no-results'>
-                    <h2 className='emoji-drop-down-selector-section-no-results-header'>No Emoji Found</h2>
-                    <p className='emoji-drop-down-selector-section-no-results-message'>Try searching for something else instead.</p>
+              {searchEmojis.length > 1 ?
+                <div className='emoji-drop-down-selector-section-wrapper'>
+                  {searchEmojis.map((emoji, index) => {
+                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                  })}
+                </div>
+                : <div className='emoji-drop-down-selector-section-no-results'>
+                  <h2 className='emoji-drop-down-selector-section-no-results-header'>No Emoji Found</h2>
+                  <p className='emoji-drop-down-selector-section-no-results-message'>Try searching for something else instead.</p>
                 </div>
               }
             </div>
