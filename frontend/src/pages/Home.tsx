@@ -4,7 +4,6 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { RootState, AppDisptach } from "../redux/Store";
 import { getUserByToken, setToken } from "../redux/Slices/UserSlice";
 import { useNavigate } from "react-router-dom";
-import './Home.css'
 import { Navigation } from "../components/Navigation/Navigation";
 import { Feed } from "../features/feed/components/Feed/Feed";
 import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/FeedPostCreatorImageEditImageModal/FeedPostCreatorImageEditImageModal";
@@ -13,6 +12,8 @@ import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPostG
 import { SchedulePostModal } from "../features/schedulepost/components/SchedulePostModal/SchedulePostModal";
 import { EmojiDropDown } from "../components/EmojiDropDown/EmojiDropDown";
 import { updateDisplayEmojis } from "../redux/Slices/ModalSlice";
+import { Discovery } from "../features/discovery";
+import './Home.css'
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
@@ -62,7 +63,9 @@ export const Home: React.FC = () => {
         <div className="home-content-section">
           <Feed />
         </div>
-        <div className="home-info-section"></div>
+        <div className="home-info-section">
+          <Discovery />
+        </div>
       </div>
     </div>
   );

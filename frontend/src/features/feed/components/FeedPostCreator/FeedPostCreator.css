@@ -80,15 +80,15 @@
   border: none;
   background-color: transparent;
   font-weight: 400;
-  color: transparent;
+  /* color: transparent; */
   z-index: 100;
   caret-color: black;
 }
 
-.feed-post-creator-input::selection {
+/* .feed-post-creator-input::selection {
   background-color: rgba(51, 153, 255, 0.4);
   color: transparent;
-}
+} */
 
 .input-active {
   margin-top: 15px;
