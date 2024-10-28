@@ -2,6 +2,7 @@ import React,{useContext, useEffect} from 'react'
 import './DiscoverySearchDropDown.css'
 import { DiscoveryContext } from '../../context/DiscoveryContext'
 import { DiscoveryContextType } from '../../context/Modal'
+import { DiscoverySearchDropDownResult } from '../DiscoverySearchDropDownResult/DiscoverySearchDropDownResult'
 
 
 export const DiscoverySearchDropDown:React.FC = () => {
@@ -24,7 +25,9 @@ export const DiscoverySearchDropDown:React.FC = () => {
             <div className='discovery-search-drop-down-results'>
                 <div className='discovery-search-drop-down-results-list'>
                     {searchResultsUsers.slice(0,8).map((user)=>{
-                        return <div>{user.nickname}</div>
+                        return <DiscoverySearchDropDownResult pfp={user.profilePicture} 
+                        nickname={user.nickname}  key={user.userId} verifiedAccount={false} privateAccount={false} organization={""}
+                        username={user.username}/>
                     })}
                 </div>
                 <div className='discovery-search-drop-down-go-to'>
