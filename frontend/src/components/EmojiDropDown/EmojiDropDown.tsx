@@ -264,7 +264,7 @@ export const EmojiDropDown: React.FC = () => {
       <div className='emoji-drop-down-top'>
         <div className='emoji-drop-down-search-border'>
           <SearchIcon sx={{
-            fontSize: "18px",
+            fontSize: "18px", 
             position: "absolute",
             top: "24px",
             left: "16px"

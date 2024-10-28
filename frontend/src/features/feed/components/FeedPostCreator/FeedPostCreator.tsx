@@ -242,7 +242,7 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
        { active ?  <FeedPostAudienceDropDown /> : <></> }
-       {state.post.currentPost ? covertPostContentToParagraph(state.post.currentPost.content) : covertPostContentToParagraph(postContent) }
+       {/* {state.post.currentPost ? covertPostContentToParagraph(state.post.currentPost.content) : covertPostContentToParagraph(postContent) } */}
         <textarea
           className={
             active

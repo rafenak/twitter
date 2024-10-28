@@ -1,0 +1,11 @@
+.discovery-search-drop-down{
+    width: 350px;
+    height: fit-content;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border: 1px solid #E1E8Ed;
+    border-radius: 8px;
+    padding: 8px;
+    background: white;
+
+}
