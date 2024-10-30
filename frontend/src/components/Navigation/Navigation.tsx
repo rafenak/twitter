@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
@@ -15,7 +15,17 @@ import MoreSVG from "../SVGs/MoreSVG";
 import defaultProfile from '../../assets/Generic-Profile.jpg'
 import "./Navigation.css";
 
-export const Navigation: React.FC = () => {
+
+interface NavigationProps{
+    currentPage:string
+}
+
+export const Navigation: React.FC<NavigationProps> = ({currentPage}) => {
+
+  useEffect(()=>{
+
+  }
+,[currentPage])
 
     const state = useSelector((state:RootState)=>state.user)
 
@@ -30,15 +40,15 @@ export const Navigation: React.FC = () => {
           />
         </Link>
         <div className="navigation-item">
-          <Link to="" className="navigation-link">
+          <Link to="/home" className="navigation-link">
             <HomeSVG height={26} width={26} />
-            <p className="navigation-text navigation-active">Home</p>
+            <p className={`navigation-text ${currentPage === '/home' ? 'navigation-active' : 'navigation-inactive'}`}>Home</p>
           </Link>
         </div>
-        <div className="navigation-item">
-          <Link to="" className="navigation-link">
+        <div className="navigation-item"> 
+          <Link to="/explore" className="navigation-link">
             <ExploreSVG height={26} width={26} />
-            <p className="navigation-text navigation-inactive">Explore</p>
+            <p className={`navigation-text ${currentPage === '/explore' ? 'navigation-active' : 'navigation-inactive'}`}>Explore</p>
           </Link>
         </div>
         <div className="navigation-item">

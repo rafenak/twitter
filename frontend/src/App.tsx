@@ -39,6 +39,7 @@ export const App = () => {
           <Route path="/" element={<Landing></Landing>} />
           <Route path="" element={<LayoutPage />}>
             <Route path="/home" element={<Feed />} />
+            <Route path="/explore"  element={<>Explore</>} />
           </Route>
           {/* <Route path="/home" element={<Home></Home>} /> */}
         </Routes>
