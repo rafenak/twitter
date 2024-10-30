@@ -16,7 +16,6 @@ import { Discovery } from "../features/discovery";
 import './Home.css'
 
 export const Home: React.FC = () => {
-  const state = useSelector((state: RootState) => state.user);
   const displayEditImageModal = useSelector((state: RootState) => state.modal.displayEditPostImage);
   const displayTagPeopleModal = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
@@ -24,26 +23,7 @@ export const Home: React.FC = () => {
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
 
   const dispatch: AppDisptach = useDispatch();
-  const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (jwt !== "" && state.token !== "") {
-      dispatch(getUserByToken(state.token));
-    } else if (jwt === "" && state.token !== "") {
-      setJwt(state.token);
-    } else if (jwt !== "" && state.token === "") {
-      dispatch(setToken(jwt));
-    } else {
-      navigate("/");
-    }
-  }, [state.token]);
-
   const closedOpenedModals = (e: React.MouseEvent) => {
-    // let element:any = e.currentTarget
-    // let className=element.firstChild.getAttribute('class');
-
-    // if(displayEmoji && className !=='emoji-drop-down') {
     if (displayEmoji) {
       dispatch(updateDisplayEmojis())
     }
@@ -56,17 +36,8 @@ export const Home: React.FC = () => {
       {displayGifModal && <FeedPosterGifCreatorModal />}
       {displayScheduleModal && <SchedulePostModal />}
       {displayEmoji && <EmojiDropDown />}
-      <div className="home-layout">
-        <div className="home-navigation-section">
-          <Navigation />
-        </div>
-        <div className="home-content-section">
-          <Feed />
-        </div>
-        <div className="home-info-section">
-          <Discovery />
-        </div>
-      </div>
+      <Feed />
     </div>
   );
 };
+ 
