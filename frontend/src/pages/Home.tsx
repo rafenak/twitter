@@ -17,34 +17,34 @@ import './Home.css'
 
 export const Home: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
-  const displayEditImageModal  = useSelector((state: RootState) => state.modal.displayEditPostImage);
-  const displayTagPeopleModal  = useSelector((state: RootState) => state.modal.displayTagPeople);
+  const displayEditImageModal = useSelector((state: RootState) => state.modal.displayEditPostImage);
+  const displayTagPeopleModal = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
-  const displayScheduleModal = useSelector((state:RootState) => state.modal.displaySchedule);
-  const displayEmoji = useSelector((state:RootState) => state.modal.displayEmojis);
+  const displayScheduleModal = useSelector((state: RootState) => state.modal.displaySchedule);
+  const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
 
   const dispatch: AppDisptach = useDispatch();
   const [jwt, setJwt, removeJwt] = useLocalStorage("token", "");
   const navigate = useNavigate();
 
-  useEffect(() => { 
+  useEffect(() => {
     if (jwt !== "" && state.token !== "") {
       dispatch(getUserByToken(state.token));
     } else if (jwt === "" && state.token !== "") {
       setJwt(state.token);
     } else if (jwt !== "" && state.token === "") {
-      dispatch(setToken(jwt)); 
+      dispatch(setToken(jwt));
     } else {
       navigate("/");
     }
   }, [state.token]);
 
-  const closedOpenedModals = (e:React.MouseEvent) =>{
+  const closedOpenedModals = (e: React.MouseEvent) => {
     // let element:any = e.currentTarget
     // let className=element.firstChild.getAttribute('class');
 
-   // if(displayEmoji && className !=='emoji-drop-down') {
-    if(displayEmoji) {
+    // if(displayEmoji && className !=='emoji-drop-down') {
+    if (displayEmoji) {
       dispatch(updateDisplayEmojis())
     }
 

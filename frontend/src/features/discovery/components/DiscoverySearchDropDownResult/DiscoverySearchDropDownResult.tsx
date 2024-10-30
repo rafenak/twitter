@@ -3,6 +3,7 @@ import VerifiedSVG from '../../../../components/SVGs/VerifiedSVG'
 import LockSVG from '../../../../components/SVGs/LockSVG'
 
 import DefaultPfp from '../../../../assets/Generic-Profile.jpg'
+import './DiscoverySearchDropDownResult.css'
 
 
 interface DiscoverySearchDropDownResultProps {
@@ -27,7 +28,7 @@ export const DiscoverySearchDropDownResult: React.FC<DiscoverySearchDropDownResu
                     {privateAccount && <LockSVG color={'#FFF'} height={12} width={12} />}
                     {organization && <img className='discovery-search-drop-down-organization' src={organization} alt={`${username}'s organization`} />}
                 </div>
-                <p className='discovery-search-drop-down-usernam'>
+                <p className='discovery-search-drop-down-username'>
                     @{username}
                 </p>
             </div>

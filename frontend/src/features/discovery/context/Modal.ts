@@ -6,4 +6,4 @@ export type DiscoveryContextType ={
     searchResultsUsers: User[];
     searchForUsers: (searchContent:string) => void,
     updateSearchContent: (content:string) => void
-}
+} 

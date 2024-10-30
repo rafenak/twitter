@@ -6,8 +6,12 @@ import './DiscoverySearchBar.css'
 import { DiscoveryContext } from '../../context/DiscoveryContext'
 import { DiscoveryContextType } from '../../context/Modal'
 
+interface DiscoverySearchBarPorps {
+  toggleDropDown: (value: boolean) => void
+}
 
-export const DiscoverySearchBar: React.FC = () => {
+
+export const DiscoverySearchBar: React.FC<DiscoverySearchBarPorps> = ({ toggleDropDown }) => {
 
   const { updateSearchContent, searchForUsers, searchContent } = useContext(DiscoveryContext) as DiscoveryContextType;
 
@@ -28,6 +32,20 @@ export const DiscoverySearchBar: React.FC = () => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
+    toggleDropDown(true);
+  }
+
+  const handleFocus = () => {
+    setActive(true)
+    toggleDropDown(true);
+
+  }
+
+  const handleBlur = () => {
+    setActive(false)
+    if(searchContent ==='' ){
+      toggleDropDown(false);
+    }
   }
 
   const clearInput = () => {
@@ -42,7 +60,7 @@ export const DiscoverySearchBar: React.FC = () => {
           cursor: 'pointer',
         }} />
       </div>
-      <input className="discovery-search-bar-input" onFocus={() => setActive(true)} onBlur={() => setActive(false)}
+      <input className="discovery-search-bar-input" onFocus={handleFocus} onBlur={handleBlur}
         onChange={handlChange} placeholder='Search' ref={inputRef} value={searchContent} />
       {searchContent &&
         <div className='discovery-search-bar-clear' onClick={clearInput}>

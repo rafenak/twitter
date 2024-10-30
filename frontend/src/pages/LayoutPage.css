@@ -1,0 +1,88 @@
+   /* Base styles */
+   .layout-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  /* Mobile Layout - Default */
+  .layout-layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .layout-navigation-section,
+  .layout-content-section,
+  .layout-info-section {
+    width: 100%;
+    margin-bottom: 16px; /* Spacing between sections */
+  }
+  
+  /* Medium Screens (Tablets) */
+  @media (min-width: 768px) {
+    .layout-layout {
+      display: grid;
+      grid-template-areas: 
+        "one two"
+        "one three";
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 800px; /* Adjust max width for tablet */
+    }
+  
+    .layout-navigation-section {
+      grid-area: one;
+    }
+  
+    .layout-content-section {
+      grid-area: two;
+    }
+  
+    .layout-info-section {
+      grid-area: three;
+    }
+  }
+  
+  /* Large Screens (Desktops and Larger Tablets) */
+  @media (min-width: 1024px) {
+    .layout-layout {
+      display: grid;
+      grid-template-areas: 
+        "one two three";
+      grid-template-columns: 260px 1fr 350px; /* Fixed widths for navigation and info sections */
+      gap: 16px;
+      width: 100%;
+      max-width: 1200px;
+    }
+  
+    .layout-navigation-section {
+      grid-area: one;
+      height: 100%;
+    }
+  
+    .layout-content-section {
+      grid-area: two;
+      height: 100%;
+      margin-right: 0; 
+    }
+  
+    .layout-info-section {
+      grid-area: three;
+      height: 100%;
+    }
+  }
+  
+  /* Extra Large Screens (MacBook Pro 16" and larger) */
+  @media (min-width: 1440px) {
+    .layout-layout {
+      max-width: 1400px; /* Increase max-width for larger screens */
+    }
+  }
+  
