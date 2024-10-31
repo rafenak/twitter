@@ -48,6 +48,7 @@ public class TwitterBackendApplication {
             appUser.setPhone("9876543210");
             appUser.setEnabled(true);
 			appUser.setAuthorities(roles);
+            appUser.setNickname("Rafe");
 
             userRepository.save(appUser);
         };

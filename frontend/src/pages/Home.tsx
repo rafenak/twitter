@@ -35,7 +35,7 @@ export const Home: React.FC = () => {
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
       {displayScheduleModal && <SchedulePostModal />}
-      {displayEmoji && <EmojiDropDown />}
+      {displayEmoji ? <EmojiDropDown /> : <></>}
       <Feed />
     </div>
   );

@@ -7,6 +7,7 @@ import { Theme } from "./utils/GlobalInterfaces";
 import { Home } from "./pages/Home";
 import { LayoutPage } from "./pages/LayoutPage";
 import { Feed } from "./features/feed/components/Feed/Feed";
+import { Profile } from "./pages/Profile";
 
 const theme: Theme = {
   colors: {
@@ -40,6 +41,7 @@ export const App = () => {
           <Route path="" element={<LayoutPage />}>
             <Route path="/home" element={<Feed />} />
             <Route path="/explore"  element={<>Explore</>} />
+            <Route path="/:username"  element={<Profile />} />
           </Route>
           {/* <Route path="/home" element={<Home></Home>} /> */}
         </Routes>
