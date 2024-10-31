@@ -29,6 +29,11 @@ public class UserController {
     private final TokenService tokenService;
     private final ImageService imageService;
 
+    @GetMapping("/{username}")
+    public AppUser getUserByUserName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token ,@PathVariable String username ){
+        return  userService.getUserByName(username);
+    }
+
     @GetMapping("/verify")
     public AppUser verifyIdentity(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         String username = tokenService.getUserNameFromToken(token);

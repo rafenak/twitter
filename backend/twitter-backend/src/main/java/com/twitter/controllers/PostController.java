@@ -7,6 +7,7 @@ import com.twitter.models.AppUser;
 import com.twitter.models.Post;
 import com.twitter.request.CreatePostRequest;
 import com.twitter.services.PostService;
+import com.twitter.services.UserService;
 import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import java.util.Set;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
 
     @GetMapping("/")
      public List<Post> getAllPosts(){
@@ -59,9 +61,10 @@ public class PostController {
     }
 
     @GetMapping("/author/{userId}")
-    public Set<Post> getPostsByAuthor(@PathVariable("userId") int id){
-        AppUser author = new AppUser();
-        author.setUserId(id);
+    public Set<Post> getPostsByAuthor(@PathVariable("userId") Integer userId){
+//        AppUser author = new AppUser();
+//        author.setUserId(id);
+        AppUser author = userService.getUserById(userId);
         return  postService.getAllPostsByAuthor(author);
     }
 

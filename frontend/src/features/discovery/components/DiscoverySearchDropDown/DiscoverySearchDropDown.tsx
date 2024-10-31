@@ -4,21 +4,26 @@ import { DiscoveryContext } from '../../context/DiscoveryContext'
 import { DiscoveryContextType } from '../../context/Modal'
 import { DiscoverySearchDropDownResult } from '../DiscoverySearchDropDownResult/DiscoverySearchDropDownResult'
 import SearchIcon from '@mui/icons-material/Search'
+import { useNavigate } from 'react-router-dom'
 
 
-interface DiscoverySearchDropDownProps{
- toggleDropDown: (value: boolean) => void
+interface DiscoverySearchDropDownProps {
+    toggleDropDown: (value: boolean) => void
 }
 
-export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps>  = ({toggleDropDown }) => {
+export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps> = ({ toggleDropDown }) => {
 
-    const { searchResultsUsers, searchContent } = useContext(DiscoveryContext) as DiscoveryContextType;
+    const { searchResultsUsers, searchContent, updateSearchContent } = useContext(DiscoveryContext) as DiscoveryContextType;
+    const navigate = useNavigate()
 
-    const navigateToUserProfile = (e:React.MouseEvent<HTMLDivElement>) =>{
-        toggleDropDown(false)
+    const navigateToUserProfile = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        toggleDropDown(false);
+        updateSearchContent('')
+        navigate(`${e.currentTarget.id}`)
     }
 
-    useEffect(() => { 
+    useEffect(() => {
 
     }, [searchResultsUsers])
 
@@ -45,7 +50,8 @@ export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps>  = 
                 <div className='discovery-search-drop-down-results'>
                     <div>
                         {searchResultsUsers.slice(0, 8).map((user) => {
-                            return <div className='discovery-search-drop-down-result-wrapper' onClick={navigateToUserProfile}>
+                            return <div className='discovery-search-drop-down-result-wrapper' onClick={navigateToUserProfile}
+                                key={user.userId} id={user.username}>
                                 <DiscoverySearchDropDownResult pfp={user.profilePicture}
                                     nickname={user.nickname} key={user.userId} verifiedAccount={false} privateAccount={false} organization={""}
                                     username={user.username} />
@@ -53,7 +59,7 @@ export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps>  = 
                         })}
                     </div>
                     <div className='discovery-search-drop-down-go-to'>
-                        <p className='discovery-search-drop-down-go-to-text'>
+                        <p className='discovery-search-drop-down-go-to-text' onClick={navigateToUserProfile} id={searchContent}>
                             Go to @{searchContent}
                         </p>
                     </div>
