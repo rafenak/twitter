@@ -1,5 +1,5 @@
 import React from 'react'
-import VerifiedSVG from '../../../../components/SVGs/VerifiedSVG';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { convertNumberPostsToString } from '../../utils/ProfileUtils';
 import './ProfileTopBar.css'
@@ -19,7 +19,7 @@ export const ProfileTopBar: React.FC<ProfileTopBarProps> = ({ nickname, isVerifi
         <ArrowBackIcon sx={{
           height: '20px',
           width: '20px'
-        }}/>
+        }} />
 
       </div>
       <div className='profile-top-bar-right'>
@@ -27,7 +27,11 @@ export const ProfileTopBar: React.FC<ProfileTopBarProps> = ({ nickname, isVerifi
           <p className='profile-top-bar-name'>
             {nickname}
           </p>
-          {isVerified && <VerifiedSVG color={'#1DA1F2'} height={12} width={12} />}
+          {isVerified && <VerifiedIcon sx={{
+            color: '#1DA1F2',
+            height: '20px',
+            width: '20px'
+          }} />}
           {organization && <img src={organization} alt={`${nickname}'s organization`} height={20} width={20} />}
         </div>
         <p className='profile-top-bar-posts'>

@@ -6,6 +6,7 @@ import { Post, User } from '../utils/GlobalInterfaces'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { ProfileTopBar } from '../features/profile'
+import { ProfileFollowSection } from '../features/profile/components/ProfileFollowSection/ProfileFollowSection'
 
 
 export const Profile: React.FC = () => {
@@ -24,6 +25,7 @@ export const Profile: React.FC = () => {
             })
 
             user = req.data
+            // user.bannerPicture ='https://cdn.pixabay.com/photo/2016/09/01/19/53/pocket-watch-1637396_1280.jpg'
             setProfileUser(user)
         } catch (e) {
             console.log('user does not exists,or issue loading');
@@ -61,10 +63,13 @@ export const Profile: React.FC = () => {
         <div className='profile'>
             {
                 profileUser ? <>
-                    <ProfileTopBar nickname={profileUser.nickname} isVerified={false} organization={''} numberOfPosts={posts.length}
+                    <ProfileTopBar nickname={profileUser.nickname} isVerified={true} organization={''} numberOfPosts={posts.length}
                      key={profileUser.userId}/>
-                    {/* Profile banner */}
-                    {/* Profile picture,options, follow */}
+                    <div className='profile-banner-picture' 
+                    style={profileUser.bannerPicture ? { backgroundImage : `url("${profileUser.bannerPicture}")`} : 
+                        {backgroundColor: "#AAB8C2"}}>
+                    </div>
+                    <ProfileFollowSection profilePicture={profileUser.profilePicture} username={profileUser.username}/>
                 </> : <></> 
             }
 

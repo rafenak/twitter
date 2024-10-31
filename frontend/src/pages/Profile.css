@@ -4,3 +4,11 @@
     border-right: 1px solid #E1E8ED;
     border-left:  1px solid #E1E8ED;
 }
+
+.profile-banner-picture{
+    height: 200px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
