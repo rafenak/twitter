@@ -203,6 +203,8 @@ export const UserSlice = createSlice({
           nickname: action.payload.loggedIn.user.nickname,
           profilePicture: action.payload.loggedIn.user.profilePicture,
           bannerPicture: action.payload.loggedIn.user.bannerPicture,
+          verifiedAccount:action.payload.loggedIn.user.verifiedAccount,
+          organization:action.payload.loggedIn.user.organization,
         },
         token: action.payload.loggedIn.token,
         followers: action.payload.loggedIn.folowers,

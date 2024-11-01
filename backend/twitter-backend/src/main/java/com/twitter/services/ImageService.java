@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -94,5 +95,32 @@ public class ImageService {
     public  String getImageType(String fileName){
         Image image = imageRepository.findByImageName(fileName).get();
         return image.getImageType();
+    }
+
+    public Image createOrganization(MultipartFile file, String organizationName) throws UnableToSavePhotoException{
+        try {
+            String extension = "."+ Objects.requireNonNull(file.getContentType()).split("/")[1];
+            File orgImg = new File( DIRECTORY + File.separator + organizationName + extension);
+            orgImg.createNewFile();
+            file.transferTo(orgImg);
+
+            String imageURL  = URL + orgImg.getName();
+
+            Image i = new Image();
+            i.setImageName(orgImg.getName());
+            i.setImageType(file.getContentType());
+            i.setImagePath(orgImg.getPath());
+            i.setImageURL(imageURL);
+
+            return imageRepository.save(i);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UnableToSavePhotoException();
+        }
+    }
+
+    public Optional<Image> getImageByImageName(String name){
+        return  imageRepository.findByImageName(name);
     }
 }

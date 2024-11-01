@@ -4,14 +4,15 @@ import LockSVG from '../../../../components/SVGs/LockSVG'
 
 import DefaultPfp from '../../../../assets/Generic-Profile.jpg'
 import './DiscoverySearchDropDownResult.css'
+import { ImageInfo } from '../../../../utils/GlobalInterfaces'
 
 
 interface DiscoverySearchDropDownResultProps {
-    pfp: string;
+    pfp: ImageInfo | null;
     nickname: string;
     verifiedAccount: boolean;
     privateAccount: boolean;
-    organization: string;
+    organization: ImageInfo | null;
     username: string;
 }
 
@@ -20,13 +21,14 @@ export const DiscoverySearchDropDownResult: React.FC<DiscoverySearchDropDownResu
 }) => {
     return (
         <div className='discovery-search-drop-down-result'>
-            <img className='discovery-search-drop-down-result-pfp' src={pfp ? pfp : DefaultPfp} alt={`${username}'s pfp`} />
+            <img className='discovery-search-drop-down-result-pfp' src={pfp ? pfp.imageURL : DefaultPfp} alt={`${username}'s pfp`} />
             <div className='discovery-search-drop-down-result-name-section'>
                 <div className='discovery-search-drop-down-result-nickname-section'>
                     <p className='discovery-search-drop-down-result-nickname'>{nickname}</p>
                     {verifiedAccount && <VerifiedSVG color={'#1DA1F2'} height={12} width={12} />}
                     {privateAccount && <LockSVG color={'#FFF'} height={12} width={12} />}
-                    {organization && <img className='discovery-search-drop-down-organization' src={organization} alt={`${username}'s organization`} />}
+                    {organization && <img className='discovery-search-drop-down-organization' 
+                                src={organization.imageURL} alt={`${username}'s organization`} />}
                 </div>
                 <p className='discovery-search-drop-down-username'>
                     @{username}

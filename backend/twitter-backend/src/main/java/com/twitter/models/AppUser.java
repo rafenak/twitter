@@ -52,6 +52,13 @@ public class AppUser {
     @JoinColumn(name = "banner_picture", referencedColumnName = "image_id")
     private Image bannerPicture;
 
+    @Column(name = "verified_account",nullable = true)
+    private Boolean verifiedAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "organization_id",nullable = true )
+    private Image organization;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "following", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "following_id")}
@@ -87,6 +94,10 @@ public class AppUser {
         this.enabled = false;
         this.following = new HashSet<>();
         this.followers = new HashSet<>();
+    }
+
+    public boolean isVerifiedAccount() {
+        return Boolean.TRUE.equals(verifiedAccount); // Returns false if null
     }
 
 }

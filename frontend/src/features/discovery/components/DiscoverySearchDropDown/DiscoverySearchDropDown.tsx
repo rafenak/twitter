@@ -53,7 +53,11 @@ export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps> = (
                             return <div className='discovery-search-drop-down-result-wrapper' onClick={navigateToUserProfile}
                                 key={user.userId} id={user.username}>
                                 <DiscoverySearchDropDownResult pfp={user.profilePicture}
-                                    nickname={user.nickname} key={user.userId} verifiedAccount={false} privateAccount={false} organization={""}
+                                    nickname={user.nickname} 
+                                    key={user.userId} 
+                                    verifiedAccount={user.verifiedAccount}
+                                    privateAccount={false} 
+                                    organization={user.organization}
                                     username={user.username} />
                             </div>
                         })}
