@@ -133,8 +133,13 @@ public class PostService {
         return postRepository.findByAuthor(author).orElse(new HashSet<>());
     }
 
+    public List<Post> getAllPostsByAuthors(Set<AppUser> authors){
+            return postRepository.findPostsByAuthorIds(authors);
+    }
+
     public  void deletePost(Post post){
         postRepository.delete(post);
     }
+
 
 }

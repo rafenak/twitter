@@ -16,7 +16,7 @@ import java.util.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,4 +98,8 @@ public class Post {
     }
 
 
+    @Override
+    public int compareTo(Post o) {
+        return -this.postDate.compareTo(o.postDate);
+    }
 }
