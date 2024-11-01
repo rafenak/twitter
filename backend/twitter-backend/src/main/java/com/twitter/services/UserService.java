@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,8 +41,8 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
 
-    public AppUser getUserById(Integer userId){
-        return  userRepository.findById(userId).orElseThrow(UserDoesNotExistException::new);
+    public AppUser getUserById(Integer userId) {
+        return userRepository.findById(userId).orElseThrow(UserDoesNotExistException::new);
     }
 
     /**
@@ -261,6 +262,34 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    public byte[] setUserOrganization(String username, MultipartFile file, String orgName) throws UnableToResolvePhotoException {
+        AppUser user = userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+
+        Image orgImage = imageService.getImageByImageName(orgName)
+                .orElseGet(() -> {
+                    try {
+                        return imageService.createOrganization(file, orgName);
+                    } catch (UnableToSavePhotoException e) {
+                        return null;
+                    }
+                });
+
+        if (orgImage != null) {
+            user.setOrganization(orgImage);
+            userRepository.save(user);
+
+            try {
+                return Files.readAllBytes(new File(orgImage.getImagePath()).toPath());
+            } catch (IOException e) {
+                throw new UnableToResolvePhotoException();
+            }
+
+        } else {
+            throw new UnableToResolvePhotoException("We are unable to find or save the organization photo");
+
+        }
+    }
+
     public Set<AppUser> followingUser(String user, String followee) throws FollowException {
 
         if (user.equals(followee)) throw new FollowException();
@@ -312,8 +341,8 @@ public class UserService implements UserDetailsService {
         return user.getUsername();
     }
 
-    public AppUser getUserEmailAndPhone(FindUsernameRequest  credential){
-       return userRepository.findByEmailOrPhoneOrUsername
+    public AppUser getUserEmailAndPhone(FindUsernameRequest credential) {
+        return userRepository.findByEmailOrPhoneOrUsername
                         (credential.getEmail(),
                                 credential.getPhone(), credential.getUsername()).
                 orElseThrow(UserDoesNotExistException::new);

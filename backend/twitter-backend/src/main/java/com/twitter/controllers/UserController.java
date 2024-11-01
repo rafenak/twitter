@@ -1,8 +1,8 @@
 package com.twitter.controllers;
 
 
-import com.twitter.exceptions.EmailAlreadyTakenException;
 import com.twitter.exceptions.FollowException;
+import com.twitter.exceptions.UnableToResolvePhotoException;
 import com.twitter.exceptions.UnableToSavePhotoException;
 import com.twitter.models.AppUser;
 import com.twitter.services.ImageService;
@@ -30,8 +30,8 @@ public class UserController {
     private final ImageService imageService;
 
     @GetMapping("/{username}")
-    public AppUser getUserByUserName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token ,@PathVariable String username ){
-        return  userService.getUserByName(username);
+    public AppUser getUserByUserName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String username) {
+        return userService.getUserByName(username);
     }
 
     @GetMapping("/verify")
@@ -52,6 +52,14 @@ public class UserController {
         return userService.setProfileOrBannerPicture(username, file, "bnr");
     }
 
+    @PostMapping("/organization")
+    public ResponseEntity<byte[]> setUserOrganization(@RequestPart("user") String user,
+                                                      @RequestPart("file") MultipartFile file,
+                                                      @RequestPart("organization") String organization) throws UnableToResolvePhotoException {
+
+        byte[] org = userService.setUserOrganization(user, file, organization);
+        return ResponseEntity.ok(org);
+    }
 
     @PutMapping("/")
     public AppUser updateUser(AppUser user) {
@@ -73,12 +81,12 @@ public class UserController {
 
     @GetMapping("/following/{username}")
     public Set<AppUser> getFollowingList(@PathVariable String username) {
-        return  userService.retrieveFollowingList(username);
+        return userService.retrieveFollowingList(username);
     }
 
     @GetMapping("/followers/{username}")
     public Set<AppUser> getFollowersList(@PathVariable String username) {
-        return  userService.retrieveFollowersList(username);
+        return userService.retrieveFollowersList(username);
     }
 
 

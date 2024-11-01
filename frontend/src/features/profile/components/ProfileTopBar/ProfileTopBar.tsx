@@ -3,12 +3,13 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { convertNumberPostsToString } from '../../utils/ProfileUtils';
 import './ProfileTopBar.css'
+import { ImageInfo } from '../../../../utils/GlobalInterfaces';
 
 
 interface ProfileTopBarProps {
   nickname: string;
   isVerified: boolean;
-  organization: string;
+  organization: ImageInfo | null;
   numberOfPosts: number;
 }
 
@@ -32,7 +33,7 @@ export const ProfileTopBar: React.FC<ProfileTopBarProps> = ({ nickname, isVerifi
             height: '20px',
             width: '20px'
           }} />}
-          {organization && <img src={organization} alt={`${nickname}'s organization`} height={20} width={20} />}
+          {organization && <img src={organization.imageURL} alt={`${nickname}'s organization`} height={20} width={20} />}
         </div>
         <p className='profile-top-bar-posts'>
           {convertNumberPostsToString(numberOfPosts)} posts

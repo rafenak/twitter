@@ -61,13 +61,13 @@ export const Profile: React.FC = () => {
         <div className='profile'>
             {
                 profileUser ? <>
-                    <ProfileTopBar nickname={profileUser.nickname} isVerified={true} organization={''} numberOfPosts={posts.length}
+                    <ProfileTopBar nickname={profileUser.nickname} isVerified={profileUser.verifiedAccount} organization={profileUser.organization} numberOfPosts={posts.length}
                      key={profileUser.userId}/>
                     <div className='profile-banner-picture' 
                     style={profileUser.bannerPicture ? { backgroundImage : `url("${profileUser.bannerPicture}")`} : 
                         {backgroundColor: "#AAB8C2"}}>
                     </div>
-                    <ProfileFollowSection profilePicture={profileUser.profilePicture} username={profileUser.username}/>
+                    <ProfileFollowSection  profilePicture={profileUser.profilePicture} username={profileUser.username}/>
                 </> : <></> 
             }
 

@@ -49,6 +49,8 @@ public class TwitterBackendApplication {
             appUser.setEnabled(true);
 			appUser.setAuthorities(roles);
             appUser.setNickname("Rafe");
+            appUser.setVerifiedAccount(true);
+
 
             userRepository.save(appUser);
         };
