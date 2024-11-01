@@ -97,7 +97,7 @@ export interface PostImage{
 export interface Post{
   postId:number;
   content:string;
-  postedDate?:Date;
+  postDate?:Date;
   author:User;
   replies?:Post[];
   likes:number;

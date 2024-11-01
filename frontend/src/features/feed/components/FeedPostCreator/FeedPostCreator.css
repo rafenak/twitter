@@ -4,6 +4,8 @@
   display: flex;
   padding: 4px;
   border-bottom: 1px solid #e1e8ed;
+  position: relative;
+
 }
 
 .feed-post-creator-pfp {

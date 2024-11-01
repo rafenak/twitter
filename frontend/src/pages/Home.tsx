@@ -27,8 +27,8 @@ export const Home: React.FC = () => {
     if (displayEmoji) {
       dispatch(updateDisplayEmojis())
     }
-
   }
+  
   return (
     <div className="home" onClick={closedOpenedModals}>
       {displayEditImageModal && <FeedPostCreatorImageEditImageModal />}

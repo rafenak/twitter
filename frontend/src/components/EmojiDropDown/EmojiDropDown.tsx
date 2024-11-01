@@ -36,7 +36,6 @@ export const EmojiDropDown: React.FC = () => {
   const [searchEmojis, setSearchEmojis] = useState<EmojiData[]>([])
   const [recentEmojis, setRecentEmojis, removeRecentEmojis] = useLocalStorage("recentEmojis", "");
 
-
   // let options = {
   //   root: document.querySelector("#emoji-scroll-area"),
   //   rootMargin: "0px",
@@ -322,7 +321,7 @@ export const EmojiDropDown: React.FC = () => {
       <div className='emoji-drop-down-selector' onMouseOver={!emojiSearchContent ? getCurrentEmoji : () => { }}
         onMouseLeave={!emojiSearchContent ? resetCurrentEmoji : () => { }} id="emoji-scroll-area">
         {
-          !emojiSearchContent ?
+          !emojiSearchContent &&  recentEmojis ?
             <>
               { JSON.parse(recentEmojis).length > 0 ? 
                 <div className='emoji-drop-down-selector-section' id="Recent">
