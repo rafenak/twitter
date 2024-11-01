@@ -45,8 +45,6 @@ export const Profile: React.FC = () => {
             })
 
             setPosts(req.data)
-            console.log(req.data);
-
         }
         catch (e) {
             console.log('unable to fetch post');
