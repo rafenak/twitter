@@ -30,6 +30,7 @@ import { covertPostContentToParagraph } from "../../../../utils/EmojiUtils";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
+  const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
   const dispatch: AppDisptach = useDispatch();
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -39,7 +40,6 @@ export const FeedPostCreator: React.FC = () => {
   const [postContent, setPostContent] = useState<string>("");
   const [overLoadedImages,setOverLoadedImages] = useState<boolean>(false)
   // const [showPoll, setShowPoll] = useState<boolean>(false); 
-
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const activate = (e:React.MouseEvent<HTMLDivElement>) => {
@@ -329,6 +329,7 @@ export const FeedPostCreator: React.FC = () => {
           </div>
         </div>
       </div>
+      {displayEmoji ? <EmojiDropDown /> : <></>}
     </div>
   );
 };

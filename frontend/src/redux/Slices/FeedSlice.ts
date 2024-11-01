@@ -30,9 +30,7 @@ export const loadFeedPage = createAsyncThunk(
             headers:{
                 Authorization: `Bearer ${payload.token}`,
             }
-        })
-        console.log(req.data);
-        
+        })        
         return req.data;
       } catch (e) {
         return thuckAPI.rejectWithValue(e);
