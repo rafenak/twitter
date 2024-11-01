@@ -4,6 +4,8 @@ import axios from "axios";
 
 interface UserSliceState {
   loggedIn: User | undefined;
+  following: User[];
+  followers: User[];
   username: string;
   token: string;
   fromRegister: boolean;
@@ -21,13 +23,42 @@ interface VerifyUserBody {
   username: string;
 }
 
+interface FollowUserBody {
+  token: string;
+  followee: string;
+}
+
 const initialState: UserSliceState = {
   loggedIn: undefined,
+  following: [],
+  followers: [],
   fromRegister: false,
   error: false,
   username: "",
   token: "",
 };
+
+async function getFollowers(username: string) {
+  try {
+    const req = await axios.get(
+      `http://localhost:8000/user/followers/${username}`
+    );
+    return req.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+async function getFollowing(username: string) {
+  try {
+    const req = await axios.get(
+      `http://localhost:8000/user/following/${username}`
+    );
+    return req.data;
+  } catch (e) {
+    return [];
+  }
+}
 
 /**
  *  Create a login request
@@ -41,7 +72,20 @@ export const loginUser = createAsyncThunk(
         username: body.username,
         password: body.password,
       });
-      return req.data;
+
+      const user = req.data;
+
+      const followers = getFollowers(user.user.username);
+      const following = getFollowing(user.user.username);
+
+      let followingAndFollowers = await Promise.all([followers, following]);
+
+      return {
+        loggedIn: user,
+        followers: followingAndFollowers[0],
+        following: followingAndFollowers[1],
+      };
+      //return req.data;
     } catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
@@ -77,6 +121,39 @@ export const getUserByToken = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+
+      const user = req.data;
+
+      const followers = getFollowers(user.username);
+      const following = getFollowing(user.username);
+
+      let followingAndFollowers = await Promise.all([followers, following]);
+
+      return {
+        loggedIn: user,
+        followers: followingAndFollowers[0],
+        following: followingAndFollowers[1],
+      };
+      //return req.data;
+    } catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+);
+
+export const followUser = createAsyncThunk(
+  "user/follow",
+  async (body: FollowUserBody, thuckAPI) => {
+    try {
+      const req = await axios.put(
+        "http://localhost:8000/user/follow",
+        { followedUser: body.followee },
+        {
+          headers: {
+            Authorization: `Bearer ${body.token}`,
+          },
+        }
+      );
       return req.data;
     } catch (e) {
       return thuckAPI.rejectWithValue(e);
@@ -115,19 +192,21 @@ export const UserSlice = createSlice({
       state = {
         ...state,
         loggedIn: {
-          userId: action.payload.user.userId,
-          firstName: action.payload.user.firstName,
-          lastName: action.payload.user.lastName,
-          email: action.payload.user.email,
-          phone: action.payload.user.phone,
-          dateOfBirth: action.payload.user.dateOfBirth,
-          username: action.payload.user.username,
-          bio: action.payload.user.bio,
-          nickname: action.payload.user.nickname,
-          profilePicture: action.payload.user.profilePicture,
-          bannerPicture: action.payload.user.bannerPicture,
+          userId: action.payload.loggedIn.user.userId,
+          firstName: action.payload.loggedIn.user.firstName,
+          lastName: action.payload.loggedIn.user.lastName,
+          email: action.payload.loggedIn.user.email,
+          phone: action.payload.loggedIn.user.phone,
+          dateOfBirth: action.payload.loggedIn.user.dateOfBirth,
+          username: action.payload.loggedIn.user.username,
+          bio: action.payload.loggedIn.user.bio,
+          nickname: action.payload.loggedIn.user.nickname,
+          profilePicture: action.payload.loggedIn.user.profilePicture,
+          bannerPicture: action.payload.loggedIn.user.bannerPicture,
         },
-        token: action.payload.token,
+        token: action.payload.loggedIn.token,
+        followers: action.payload.loggedIn.folowers,
+        following: action.payload.loggedIn.following,
       };
 
       return state;
@@ -176,8 +255,10 @@ export const UserSlice = createSlice({
     builder.addCase(getUserByToken.fulfilled, (state, action) => {
       state = {
         ...state,
-        loggedIn: action.payload,
-        username: action.payload.username,
+        loggedIn: action.payload.loggedIn,
+        username: action.payload.loggedIn.username,
+        followers: action.payload.followers,
+        following: action.payload.following,
       };
       return state;
     });
@@ -197,7 +278,30 @@ export const UserSlice = createSlice({
       };
       return state;
     });
-    
+
+    builder.addCase(followUser.pending, (state, action) => {
+      state = {
+        ...state,
+        error: false,
+      };
+      return state;
+    });
+
+    builder.addCase(followUser.fulfilled, (state, action) => {
+      state = {
+        ...state,
+        following: action.payload,
+      };
+      return state;
+    });
+
+    builder.addCase(followUser.rejected, (state, action) => {
+      state = {
+        ...state,
+        error: true,
+      };
+      return state;
+    });
   },
 });
 

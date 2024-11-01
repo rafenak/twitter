@@ -14,7 +14,7 @@
     width: 115px;
     border-radius: 100%;
     border: 4px solid white;
-    top: -65px;
+    top: -40px;
     left: 16px;
     object-fit: cover;
 }
@@ -43,7 +43,7 @@
     background-color: rgba(225, 232, 237, 0.3);
 }
 
-.profile-follow-section-button{
+.profile-follow-section-follow-button{
     width: 80px;
     height: 36px;
     border: none;
@@ -55,6 +55,26 @@
     cursor: pointer;
 }
 
-.profile-follow-section-button:hover{
+.profile-follow-section-follow-button:hover{
     background-color: #1a91da;
+}
+
+.profile-follow-section-unfollow-button{
+    width: 104px;
+    height: 36px;
+    border: 1px solid #E1E8ED;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px; 
+    background-color: white;
+}
+
+.profile-follow-section-unfollow-button:hover{
+    border: 1px solid #E0245E;
+    color: #E0245E;
+    background-color: rgba(225, 0, 0, 0.3);
 }
