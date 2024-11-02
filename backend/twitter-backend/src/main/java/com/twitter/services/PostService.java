@@ -2,18 +2,24 @@ package com.twitter.services;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twitter.enums.Audience;
+import com.twitter.enums.ReplyRestriction;
 import com.twitter.exceptions.PostDoesNotExistsException;
 import com.twitter.exceptions.UnableToCreatePostException;
 import com.twitter.models.*;
 import com.twitter.repositories.PostRepository;
 import com.twitter.request.CreatePostRequest;
+import com.twitter.request.CreateReplyRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.Pool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -22,16 +28,16 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final ImageService imageService;
-    private final PollService   pollService;
+    private final PollService pollService;
 
     public Post createPost(CreatePostRequest request) {
 
         Image savedGif;
 
         //if true, there will a single gif from tenor
-        if(request.getImages() !=null && request.getImages().size() > 0){
+        if (request.getImages() != null && request.getImages().size() > 0) {
             List<Image> gifList = request.getImages();
-            Image gif =  gifList.getFirst();
+            Image gif = gifList.getFirst();
             gif.setImagePath(gif.getImageURL());
 
             savedGif = imageService.saveGifFromPost(gif);
@@ -42,17 +48,17 @@ public class PostService {
 
         //if true, there is a poll needs to be created
         Poll savedPoll = null;
-        if(request.getPoll() != null){
+        if (request.getPoll() != null) {
             Poll p = new Poll();
             p.setEndTime(request.getPoll().getEndTime());
             p.setChoices(new ArrayList<>());
             savedPoll = pollService.generatePoll(p);
-            List<PollChoice> pollChoices =new ArrayList<PollChoice>();
+            List<PollChoice> pollChoices = new ArrayList<PollChoice>();
             List<PollChoice> choices = request.getPoll().getChoices();
             for (int i = 0; i < choices.size(); i++) {
                 PollChoice choice = choices.get(i);
                 choice.setPoll(savedPoll);
-                choice=pollService.generateChoice(choice);
+                choice = pollService.generateChoice(choice);
                 pollChoices.add(choice);
             }
             savedPoll.setChoices(pollChoices);
@@ -64,9 +70,9 @@ public class PostService {
         p.setContent(request.getContent());
 
         if (request.isScheduled()) {
-            p.setPostDate(p.getScheduledDate());
+            p.setPostDate(request.getScheduledDate());
         } else {
-            p.setPostDate(new Date());
+            p.setPostDate(LocalDateTime.now());
         }
         p.setAuthor(request.getAuthor());
         p.setReplies(request.getReplies());
@@ -80,14 +86,14 @@ public class PostService {
         try {
             return postRepository.save(p);
         } catch (Exception e) {
-           throw  new UnableToCreatePostException();
+            throw new UnableToCreatePostException();
         }
     }
 
-    public Post createMediaPost(String post, List<MultipartFile> files){
+    public Post createMediaPost(String post, List<MultipartFile> files) {
         CreatePostRequest request = new CreatePostRequest();
 
-        try{
+        try {
 
             ObjectMapper objectMapper = new ObjectMapper();
             request = objectMapper.readValue(post, CreatePostRequest.class);
@@ -96,9 +102,9 @@ public class PostService {
             p.setContent(request.getContent());
 
             if (request.isScheduled()) {
-                p.setPostDate(p.getScheduledDate());
+                p.setPostDate(request.getScheduledDate());
             } else {
-                p.setPostDate(new Date());
+                p.setPostDate(LocalDateTime.now());
             }
             p.setAuthor(request.getAuthor());
             p.setReplies(request.getReplies());
@@ -110,14 +116,13 @@ public class PostService {
             //upload the images that got passed
             List<Image> postImages = new ArrayList<>();
             for (int i = 0; i < files.size(); i++) {
-               Image postImage= imageService.uploadImage(files.get(i),"post");
-               postImages.add(postImage);
+                Image postImage = imageService.uploadImage(files.get(i), "post");
+                postImages.add(postImage);
             }
             p.setImages(postImages);
-            return  postRepository.save(p);
-        }
-        catch (Exception e) {
-            throw  new UnableToCreatePostException();
+            return postRepository.save(p);
+        } catch (Exception e) {
+            throw new UnableToCreatePostException();
         }
     }
 
@@ -133,12 +138,41 @@ public class PostService {
         return postRepository.findByAuthor(author).orElse(new HashSet<>());
     }
 
-    public List<Post> getAllPostsByAuthors(Set<AppUser> authors){
-            return postRepository.findPostsByAuthorIds(authors);
+    public List<Post> getAllPostsByAuthors(Set<AppUser> authors) {
+        return postRepository.findPostsByAuthorIds(authors);
     }
 
-    public  void deletePost(Post post){
+    public void deletePost(Post post) {
         postRepository.delete(post);
+    }
+
+
+    public Post createReply(CreateReplyRequest request) {
+
+        CreatePostRequest postRequest = new CreatePostRequest();
+        postRequest.setContent(request.getReplyContent());
+        postRequest.setAuthor(request.getAuthor());
+        postRequest.setReplies(new HashSet<>());
+        postRequest.setImages(request.getImages());
+        postRequest.setScheduled(request.isScheduled());
+        postRequest.setScheduledDate(request.getScheduledDate());
+        postRequest.setAudience(Audience.EVERYONE);
+        postRequest.setReplyRestriction(ReplyRestriction.EVERYONE);
+        postRequest.setPoll(request.getPoll());
+
+        Post reply = createPost(postRequest);
+        reply.setReply(true);
+
+        Post original = postRepository.findById(request.getOriginalPost())
+                .orElseThrow(PostDoesNotExistsException::new);
+
+        Set<Post> originalPostReplies = original.getReplies();
+        originalPostReplies.add(reply);
+        original.setReplies(originalPostReplies);
+
+        postRepository.save(original);
+
+        return postRepository.save(reply);
     }
 
 

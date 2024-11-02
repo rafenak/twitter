@@ -187,3 +187,25 @@
     height: 20px;
     object-fit: cover;
 }
+
+.post-content-span{
+  height: fit-content;
+  width: fit-content;
+  font-size: 15px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+.post-content-span-emoji {
+  height: 15px;
+  width: 15px;
+  /* font-size: 20px; */
+  margin: 0;
+  padding: 0;
+  /* background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat; */
+  /* margin-left: 5px;
+  margin-right: 2px; */
+}

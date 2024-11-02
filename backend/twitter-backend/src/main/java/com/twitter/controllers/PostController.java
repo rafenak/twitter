@@ -6,6 +6,7 @@ import com.twitter.exceptions.UnableToCreatePostException;
 import com.twitter.models.AppUser;
 import com.twitter.models.Post;
 import com.twitter.request.CreatePostRequest;
+import com.twitter.request.CreateReplyRequest;
 import com.twitter.services.PostService;
 import com.twitter.services.UserService;
 import jakarta.mail.Multipart;
@@ -72,5 +73,11 @@ public class PostController {
     public ResponseEntity<String> deletePost(@RequestBody Post post) {
         postService.deletePost(post);
         return new ResponseEntity<String>("Post has been deleted", HttpStatus.OK);
+    }
+
+
+    @PostMapping("/reply")
+    public Post createReply(@RequestBody CreateReplyRequest request){
+       return postService.createReply(request);
     }
 }

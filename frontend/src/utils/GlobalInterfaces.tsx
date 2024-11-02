@@ -69,6 +69,7 @@ export interface User{
   profilePicture:ImageInfo | null;
   bannerPicture:ImageInfo | null;
   verifiedAccount:boolean;
+  privateAccount:boolean;
   organization:ImageInfo | null;
 }
 

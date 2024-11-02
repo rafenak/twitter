@@ -26,7 +26,7 @@ export const DiscoverySearchDropDownResult: React.FC<DiscoverySearchDropDownResu
                 <div className='discovery-search-drop-down-result-nickname-section'>
                     <p className='discovery-search-drop-down-result-nickname'>{nickname}</p>
                     {verifiedAccount && <VerifiedSVG color={'#1DA1F2'} height={12} width={12} />}
-                    {privateAccount && <LockSVG color={'#FFF'} height={12} width={12} />}
+                    {privateAccount && <LockSVG color={'#1DA1F2'} height={12} width={12} />}
                     {organization && <img className='discovery-search-drop-down-organization' 
                                 src={organization.imageURL} alt={`${username}'s organization`} />}
                 </div>

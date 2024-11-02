@@ -19,4 +19,16 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     @Query( "SELECT p from Post p WHERE p.author IN(:authors)")
     List<Post> findPostsByAuthorIds(@Param("authors") Set<AppUser> authors);
 
+    @Query("SELECT p.reposts FROM Post p WHERE p.id = :postId")
+    Set<AppUser> findRepostsByPostId(@Param("postId") Long postId);
+
+    @Query("SELECT p.bookmarks FROM Post p WHERE p.id = :postId")
+    Set<AppUser> findBookmarksByPostId(@Param("postId") Long postId);
+
+    @Query("SELECT p.views FROM Post p WHERE p.id = :postId")
+    Set<AppUser> findViewsByPostId(@Param("postId") Long postId);
+
+    @Query("SELECT p.likes FROM Post p WHERE p.id = :postId")
+    Set<AppUser> findViewsByLikeId(@Param("likes") Long likeId);
+
 }

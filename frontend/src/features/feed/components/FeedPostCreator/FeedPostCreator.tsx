@@ -26,7 +26,7 @@ import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorI
 import { updateDiplaySchedule, updateDisplayEmojis, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
-import { covertPostContentToParagraph } from "../../../../utils/EmojiUtils";
+import { covertPostContentToElements } from "../../../../utils/EmojiUtils";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
@@ -38,11 +38,11 @@ export const FeedPostCreator: React.FC = () => {
 
   const [active, setActive] = useState<boolean>(false);
   const [postContent, setPostContent] = useState<string>("");
-  const [overLoadedImages,setOverLoadedImages] = useState<boolean>(false)
+  const [overLoadedImages, setOverLoadedImages] = useState<boolean>(false)
   // const [showPoll, setShowPoll] = useState<boolean>(false); 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const activate = (e:React.MouseEvent<HTMLDivElement>) => {
+  const activate = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!active) {
       setActive(true);
       if (state.user.loggedIn) {
@@ -62,8 +62,8 @@ export const FeedPostCreator: React.FC = () => {
       }
     }
 
-    let targetElement:any = e.target;
-    if(targetElement.id === 'post-text'){
+    let targetElement: any = e.target;
+    if (targetElement.id === 'post-text') {
       if (textAreaRef && textAreaRef.current) {
         textAreaRef.current.focus();
       }
@@ -87,31 +87,31 @@ export const FeedPostCreator: React.FC = () => {
 
   const submitPost = () => {
     if (state.post.currentPost && state.user.loggedIn) {
-      if(state.post.currentPostImages.length ===0){
+      if (state.post.currentPostImages.length === 0) {
         let poll = undefined;
-        if(state.post.currentPost.poll !== undefined && state.post.currentPost.images.length < 1){
-          poll=JSON.parse(JSON.stringify(state.post.currentPost.poll))
+        if (state.post.currentPost.poll !== undefined && state.post.currentPost.images.length < 1) {
+          poll = JSON.parse(JSON.stringify(state.post.currentPost.poll))
           let timeString = state.post.currentPost.poll.endTime
-          let days=timeString.split(":")[0]
-          let hours=timeString.split(":")[1]
-          let minutes=timeString.split(":")[2]
+          let days = timeString.split(":")[0]
+          let hours = timeString.split(":")[1]
+          let minutes = timeString.split(":")[2]
 
           let endTime = new Date();
           endTime.setDate(endTime.getDate() + (+days))
           endTime.setHours(endTime.getHours() + (+hours))
           endTime.setMinutes(endTime.getMinutes() + (+minutes))
           console.log(endTime)
-          poll ={
+          poll = {
             ...poll,
-             endTime: `${endTime.getFullYear()}-${(endTime.getMonth() + 1).toString().padStart(2, '0')}-${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`
+            endTime: `${endTime.getFullYear()}-${(endTime.getMonth() + 1).toString().padStart(2, '0')}-${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`
           }
-        } 
+        }
 
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
           images: state.post.currentPost.images,
-          poll:poll,
+          poll: poll,
           replies: [],
           scheduled: state.post.currentPost.scheduled,
           scheduledDate: state.post.currentPost.scheduledDate,
@@ -119,10 +119,10 @@ export const FeedPostCreator: React.FC = () => {
           replyRestriction: state.post.currentPost.replyRestriction,
           token: state.user.token,
         };
-       dispatch(createPost(body));
-      } else{
+        dispatch(createPost(body));
+      } else {
 
-       
+
         let body = {
           content: state.post.currentPost.content,
           author: state.post.currentPost.author,
@@ -134,11 +134,11 @@ export const FeedPostCreator: React.FC = () => {
           token: state.user.token,
           images: [],
           poll: undefined,
-          imagesFiles : state.post.currentPostImages
+          imagesFiles: state.post.currentPostImages
         };
-       dispatch(createPostWithMedia(body))
+        dispatch(createPostWithMedia(body))
       }
-      
+
     }
     setActive(false);
     setPostContent("")
@@ -159,72 +159,72 @@ export const FeedPostCreator: React.FC = () => {
         imageSelectorRef.current.value = "";
         setOverLoadedImages(true);
         return;
-      } 
-      if(imageList[0]?.type ==='image/gif'){
+      }
+      if (imageList[0]?.type === 'image/gif') {
         console.log("only one gif and no other images allowed");
         imageSelectorRef.current.value = "";
         setOverLoadedImages(true)
         return;
       }
 
-      let fileArr:File[] = [...imageList]
-      for (let i=0; i< e.target.files.length ; i++ ) {
+      let fileArr: File[] = [...imageList]
+      for (let i = 0; i < e.target.files.length; i++) {
         let file = e.target.files.item(i);
-        if((file?.type === 'image/gif' && imageList.length >1)  || (file?.type === 'image/gif' && e.target.files.length >1) ){
+        if ((file?.type === 'image/gif' && imageList.length > 1) || (file?.type === 'image/gif' && e.target.files.length > 1)) {
           console.log("only one gif and no other images are allowed");
           imageSelectorRef.current.value = "";
           setOverLoadedImages(true);
           return;
         }
         if (file) fileArr.push(file)
-      }    
+      }
       dispatch(updateCurrentPostImages(fileArr))
     }
-  }; 
+  };
 
-  const determineFull =(): boolean =>{
-    if(state.post.currentPostImages.length === 4){
+  const determineFull = (): boolean => {
+    if (state.post.currentPostImages.length === 4) {
       return true;
-    } 
-    if(state.post.currentPostImages[0]?.type === 'image/gif'){
+    }
+    if (state.post.currentPostImages[0]?.type === 'image/gif') {
       return true;
     }
     return false;
   }
 
-  const diplayGif =()=>{
+  const diplayGif = () => {
     dispatch(updateDisplayGif());
   }
 
-  const generatePoll=(e:React.MouseEvent<HTMLDivElement>)=>{
-    if(state.post.currentPost ===undefined){
-        activate(e);
+  const generatePoll = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (state.post.currentPost === undefined) {
+      activate(e);
     }
-    else{
+    else {
       dispatch(createPoll());
     }
   }
 
-  const generateButtonClass=():string=>{
-    return postContent !=='' 
-    || state.post.currentPostImages.length > 0
-    || (state.post.currentPost && state.post.currentPost.images.length >= 1) 
-    || (state.post.currentPost && state.post.currentPost.poll !==undefined)
-    ? "feed-post-creator-post-button post-active": "feed-post-creator-post-button"
+  const generateButtonClass = (): string => {
+    return postContent !== ''
+      || state.post.currentPostImages.length > 0
+      || (state.post.currentPost && state.post.currentPost.images.length >= 1)
+      || (state.post.currentPost && state.post.currentPost.poll !== undefined)
+      ? "feed-post-creator-post-button post-active" : "feed-post-creator-post-button"
   }
 
-  const activateButton=():boolean=>{
-      return !(postContent !== '' 
-        || state.post.currentPostImages.length > 0 
-        || (state.post.currentPost && state.post.currentPost.images.length >= 1)
-        || (state.post.currentPost && state.post.currentPost.poll !==undefined)) 
+  const activateButton = (): boolean => {
+    return !(postContent !== ''
+      || state.post.currentPostImages.length > 0
+      || (state.post.currentPost && state.post.currentPost.images.length >= 1)
+      || (state.post.currentPost && state.post.currentPost.poll !== undefined))
   }
 
-  const openScheduleModal = () =>{
+  const openScheduleModal = () => {
     dispatch(updateDiplaySchedule());
   }
 
-  const openEmojiModal = () =>{
+  const openEmojiModal = () => {
     dispatch(updateDisplayEmojis())
   }
 
@@ -241,9 +241,13 @@ export const FeedPostCreator: React.FC = () => {
         <img className="feed-post-creator-pfp" src={defaultProfile} alt="pfd" />
       </Link>
       <div className="feed-post-creator-right">
-       { active ?  <FeedPostAudienceDropDown /> : <></> }
-       {/* {state.post.currentPost ? covertPostContentToParagraph(state.post.currentPost.content) : covertPostContentToParagraph(postContent) } */}
-        <textarea
+        {active ? <FeedPostAudienceDropDown /> : <></>}
+        {/* {state.post.currentPost &&
+          <div className="feed-post-creator-post-content">
+            {covertPostContentToElements(state.post.currentPost.content,'creator')}
+          </div>
+        } */}
+        <textarea 
           className={
             active
               ? "feed-post-creator-input input-active"
@@ -255,12 +259,12 @@ export const FeedPostCreator: React.FC = () => {
           cols={50}
           maxLength={256}
           id={"post-text"}
-          value={state.post.currentPost ? state.post.currentPost.content : postContent }
+          value={state.post.currentPost ? state.post.currentPost.content : postContent}
         />
-       { ((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
-        <FeedPostCreatorImages />}
-        {state.post.currentPost &&state.post.currentPost.poll && <FeedPostCreatorPoll /> }
-        {active ? <FeedPostReplyRestrictionDropDown /> : <></> }
+        {((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
+          <FeedPostCreatorImages />}
+        {state.post.currentPost && state.post.currentPost.poll && <FeedPostCreatorPoll />}
+        {active ? <FeedPostReplyRestrictionDropDown /> : <></>}
         <div
           className={
             active
@@ -270,20 +274,20 @@ export const FeedPostCreator: React.FC = () => {
         >
           <div className="feed-post-creator-botton-icons-left">
             <div className="feed-post-creator-icon-bg-media">
-              <input className="feed-post-creator-file-update" onChange={handleGetImages} type="file" id="images" accept="image/*" multiple={true} 
-              ref={imageSelectorRef} hidden disabled={determineFull()}/>
-              <label  htmlFor="images" className={ determineFull() ? "feed-post-creator-icon-bg" : 'feed-post-creator-icon-bg icon-active'}>
-              <MediaSVG height={20} width={20} color={ determineFull() ? "rgba(19,161,242,0.5)":"#1DA1F2"} /> 
+              <input className="feed-post-creator-file-update" onChange={handleGetImages} type="file" id="images" accept="image/*" multiple={true}
+                ref={imageSelectorRef} hidden disabled={determineFull()} />
+              <label htmlFor="images" className={determineFull() ? "feed-post-creator-icon-bg" : 'feed-post-creator-icon-bg icon-active'}>
+                <MediaSVG height={20} width={20} color={determineFull() ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
               </label>
             </div>
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={diplayGif}>
-              <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
+              <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
             <div className={state.post.currentPostImages.length > 0 ? "feed-post-creator-icon-bg" : "feed-post-creator-icon-bg icon-active"} onClick={generatePoll} >
-              <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" :"#1DA1F2"} />
+              <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
             <div className="feed-post-creator-icon-bg icon-active" onClick={openEmojiModal}>
-              <EmojiSVG height={20} width={20} color={"#1DA1F2"}/>
+              <EmojiSVG height={20} width={20} color={"#1DA1F2"} />
             </div>
             <div className="feed-post-creator-icon-bg icon-active" onClick={openScheduleModal}>
               <ScheduleSVG height={20} width={20} color={"#1DA1F2"} />
@@ -319,9 +323,9 @@ export const FeedPostCreator: React.FC = () => {
             >
               Post
             </button> */}
-            <button 
+            <button
               className={generateButtonClass()}
-              disabled={ activateButton()}
+              disabled={activateButton()}
               onClick={submitPost}
             >
               Post

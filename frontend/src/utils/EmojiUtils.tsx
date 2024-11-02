@@ -224,6 +224,33 @@ export const getEmojiCharacterByNameAndModifier = (name: string, modifier: strin
 }
 
 
+export const covertPostContentToElements = (content: string, location:string) : JSX.Element[] =>{
+  let tags: JSX.Element[]=[<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}>{" "}</span>];
+  let characters:string[] = Array.from(content);
+  let currentWord = "";
+
+  for(let char of characters){
+    if(EMOJIS_IMG_MAP.find(e => e.emoji === char)){
+      let image = EMOJIS_IMG_MAP.find(e => e.emoji === char)?.image || "";
+        tags.push(<img className={location ==='creator' ? 'feed-post-creator-post-content-emoji' : 'post-content-span-emoji'} src={image} alt={'Emoji'} />)
+        tags.push(<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}></span>);
+    }
+    else if(char  !== " " ){
+      currentWord += char; 
+      tags.splice(tags.length - 1, 1, <span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}>{currentWord}</span>); 
+    }
+    else{ 
+      tags.push(<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}>{" "}</span>);
+      tags.push(<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}></span>);
+      currentWord="";
+    }
+  }
+  return tags;
+
+}
+
+
+/*
 export const covertPostContentToParagraph = (content: string): JSX.Element => {
   let characters: any = Array.from(content)
   let currentPTag = ['<span class="feed-post-creator-post-content-paragraph">', '', '</span>'];
@@ -253,3 +280,4 @@ export const covertPostContentToParagraph = (content: string): JSX.Element => {
   }
   return <p className='feed-post-creator-post-content' dangerouslySetInnerHTML={{ __html: dangerousHtml }} ></p>;
 }
+*/

@@ -204,6 +204,7 @@ export const UserSlice = createSlice({
           profilePicture: action.payload.loggedIn.user.profilePicture,
           bannerPicture: action.payload.loggedIn.user.bannerPicture,
           verifiedAccount:action.payload.loggedIn.user.verifiedAccount,
+          privateAccount:action.payload.loggedIn.user.privateAccount,
           organization:action.payload.loggedIn.user.organization,
         },
         token: action.payload.loggedIn.token,
