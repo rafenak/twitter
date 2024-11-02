@@ -13,6 +13,11 @@ import BookMarkSVG from '../../../../components/SVGs/BookMarkSVG';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 import './Post.css'
+import { AppDisptach } from '../../../../redux/Store';
+import { useDispatch } from 'react-redux';
+import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
+import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
+import { convertPostDateToString } from '../../utils/PostUtils';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -30,6 +35,8 @@ interface HoverColors {
 
 export const Post: React.FC<PostProps> = ({ post }) => {
 
+    const dispatch:AppDisptach = useDispatch(); 
+
     const { author, content, postDate } = post;
 
     const [colors, setColors] = useState<HoverColors>({
@@ -41,39 +48,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         share: '#AAB8C2',
     })
 
-    const convertPostDateToString = (): string => {
-        const postDateString = `${postDate}`;
-        let d = new Date(postDateString);
-    
-        const now = new Date();
-        const timeDiff = now.getTime() - d.getTime();
-    
-        const seconds = Math.floor(timeDiff / 1000);
-        const minutes = Math.floor(timeDiff / (1000 * 60));
-        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const months = Math.floor(days / 30);
-        const years = Math.floor(days / 365);
-    
-        if (years > 0 || months >= 1) {
-            // Format the date as "MMM d, yyyy" for older dates
-            return d.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-            });
-        } else if (days > 0) {
-            return `${days}d`;
-        } else if (hours > 0) {
-            return `${hours}h`;
-        } else if (minutes > 0) {
-            return `${minutes}m`;
-        } else {
-            return `${seconds}s`;
-        }
-    };
-    
-
+   
     const updateHoverColors = (e: React.MouseEvent<HTMLDivElement>) => {
         const id = e.currentTarget.id;
 
@@ -135,6 +110,11 @@ export const Post: React.FC<PostProps> = ({ post }) => {
 
     }
 
+    const toggleReply = () =>{
+        dispatch(setCurrentPost(post))
+        dispatch(updateDisplayCreateReply())
+    } 
+
 
     return (
         <div className='post'>
@@ -158,7 +138,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                             height: "3.5px",
                             color: "#657786"
                         }} />
-                        {postDate && <p className='post-posted-at'>{convertPostDateToString()}</p>}
+                        {postDate && <p className='post-posted-at'>{convertPostDateToString(postDate)}</p>}
                     </div>
                     <div className='post-more'>
                         <MoreHorizIcon sx={{
@@ -173,7 +153,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                 </div>
                 <div className='post-action-bar'>
                     <div className='post-action-bar-group'>
-                        <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
+                        <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={toggleReply}>
                             <ReplySVG height={20} width={20} color={colors.reply} />
                         </div>
                         {/* To do number of replied beside it */}
