@@ -26,13 +26,13 @@ import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorI
 import { updateDiplaySchedule, updateDisplayEmojis, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
-import { covertPostContentToElements } from "../../../../utils/EmojiUtils";
+//import { covertPostContentToElements } from "../../../../utils/EmojiUtils";
 
 export const FeedPostCreator: React.FC = () => {
   const state = useSelector((state: RootState) => state);
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
   const dispatch: AppDisptach = useDispatch();
-
+ 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const imageSelectorRef = useRef<HTMLInputElement>(null);
 

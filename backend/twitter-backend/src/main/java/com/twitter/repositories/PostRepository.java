@@ -29,6 +29,6 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     Set<AppUser> findViewsByPostId(@Param("postId") Long postId);
 
     @Query("SELECT p.likes FROM Post p WHERE p.id = :postId")
-    Set<AppUser> findViewsByLikeId(@Param("likes") Long likeId);
+    Set<AppUser> findViewsByLikeId(@Param("postId") Long postId);
 
 }

@@ -11,6 +11,7 @@ import { FeedPostCreatorTagPeopleModal } from "../FeedPostCreatorTagPeopleModal/
 import { FeedPosterGifCreatorModal } from "../FeedPostGifCreatorModal/FeedPostGifCreatorModal";
 import { SchedulePostModal } from "../../../schedulepost/components/SchedulePostModal/SchedulePostModal";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
+import { CreateReply } from "../../../post/components/CreateReply/CreateReply";
 
 export const Feed: React.FC = () => {
   const userState = useSelector((state: RootState) => state.user);
@@ -20,8 +21,9 @@ export const Feed: React.FC = () => {
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
   const displayScheduleModal = useSelector((state: RootState) => state.modal.displaySchedule);
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
+  const displayCreateReply = useSelector((state: RootState) => state.modal.displayCreateReply);
 
-  const dispatch: AppDisptach = useDispatch();
+  const dispatch: AppDisptach = useDispatch(); 
 
   useEffect(() => {
     if (userState.loggedIn && userState.token) {
@@ -42,6 +44,7 @@ export const Feed: React.FC = () => {
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
       {displayScheduleModal && <SchedulePostModal />}
+      {displayCreateReply && <CreateReply /> }
 
       <FeedPostCreator />
       {!feedState.loading && (
