@@ -55,6 +55,9 @@ public class AppUser {
     @Column(name = "verified_account",nullable = true)
     private Boolean verifiedAccount;
 
+    @Column(name = "private_account",nullable = true)
+    private Boolean privateAccount;
+
     @ManyToOne
     @JoinColumn(name = "organization_id",nullable = true )
     private Image organization;
@@ -98,6 +101,10 @@ public class AppUser {
 
     public boolean isVerifiedAccount() {
         return Boolean.TRUE.equals(verifiedAccount); // Returns false if null
+    }
+
+    public boolean isPrivateAccount() {
+        return Boolean.TRUE.equals(privateAccount); // Returns false if null
     }
 
 }

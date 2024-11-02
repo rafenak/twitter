@@ -6,9 +6,9 @@ import com.twitter.enums.ReplyRestriction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -27,13 +27,16 @@ public class Post implements Comparable<Post>{
     private String content;
 
     @Column(name = "posted_date")
-    private Date postDate;
+    private LocalDateTime postDate;
+
+    @Column(name = "is_reply",nullable = true)
+    private Boolean reply;
 
     @ManyToOne
     @JoinColumn(name = "author_id",nullable = false)
     private AppUser author;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "post_likes", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
@@ -44,7 +47,7 @@ public class Post implements Comparable<Post>{
 
     //To do for video upload
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "post_reply", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "reply_id")}
     )
@@ -52,20 +55,20 @@ public class Post implements Comparable<Post>{
     private Set<Post> replies;
 
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "post_repost", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<AppUser> reposts;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "post_bookmarks", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<AppUser> bookmarks;
 
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name = "post_view", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
@@ -74,7 +77,7 @@ public class Post implements Comparable<Post>{
     private boolean scheduled;
 
     @Column(name = "scheduled_date",nullable = true)
-    private Date scheduledDate;
+    private LocalDateTime scheduledDate;
 
     @Enumerated(EnumType.ORDINAL)
     private Audience audience;
@@ -101,5 +104,9 @@ public class Post implements Comparable<Post>{
     @Override
     public int compareTo(Post o) {
         return -this.postDate.compareTo(o.postDate);
+    }
+
+    public boolean isReply() {
+        return Boolean.TRUE.equals(reply); // Returns false if null
     }
 }

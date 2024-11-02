@@ -56,7 +56,7 @@ export const DiscoverySearchDropDown: React.FC<DiscoverySearchDropDownProps> = (
                                     nickname={user.nickname} 
                                     key={user.userId} 
                                     verifiedAccount={user.verifiedAccount}
-                                    privateAccount={false} 
+                                    privateAccount={user.privateAccount} 
                                     organization={user.organization}
                                     username={user.username} />
                             </div>

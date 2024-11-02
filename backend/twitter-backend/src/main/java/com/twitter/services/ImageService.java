@@ -105,7 +105,6 @@ public class ImageService {
             file.transferTo(orgImg);
 
             String imageURL  = URL + orgImg.getName();
-
             Image i = new Image();
             i.setImageName(orgImg.getName());
             i.setImageType(file.getContentType());

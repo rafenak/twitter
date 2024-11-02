@@ -24,6 +24,7 @@ public class TwitterBackendApplication {
     }
 
 
+
     /**
      * This is use to create a temp user and do some testing
      * @param roleRepo
@@ -31,6 +32,7 @@ public class TwitterBackendApplication {
      * @param encoder
      * @return
      */
+    /*
     @Bean
     CommandLineRunner run(RoleRepository roleRepo, UserRepository userRepository, PasswordEncoder encoder) {
         return args -> {
@@ -55,5 +57,6 @@ public class TwitterBackendApplication {
             userRepository.save(appUser);
         };
     }
+     */
 
 }

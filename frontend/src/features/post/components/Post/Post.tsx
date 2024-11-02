@@ -13,6 +13,7 @@ import BookMarkSVG from '../../../../components/SVGs/BookMarkSVG';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 import './Post.css'
+// import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
     post: IPost
@@ -40,40 +41,27 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         share: '#AAB8C2',
     })
 
-    // const convertPostDateToSting = (): string => {
-    //     const postDateString = `${postDate}`;
-    //     let d = new Date(postDateString);
-    //     let today = new Date()
-
-    //     let time_diff = today.getTime() - d.getTime();
-
-    //     let days = Math.round(time_diff/(1000 * 3600 * 24));
-
-    //     console.log(days);
-
-
-    //     return d.toDateString();
-    // }
-
     const convertPostDateToString = (): string => {
-
         const postDateString = `${postDate}`;
         let d = new Date(postDateString);
-
+    
         const now = new Date();
         const timeDiff = now.getTime() - d.getTime();
-
+    
         const seconds = Math.floor(timeDiff / 1000);
         const minutes = Math.floor(timeDiff / (1000 * 60));
         const hours = Math.floor(timeDiff / (1000 * 60 * 60));
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const months = Math.floor(days / 30);
         const years = Math.floor(days / 365);
-
-        if (years > 0) {
-            return `${years}y`;
-        } else if (months > 0) {
-            return `${months}mo`;
+    
+        if (years > 0 || months >= 1) {
+            // Format the date as "MMM d, yyyy" for older dates
+            return d.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+            });
         } else if (days > 0) {
             return `${days}d`;
         } else if (hours > 0) {
@@ -84,6 +72,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
             return `${seconds}s`;
         }
     };
+    
 
     const updateHoverColors = (e: React.MouseEvent<HTMLDivElement>) => {
         const id = e.currentTarget.id;
@@ -180,6 +169,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                 </div>
                 <div className='post-content'>
                     {content}
+                    {/* {covertPostContentToElements(content,"post")} */}
                 </div>
                 <div className='post-action-bar'>
                     <div className='post-action-bar-group'>

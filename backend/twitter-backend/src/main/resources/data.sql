@@ -1,3 +1,19 @@
+--Role
+insert into roles(role_id,authority) values (1,'USER');
+
+insert into users(first_name,last_name,email,username,password,bio,nickname,verified_account,private_account,phone)
+values ('Rafe','Nakhuda','rafe@test.com','rafen','$2a$10$BCUOcPxHx.2xqAGe1qd08uujzI2jk25cDYjslFzC37MXbVTmmjj7u',
+'Software Engineer','Rafe Nakhuda',true,false,'9876543210');
+
+insert into user_role(role_id,user_id) values (1,1);
+
+insert into posts (audience, content, posted_date, reply_restriction, scheduled, author_id)
+values (0, 'This was posted over an hour ago, but less than a day ', '2024-11-02 08:10:46', 0, false, 1);
+
+
+
+
+
 --Temp users
 insert into users(email,enabled,first_name,last_name,nickname,password,username,bio)
 values ('rick@test.com',true,'Rick','Sanchez','Rick','$2a$10$/BLhUEO8i/qmf1S8fsM.Nuhy7wXQdIfBT5TOc7.S/QCC7GEUuCGIe','RickSanchez','I''m pickle rick'),
