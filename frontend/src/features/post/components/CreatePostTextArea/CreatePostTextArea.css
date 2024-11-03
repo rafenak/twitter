@@ -1,0 +1,50 @@
+.create-post-text-area{
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.create-post-text-area-content {
+    width: 507px;
+    /* background-color: blue; */
+    font-size: 20px;
+    position: absolute;
+    word-break: break-all;
+    /* z-index: -10; */
+    font-weight: 400;
+    pointer-events: none;
+    /* margin-top: 15px; */
+    padding: 0;
+    margin: 0;
+    /* padding-left: 2px; */
+    padding-top: 15px;
+  }
+
+  .create-post-text-area-creator-input {
+    height: fit-content;
+    resize: none;
+    overflow: hidden;
+    font-size: 20px;
+    border: none;
+    background-color: transparent;
+    font-weight: 400;
+    /* color: transparent; */
+    z-index: 100;
+    caret-color: black;
+  }
+  
+  /* .create-post-text-area-creator-input:selection {
+    background-color: rgba(51, 153, 255, 0.4);
+    color: transparent;
+  } */
+  
+  .input-active {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .create-post-text-area-creator-input:focus {
+    outline: none;
+  }
