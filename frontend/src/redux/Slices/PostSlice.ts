@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Poll, PollChoice, Post, PostImage, User } from "../../utils/GlobalInterfaces";
+import { Poll, PollChoice, Post, PostImage, Reply, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -8,7 +8,8 @@ export interface PostSliceState {
   error: boolean;
   currentPost: Post | undefined;
   posts: Post[];
-  currentPostImages: File[]
+  currentPostImages: File[];
+  currentReply: Reply | undefined;
 }
 
 interface UpdatePostPayload {
@@ -36,6 +37,11 @@ interface CreatePostWithMedia extends CreatePostBody{
 interface UpdatePollPayLoad{
   index:number;
   choiceText:string;
+}
+
+interface GenerateReplyPayload{
+  post:Post,
+  user:User,
 }
 
 export const createPost = createAsyncThunk(
@@ -112,7 +118,8 @@ const initialState: PostSliceState = {
   error: false,
   currentPost: undefined,
   posts: [],
-  currentPostImages : []
+  currentPostImages : [],
+  currentReply: undefined
 };
 
 export const PostSlice = createSlice({
@@ -131,12 +138,37 @@ export const PostSlice = createSlice({
       return state;
     },
 
+    initializeCurrentReply(state,action:PayloadAction<GenerateReplyPayload>){
+      state ={
+        ...state,
+        currentReply: {
+           author:action.payload.user,
+          originalPost:action.payload.post,
+          replyContent:"",
+          images:[],
+          scheduled:false,
+        }
+      }
+
+      return state;
+    },
+
     updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
       if (state.currentPost) {
         state.currentPost = {
           ...state.currentPost,
           [action.payload.name]: action.payload.value,
         };
+      }  
+      return state;
+    },
+
+    updateReplyPost(state, action: PayloadAction<UpdatePostPayload>) {
+      if (state.currentReply) {
+        state.currentReply={
+          ...state.currentReply,
+          [action.payload.name]: action.payload.value,
+        }
       }  
       return state;
     },
@@ -337,7 +369,7 @@ export const PostSlice = createSlice({
 });
 
 export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages,
-  createPoll ,updatePoll, removePoll ,setPollData,
-  setScheduleData} = PostSlice.actions;
+  createPoll ,updatePoll, removePoll ,setPollData, 
+  setScheduleData ,initializeCurrentReply ,updateReplyPost} = PostSlice.actions;
 
 export default PostSlice.reducer;

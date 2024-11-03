@@ -89,6 +89,10 @@ public class UserService implements UserDetailsService {
         String username = "";
         Set<String> attemptedUsernames = new HashSet<>();
 
+        //To insert nickname of the user
+        String nickname = ro.getFirstName() + " " + ro.getLastName();
+        user.setNickname(nickname);
+
         do {
             username = generateUserName(baseName);
         } while (isUsernameTaken(username, attemptedUsernames));
