@@ -10,6 +10,7 @@ export interface PostSliceState {
   posts: Post[];
   currentPostImages: File[];
   currentReply: Reply | undefined;
+  currentReplyImages: File[];
 }
 
 interface UpdatePostPayload {
@@ -119,7 +120,8 @@ const initialState: PostSliceState = {
   currentPost: undefined,
   posts: [],
   currentPostImages : [],
-  currentReply: undefined
+  currentReply: undefined,
+  currentReplyImages: []
 };
 
 export const PostSlice = createSlice({
@@ -159,25 +161,28 @@ export const PostSlice = createSlice({
           ...state.currentPost,
           [action.payload.name]: action.payload.value,
         };
-      }  
-      return state;
-    },
-
-    updateReplyPost(state, action: PayloadAction<UpdatePostPayload>) {
-      if (state.currentReply) {
+      }else if(state.currentReply){
         state.currentReply={
           ...state.currentReply,
           [action.payload.name]: action.payload.value,
         }
       }  
+
       return state;
     },
 
     updateCurrentPostImages(state, action: PayloadAction<File[]>) {
+      if(state.currentPost ){
         state= {
           ...state,
           currentPostImages: action.payload
         };
+      }else if( state.currentReply ){
+        state= {
+          ...state,
+          currentReplyImages: action.payload
+        };
+      }
       return state;
     },
 
@@ -370,6 +375,6 @@ export const PostSlice = createSlice({
 
 export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages,
   createPoll ,updatePoll, removePoll ,setPollData, 
-  setScheduleData ,initializeCurrentReply ,updateReplyPost} = PostSlice.actions;
+  setScheduleData ,initializeCurrentReply} = PostSlice.actions;
 
 export default PostSlice.reducer;

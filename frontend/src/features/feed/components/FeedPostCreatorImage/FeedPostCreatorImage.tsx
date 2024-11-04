@@ -19,15 +19,15 @@ export const FeedPostCreatorImage:React.FC<FeedPostCreatorImageProps> = ({image,
 
     const removeImage = (e:React.MouseEvent<HTMLDivElement>) =>{
         e.stopPropagation();
-        if(state.currentPost && state.currentPost.images.length > 0){
+        if((state.currentPost && state.currentPost.images.length > 0) || (state.currentReply && state.currentReply.images.length > 0)){
           dispatch(updateCurrentPost({
             name:"images",
             value : []
           }))
         }else{
-          let imageArrayCopy:File[] = state.currentPostImages;
-          imageArrayCopy = imageArrayCopy.filter((img:any) => img.name !== name); // Filter out the selected image
-          dispatch(updateCurrentPostImages(imageArrayCopy))
+          let filteredImages:File[] = state.currentPostImages.filter((img:any) => img.name !== name); // Filter out the selected image
+
+          dispatch(updateCurrentPostImages(filteredImages))
         }      
     }
 

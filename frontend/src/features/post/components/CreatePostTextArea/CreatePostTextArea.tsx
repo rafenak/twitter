@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import { updateCurrentPost } from '../../../../redux/Slices/PostSlice';
@@ -6,24 +6,45 @@ import { updateCurrentPost } from '../../../../redux/Slices/PostSlice';
 import './CreatePostTextArea.css'
 
 
-export const CreatePostTextArea:React.FC = ( ) => {
+interface CreatePostTextAreaProps{
+    location:string
+}
+
+
+export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location} ) => {
 
   const state = useSelector((state: RootState) => state);
   const dispatch: AppDisptach = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
+  const [content,setContent] = useState<string>("");
+
   const autoGrow = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef && textAreaRef.current) {
       textAreaRef.current.style.height = "25px";
-      textAreaRef.current.style.height =
-        textAreaRef.current.scrollHeight + "px";
+      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
     }
-    dispatch(
-      updateCurrentPost({
-        name: "content",
-        value: e.target.value,
-      })
-    );
+
+    if(location === "post"){
+        dispatch(
+            updateCurrentPost({
+              name: "content",
+              value: e.target.value,
+            })
+          );
+    }
+
+    if(location === "reply"){
+        dispatch(
+            updateCurrentPost({
+              name: "replyContent",
+              value: e.target.value,
+            })
+          );
+    }
+
+    setContent(e.target.value)
+    
   };
 
   const activate = (e:React.MouseEvent<HTMLDivElement>) =>{
@@ -36,14 +57,14 @@ export const CreatePostTextArea:React.FC = ( ) => {
   return (
     <div className='create-post-text-area' onClick={activate}>
 
-        {/* {state.post.currentPost &&
+        {/* {content !=='' &&
           <div className="create-post-text-area-content">
-            {covertPostContentToElements(state.post.currentPost.content,'creator')}
+            {covertPostContentToElements(content,'creator')}
           </div>
         } */}
         <textarea 
           className={ 
-            state.post.currentPost 
+            state.post.currentPost || state.post.currentReply 
               ? "create-post-text-area-creator-input input-active"
               : "create-post-text-area-creator-input"
           }
@@ -53,7 +74,7 @@ export const CreatePostTextArea:React.FC = ( ) => {
           cols={50}
           maxLength={256}
           id={"post-text"}
-          value={state.post.currentPost ? state.post.currentPost.content : ""}/>
+          value={content}/>
     </div>
   )
 }

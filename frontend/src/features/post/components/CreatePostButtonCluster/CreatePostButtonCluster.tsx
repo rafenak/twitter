@@ -78,8 +78,9 @@ export const CreatePostButtonCluster = () => {
         dispatch(updateDisplayEmojis());
     };
 
- 
+
     return (
+        // <>{  (state.post.currentPost || state.post.currentReply) &&
         <div className='create-post-button-cluster'>
             <div>
                 <input onChange={handleGetImages} type="file" id="images" accept="image/*" multiple={true}
@@ -108,5 +109,7 @@ export const CreatePostButtonCluster = () => {
                 />
             </div>
         </div>
+        // }
+        //</>
     )
 }

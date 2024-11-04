@@ -8,41 +8,41 @@ import { FeedPostCreatorImage } from "../components/FeedPostCreatorImage/FeedPos
 import TagPeopleSVG from "../../../components/SVGs/TagPeopleSVG";
 
 export function getReplyDropDownButton(
-  state: PostSliceState,
-  callback: () => void
+    state: PostSliceState,
+    callback: () => void
 ): JSX.Element {
-  switch (state.currentPost?.replyRestriction) {
-    case "EVERYONE":
-        return (
-            <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
-            <GlobeSVG height={14} width={14} color={'#1da1f2'} />
-              Everyone can reply
-            </div>
-        )
-    case "FOLLOW":
-        return (
-            <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
-                <PeopleYouFollowSVG height={14} width={14}  color={'#1da1f2'}/>
-                People you follow can reply
-            </div>
-        )
-    case "CIRCLE":
-        return (
-            <div className="feed-post-reply-restriction-drop-down-button-disabled">
-                <LockSVG height={14} width={14}  color={'rgba(29,161,242,0.5)'}/>
-                Only your circle can reply
-            </div>
-        )
-    case "MENTION":
-        return (
-            <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
-                <MentionedSVG height={14} width={14}  color={'#1da1f2'}/>
-                Only people you mentioned can reply
-            </div>
-        )
-    default:
-      return <></>;
-  }
+    switch (state.currentPost?.replyRestriction) {
+        case "EVERYONE":
+            return (
+                <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
+                    <GlobeSVG height={14} width={14} color={'#1da1f2'} />
+                    Everyone can reply
+                </div>
+            )
+        case "FOLLOW":
+            return (
+                <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
+                    <PeopleYouFollowSVG height={14} width={14} color={'#1da1f2'} />
+                    People you follow can reply
+                </div>
+            )
+        case "CIRCLE":
+            return (
+                <div className="feed-post-reply-restriction-drop-down-button-disabled">
+                    <LockSVG height={14} width={14} color={'rgba(29,161,242,0.5)'} />
+                    Only your circle can reply
+                </div>
+            )
+        case "MENTION":
+            return (
+                <div className="feed-post-reply-restriction-drop-down-button" onClick={callback}>
+                    <MentionedSVG height={14} width={14} color={'#1da1f2'} />
+                    Only people you mentioned can reply
+                </div>
+            )
+        default:
+            return <></>;
+    }
 }
 
 export function createImageContainer(images: File[]): JSX.Element {
@@ -106,47 +106,46 @@ export function createImageContainer(images: File[]): JSX.Element {
 
 
 
-export function dispalyTagPeople(
-  state: PostSliceState,
-  toggleTagPeople: MouseEventHandler<HTMLParagraphElement>
-): JSX.Element {
-  if (state.currentPost && state.currentPost.images.length > 0) {
-    return <div className="feed-post-creator-images-option">via Tenor</div>;
-  }
+export function dispalyTagPeople(state: PostSliceState,toggleTagPeople: MouseEventHandler<HTMLParagraphElement>): JSX.Element {
+    if ((state.currentPost && state.currentPost.images.length > 0)
+        || (state.currentReply && state.currentReply.images.length > 0)) {
+        return <div className="feed-post-creator-images-option">via Tenor</div>;
+    }
 
-  if (state.currentPostImages[0].type === "image/gif") {
-    return <></>;
-  }
+    if ( (state.currentPostImages.length > 0 && state.currentPostImages[0].type === "image/gif") 
+        || (state.currentReplyImages.length > 0 && state.currentReplyImages[0].type === "image/gif")) {
+        return <></>;
+    }
 
-  return (
-    <p className="feed-post-creator-images-option" onClick={toggleTagPeople}>
-      <TagPeopleSVG height={16} width={16} color={"#536471"} />
-      Tag People
-    </p>
-  );
+    return (
+        <p className="feed-post-creator-images-option" onClick={toggleTagPeople}>
+            <TagPeopleSVG height={16} width={16} color={"#536471"} />
+            Tag People
+        </p>
+    );
 }
 
 export const generatePollDaysSelection = (): JSX.Element[] => {
     let options: JSX.Element[] = [];
     for (let i = 1; i <= 8; i++) {
-            options.push(<option value={i} key={i}>{i}</option>);
-        }
+        options.push(<option value={i} key={i}>{i}</option>);
+    }
     return options;
- };
+};
 
 
- export const generatePollHoursSelection = (): JSX.Element[] => {
+export const generatePollHoursSelection = (): JSX.Element[] => {
     let options: JSX.Element[] = [];
     for (let i = 0; i <= 23; i++) {
         options.push(<option value={i} key={i}>{i}</option>);
-      } 
+    }
     return options;
- };
+};
 
- export const generatePollMinutesSelection = (): JSX.Element[] => {
+export const generatePollMinutesSelection = (): JSX.Element[] => {
     let options: JSX.Element[] = [];
     for (let i = 0; i <= 59; i++) {
         options.push(<option value={i} key={i}>{i}</option>);
-      } 
+    }
     return options;
- };
+};
