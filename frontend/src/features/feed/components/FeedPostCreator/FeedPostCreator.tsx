@@ -1,12 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import defaultProfile from "../../../../assets/Generic-Profile.jpg";
-import MediaSVG from "../../../../components/SVGs/MediaSVG";
-import GifSVG from "../../../../components/SVGs/GifSVG";
-import PollSVG from "../../../../components/SVGs/PollSVG";
-import EmojiSVG from "../../../../components/SVGs/EmojiSVG";
-import ScheduleSVG from "../../../../components/SVGs/ScheduleSVG";
-import LocationSVG from "../../../../components/SVGs/LocationSVG";
 import "./FeedPostCreator.css";
 import { FeedPostCreatorProgress } from "../FeedPostCreatorProgress/FeedPostCreatorProgress";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,16 +8,12 @@ import { AppDisptach, RootState } from "../../../../redux/Store";
 import {
   createPost,
   initializeCurrentPost,
-  updateCurrentPost,
-  updateCurrentPostImages,
   createPostWithMedia,
-  createPoll
 } from "../../../../redux/Slices/PostSlice";
 import { Post } from "../../../../utils/GlobalInterfaces";
 import { FeedPostAudienceDropDown } from "../FeedPostAudienceDropDown/FeedPostAudienceDropDown";
 import { FeedPostReplyRestrictionDropDown } from "../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown";
 import { FeedPostCreatorImages } from "../FeedPostCreatorImages/FeedPostCreatorImages";
-import { updateDiplaySchedule, updateDisplayEmojis, updateDisplayGif } from "../../../../redux/Slices/ModalSlice";
 import { FeedPostCreatorPoll } from "../FeedPostCreatorPoll/FeedPostCreatorPoll";
 import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
 import { CreatePostButtonCluster } from "../../../post/components/CreatePostButtonCluster/CreatePostButtonCluster";
@@ -146,7 +136,6 @@ export const FeedPostCreator: React.FC = () => {
     return false;
   };
 
-
   return (
     <div className="feed-post-creartor" onClick={activate}>
       <Link to={""}>
@@ -155,7 +144,7 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
         {state.post.currentPost ? <FeedPostAudienceDropDown /> : <></>}
-        <CreatePostTextArea />
+        <CreatePostTextArea location="post" />
         {((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
           <FeedPostCreatorImages />}
         {state.post.currentPost && state.post.currentPost.poll && <FeedPostCreatorPoll />}

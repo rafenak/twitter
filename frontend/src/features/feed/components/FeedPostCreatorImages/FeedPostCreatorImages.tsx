@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useMemo} from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
@@ -9,37 +9,73 @@ import { updateDisplayEditPostImage, updateDisplayTagPeople } from '../../../../
 import { FeedPostCreatorImage } from '../FeedPostCreatorImage/FeedPostCreatorImage';
 
 
-export const FeedPostCreatorImages:React.FC = () => {
+export const FeedPostCreatorImages: React.FC = () => {
 
     const state = useSelector((state: RootState) => state.post);
 
-    const dispatch:AppDisptach  = useDispatch();
+    const dispatch: AppDisptach = useDispatch();
 
-    const imageContainer = 
-    useMemo(()=> createImageContainer(state.currentPostImages),[state.currentPostImages])
+    const postImageContainer =
+        useMemo(() => createImageContainer(state.currentPostImages), [state.currentPostImages])
 
-    const toggleTagPeople = () =>{
+    const replyImageContainer =
+        useMemo(() => createImageContainer(state.currentReplyImages), [state.currentReplyImages])
+
+    const toggleTagPeople = () => {
         dispatch(updateDisplayTagPeople())
     }
 
-    const toggleEditImage = () =>{
+    const toggleEditImage = () => {
         dispatch(updateDisplayEditPostImage())
     }
- 
-  return (
-    <div className='feed-post-creator-images'>
-        {state .currentPost?.images.length ===0 ? imageContainer : 
-        <div className='feed-post-creator-images-container container-odd'> 
-        <FeedPostCreatorImage image={state.currentPost?.images[0].imageUrl || ''} 
-                name={state.currentPost?.images[0].imageName || ''} type={'gif'} />
-        </div>}
-        <div className='feed-post-creator-images-options'>
-            {dispalyTagPeople(state,toggleTagPeople)}
-            <p className='feed-post-creator-images-option'  onClick={toggleEditImage}>
-                <ListSVG height={16} width={16} color={'#536471'} />
-                Add Description
-            </p>
+
+    console.log('state.currentPost',state.currentPost?.images);
+    console.log('state.currentReply',state.currentReply?.images);
+    // console.log('postImageContainer',postImageContainer);
+    // console.log('replyImageContainer',replyImageContainer);
+    
+    
+
+    return (
+        <div className='feed-post-creator-images'>
+            {state.currentPost && state.currentPost.images.length === 0 && postImageContainer
+
+            }
+            {state.currentReply && state.currentReply.images.length === 0 && replyImageContainer
+
+            }
+
+            
+            
+            {(state.currentPost?.images.length !== 0 || state.currentReply?.images.length !== 0) &&
+
+                <div className='feed-post-creator-images-container container-odd'>
+                    <FeedPostCreatorImage
+                        image={state.currentPost?.images[0].imageUrl ? state.currentPost?.images[0].imageUrl
+                            : (state.currentReply?.images ? state.currentReply?.images[0].imageUrl : '')}
+                        name={state.currentPost?.images[0].imageName ? state.currentPost?.images[0].imageName
+                            : (state.currentReply?.images ? state.currentReply?.images[0].imageName : '')}
+                        type={'gif'} 
+                    />
+                </div>
+            }
+{/* 
+            {(state.currentPost?.images.length === 0 || state.currentReply?.images.length === 0) ? imageContainer :
+                <div className='feed-post-creator-images-container container-odd'>
+                    <FeedPostCreatorImage
+                        image={state.currentPost?.images[0].imageUrl ? state.currentPost?.images[0].imageUrl
+                            : (state.currentReply?.images ? state.currentReply?.images[0].imageUrl : '')}
+                        name={state.currentPost?.images[0].imageName ? state.currentPost?.images[0].imageName
+                            : (state.currentReply?.images ? state.currentReply?.images[0].imageName : '')}
+                        type={'gif'} />
+                </div>} */}
+            <div className='feed-post-creator-images-options'>
+                {dispalyTagPeople(state, toggleTagPeople)}
+                <p className='feed-post-creator-images-option' onClick={toggleEditImage}>
+                    <ListSVG height={16} width={16} color={'#536471'} />
+                    Add Description
+                </p>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
