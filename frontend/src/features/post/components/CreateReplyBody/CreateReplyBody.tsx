@@ -29,6 +29,9 @@ export const CreateReplyBody: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [feedPost?.postId, user?.userId])
 
+    console.log('postState',postState);
+    
+
     return (
         <div className='create-reply-body'>
             {feedPost &&
@@ -72,15 +75,11 @@ export const CreateReplyBody: React.FC = () => {
                 </div>
             }
             <div className='create-reply-body-reply'>
-                {postState.currentReply ?
-                    <>
-                        <img className='create-reply-body-post-pfp' src={user && user.profilePicture ? user.profilePicture.imageURL : pfp} alt={user ? `${user?.username}'s pfp` : 'user pfp'} />
-                        < CreatePostTextArea location='reply' />
-                        {((postState.currentReplyImages.length > 0) || (postState.currentReply.images.length > 0))  &&
-                            <FeedPostCreatorImages />}
-                        {postState.currentReply.poll && <FeedPostCreatorPoll />}
-                    </> : <></>
-                }
+                <img className='create-reply-body-post-pfp' src={user && user.profilePicture ? user.profilePicture.imageURL : pfp} alt={user ? `${user?.username}'s pfp` : 'user pfp'} />
+                < CreatePostTextArea location='reply' />
+                {((postState.currentReplyImages.length > 0) || (postState.currentReply && postState.currentReply.images.length > 0)) &&
+                    <FeedPostCreatorImages />}
+                {postState.currentReply && postState.currentReply.poll && <FeedPostCreatorPoll />}
             </div>
         </div>
     )

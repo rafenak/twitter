@@ -5,7 +5,7 @@ import { CreatePostButtonCluster } from '../CreatePostButtonCluster/CreatePostBu
 export const CreateReplyBottom:React.FC = () => {
   return (
     <div className='create-reply-bottom'>
-        <CreatePostButtonCluster />
+        <CreatePostButtonCluster location='reply'/>
         <button className='create-reply-bottom-button'>Reply</button>
     </div>
   )
