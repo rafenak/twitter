@@ -25,9 +25,14 @@ export const FeedPostCreatorImage:React.FC<FeedPostCreatorImageProps> = ({image,
             value : []
           }))
         }else{
-          let filteredImages:File[] = state.currentPostImages.filter((img:any) => img.name !== name); // Filter out the selected image
+         // let filteredImages:File[] = state.currentPostImages.filter((img:any) => img.name !== name); // Filter out the selected image
 
-          dispatch(updateCurrentPostImages(filteredImages))
+          let imageArrayCopy:File[] = state.currentPostImages;
+          imageArrayCopy = imageArrayCopy.filter((img:any) => img.name !== name); // Filter out the selected image
+          dispatch(updateCurrentPostImages({
+            files:imageArrayCopy,
+            location:'post'
+          }))
         }      
     }
 

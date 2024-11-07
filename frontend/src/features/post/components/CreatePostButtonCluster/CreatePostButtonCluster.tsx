@@ -11,15 +11,29 @@ import ScheduleSVG from "../../../../components/SVGs/ScheduleSVG";
 import LocationSVG from "../../../../components/SVGs/LocationSVG";
 import { updateDiplaySchedule, updateDisplayEmojis, updateDisplayGif } from '../../../../redux/Slices/ModalSlice';
 
+interface CreatePostButtonClusterProps{
+    location:string
+}
 
-export const CreatePostButtonCluster = () => {
+
+export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({location}) => {
     const state = useSelector((state: RootState) => state);
     const dispatch: AppDisptach = useDispatch();
 
     const imageSelectorRef = useRef<HTMLInputElement>(null);
 
     const handleGetImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const imageList = state.post.currentPostImages;
+
+
+        let imageList:File[] = []
+        if(location === 'reply'){
+            imageList = state.post.currentReplyImages;
+        }
+        else if (location === 'post'){
+            imageList = state.post.currentPostImages;
+        }
+
+         //const  imageList = state.post.currentPostImages;
 
         if (imageSelectorRef.current && e.target.files) {
             if (e.target.files.length + imageList.length > 4) {
@@ -46,15 +60,32 @@ export const CreatePostButtonCluster = () => {
                 }
                 if (file) fileArr.push(file);
             }
-            dispatch(updateCurrentPostImages(fileArr));
+            dispatch(updateCurrentPostImages({
+                files:fileArr,
+                location:location
+            }));
         }
     };
 
     const determineFull = (): boolean => {
-        if (state.post.currentPostImages.length === 4) {
+
+        let length:number =0;
+
+        let type:string='' 
+
+        if( location === 'reply'){
+            length = state.post.currentReplyImages.length
+            type=state.post.currentReplyImages[0]?.type
+        }
+        else if(location === 'post'){
+            length = state.post.currentPostImages.length
+            type =state.post.currentPostImages[0]?.type
+        }
+
+        if (length === 4) {
             return true;
         }
-        if (state.post.currentPostImages[0]?.type === "image/gif") {
+        if (type === "image/gif") {
             return true;
         }
         return false;
@@ -89,11 +120,11 @@ export const CreatePostButtonCluster = () => {
                     <MediaSVG height={20} width={20} color={determineFull() ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
                 </label>
             </div>
-            <div className={state.post.currentPostImages.length > 0 ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={diplayGif}>
+            <div className={(state.post.currentPostImages.length > 0 || state.post.currentReplyImages.length > 0)  ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={diplayGif}>
                 <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
-            <div className={state.post.currentPostImages.length > 0 ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
-                <PollSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
+            <div className={(state.post.currentPostImages.length > 0  || state.post.currentReplyImages.length > 0) ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
+                <PollSVG height={20} width={20} color={(state.post.currentPostImages.length || state.post.currentReplyImages.length ) ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
             <div className="create-post-button-cluster-icon-bg icon-active" onClick={openEmojiModal}>
                 <EmojiSVG height={20} width={20} color={"#1DA1F2"} />

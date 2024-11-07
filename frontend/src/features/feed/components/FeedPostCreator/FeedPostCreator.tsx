@@ -157,7 +157,7 @@ export const FeedPostCreator: React.FC = () => {
           }
         >
           <div className="feed-post-creator-botton-icons-left">
-          <CreatePostButtonCluster />
+          <CreatePostButtonCluster location="post"/>
           </div>
           <div className="feed-post-creator-submit-cluster">
             {state.post.currentPost && (state.post.currentPost.content) !== "" ? (

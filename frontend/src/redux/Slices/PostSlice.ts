@@ -155,33 +155,65 @@ export const PostSlice = createSlice({
       return state;
     },
 
+    
+
+    // updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
+    //   if (state.currentPost) {
+    //     state.currentPost = { 
+    //       ...state.currentPost,
+    //       [action.payload.name]: action.payload.value,
+    //     };
+    //   }else if(state.currentReply){
+    //     state.currentReply={
+    //       ...state.currentReply,
+    //       [action.payload.name]: action.payload.value,
+    //     }
+    //   }  
+
+    //   return state;
+    // },
+
     updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
       if (state.currentPost) {
-        state.currentPost = {
+        state.currentPost = { 
           ...state.currentPost,
           [action.payload.name]: action.payload.value,
         };
-      }else if(state.currentReply){
-        state.currentReply={
+      } else if (state.currentReply) {
+        state.currentReply = {
           ...state.currentReply,
           [action.payload.name]: action.payload.value,
-        }
-      }  
-
+        };
+      }
       return state;
     },
 
-    updateCurrentPostImages(state, action: PayloadAction<File[]>) {
-      if(state.currentPost ){
+    updateCurrentPostImages(state, action: PayloadAction<{files: File[]; location: string}>) {
+      // if(state.currentPost ){
+      //   state= {
+      //     ...state,
+      //     currentPostImages: action.payload
+      //   };
+      // }else if( state.currentReply ){
+      //   state= {
+      //     ...state,
+      //     currentReplyImages: action.payload
+      //   };
+      // }
+      const { files, location } = action.payload;
+
+      if (location === 'post') {
         state= {
           ...state,
-          currentPostImages: action.payload
-        };
-      }else if( state.currentReply ){
+          currentPostImages:files
+
+        }
+      } else if (location === 'reply') {
         state= {
           ...state,
-          currentReplyImages: action.payload
-        };
+          currentReplyImages:files
+
+        }
       }
       return state;
     },

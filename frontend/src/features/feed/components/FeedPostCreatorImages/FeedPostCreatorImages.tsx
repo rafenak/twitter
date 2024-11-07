@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
@@ -8,18 +8,20 @@ import { createImageContainer, dispalyTagPeople } from '../../utils/FeedUtils';
 import { updateDisplayEditPostImage, updateDisplayTagPeople } from '../../../../redux/Slices/ModalSlice';
 import { FeedPostCreatorImage } from '../FeedPostCreatorImage/FeedPostCreatorImage';
 
-
 export const FeedPostCreatorImages: React.FC = () => {
-
     const state = useSelector((state: RootState) => state.post);
-
     const dispatch: AppDisptach = useDispatch();
 
-    const postImageContainer =
-        useMemo(() => createImageContainer(state.currentPostImages), [state.currentPostImages])
+    // Create containers for post and reply images only when they are empty
+    const postImageContainer = useMemo(
+        () => createImageContainer(state.currentPostImages), 
+        [state.currentPostImages]
+    );
 
-    const replyImageContainer =
-        useMemo(() => createImageContainer(state.currentReplyImages), [state.currentReplyImages])
+    const replyImageContainer = useMemo(
+        () => createImageContainer(state.currentReplyImages), 
+        [state.currentReplyImages]
+    );
 
     const toggleTagPeople = () => {
         dispatch(updateDisplayTagPeople())
@@ -29,46 +31,34 @@ export const FeedPostCreatorImages: React.FC = () => {
         dispatch(updateDisplayEditPostImage())
     }
 
-    console.log('state.currentPost',state.currentPost?.images);
-    console.log('state.currentReply',state.currentReply?.images);
-    // console.log('postImageContainer',postImageContainer);
-    // console.log('replyImageContainer',replyImageContainer);
-    
-    
-
     return (
         <div className='feed-post-creator-images'>
-            {state.currentPost && state.currentPost.images.length === 0 && postImageContainer
-
+            {/* Display either postImageContainer or replyImageContainer if they have no images */}
+            {state.currentPost && (state.currentPost.images?.length === 0)
+                ? postImageContainer
+                : state.currentReply && (state.currentReply.images?.length === 0)
+                ? replyImageContainer
+                : null
             }
-            {state.currentReply && state.currentReply.images.length === 0 && replyImageContainer
 
+            {/* Display FeedPostCreatorImage component only if there are images in currentPost or currentReply */}
+            {((state.currentPost?.images || []).length > 0 || (state.currentReply?.images || []).length > 0) && (
+    <div className='feed-post-creator-images-container container-odd'>
+        <FeedPostCreatorImage
+            image={
+                (state.currentPost?.images || [])[0]?.imageUrl ||
+                (state.currentReply?.images || [])[0]?.imageUrl || ''
             }
-
-            
-            
-            {(state.currentPost?.images.length !== 0 || state.currentReply?.images.length !== 0) &&
-
-                <div className='feed-post-creator-images-container container-odd'>
-                    <FeedPostCreatorImage
-                        image={state.currentPost?.images[0].imageUrl ? state.currentPost?.images[0].imageUrl
-                            : (state.currentReply?.images ? state.currentReply?.images[0].imageUrl : '')}
-                        name={state.currentPost?.images[0].imageName ? state.currentPost?.images[0].imageName
-                            : (state.currentReply?.images ? state.currentReply?.images[0].imageName : '')}
-                        type={'gif'} 
-                    />
-                </div>
+            name={
+                (state.currentPost?.images || [])[0]?.imageName ||
+                (state.currentReply?.images || [])[0]?.imageName || ''
             }
-{/* 
-            {(state.currentPost?.images.length === 0 || state.currentReply?.images.length === 0) ? imageContainer :
-                <div className='feed-post-creator-images-container container-odd'>
-                    <FeedPostCreatorImage
-                        image={state.currentPost?.images[0].imageUrl ? state.currentPost?.images[0].imageUrl
-                            : (state.currentReply?.images ? state.currentReply?.images[0].imageUrl : '')}
-                        name={state.currentPost?.images[0].imageName ? state.currentPost?.images[0].imageName
-                            : (state.currentReply?.images ? state.currentReply?.images[0].imageName : '')}
-                        type={'gif'} />
-                </div>} */}
+            type={'gif'} 
+        />
+    </div>
+)}
+
+            {/* Display options section with Tag People and Add Description */}
             <div className='feed-post-creator-images-options'>
                 {dispalyTagPeople(state, toggleTagPeople)}
                 <p className='feed-post-creator-images-option' onClick={toggleEditImage}>
