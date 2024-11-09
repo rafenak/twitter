@@ -176,4 +176,50 @@ public class PostService {
     }
 
 
+    public Post createReplyWithMedia(String reply, List<MultipartFile> files ) {
+        CreateReplyRequest replyRequest = new CreateReplyRequest();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            replyRequest = objectMapper.readValue(reply,CreateReplyRequest.class);
+
+            CreatePostRequest postRequest = new CreatePostRequest();
+            postRequest.setContent(replyRequest.getReplyContent());
+            postRequest.setAuthor(replyRequest.getAuthor());
+            postRequest.setReplies(new HashSet<>());
+            postRequest.setImages(replyRequest.getImages());
+            postRequest.setScheduled(replyRequest.isScheduled());
+            postRequest.setScheduledDate(replyRequest.getScheduledDate());
+            postRequest.setAudience(Audience.EVERYONE);
+            postRequest.setReplyRestriction(ReplyRestriction.EVERYONE);
+            postRequest.setPoll(replyRequest.getPoll());
+
+
+            Post replyPost = createPost(postRequest);
+            replyPost.setReply(true);
+
+
+            Post original = postRepository.findById(replyRequest.getOriginalPost())
+                    .orElseThrow(PostDoesNotExistsException::new);
+
+            Set<Post> originalPostReplies = original.getReplies();
+            originalPostReplies.add(replyPost);
+            original.setReplies(originalPostReplies);
+
+            postRepository.save(original);
+
+            //upload the images that got passed
+            List<Image> postImages = new ArrayList<>();
+            for (int i = 0; i < files.size(); i++) {
+                Image postImage = imageService.uploadImage(files.get(i), "reply");
+                postImages.add(postImage);
+            }
+            replyPost.setImages(postImages);
+
+           return postRepository.save(replyPost);
+        }
+        catch (Exception e) {
+            throw new UnableToCreatePostException();
+        }
+    }
+
 }

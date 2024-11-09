@@ -25,6 +25,7 @@ export const EmojiDropDown: React.FC = () => {
 
 
   let currentPost = useSelector((state: RootState) => state.post.currentPost)
+  let currentReply = useSelector((state: RootState) => state.post.currentReply)
   const dispatch: AppDisptach = useDispatch()
 
   const [activeCategory, setActiveCategory] = useState<number>(0);
@@ -206,6 +207,15 @@ export const EmojiDropDown: React.FC = () => {
       let newContent = postContent + emoji;
       dispatch(updateCurrentPost({
         name: "content",
+        value: newContent
+      }));
+    }
+
+    if (currentReply) {
+      let postContent = currentReply.replyContent || '';
+      let newContent = postContent + emoji;
+      dispatch(updateCurrentPost({
+        name: "replyContent",
         value: newContent
       }));
     }

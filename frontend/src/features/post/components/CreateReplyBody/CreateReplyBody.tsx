@@ -10,7 +10,6 @@ import { CreatePostTextArea } from '../CreatePostTextArea/CreatePostTextArea'
 import { initializeCurrentReply } from '../../../../redux/Slices/PostSlice'
 import { FeedPostCreatorPoll } from '../../../feed/components/FeedPostCreatorPoll/FeedPostCreatorPoll'
 import { FeedPostCreatorImages } from '../../../feed/components/FeedPostCreatorImages/FeedPostCreatorImages'
-import { EmojiDropDown } from '../../../../components/EmojiDropDown/EmojiDropDown'
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 export const CreateReplyBody: React.FC = () => {
@@ -18,7 +17,6 @@ export const CreateReplyBody: React.FC = () => {
     const feedPost = useSelector((state: RootState) => state.feed.currentPost)
     const postState = useSelector((state: RootState) => state.post)
     const user = useSelector((state: RootState) => state.user.loggedIn)
-    const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
     const dispatch: AppDisptach = useDispatch();
 
     useEffect(() => {
@@ -31,7 +29,7 @@ export const CreateReplyBody: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [feedPost?.postId, user?.userId])
 
-    console.log('postState', postState);
+    //console.log('postState', postState);
 
 
     return (

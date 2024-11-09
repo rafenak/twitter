@@ -80,4 +80,10 @@ public class PostController {
     public Post createReply(@RequestBody CreateReplyRequest request){
        return postService.createReply(request);
     }
+
+
+    @PostMapping(value = "/reply/media",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Post createReplyPost(@RequestPart("reply") String post, @RequestPart("media")List<MultipartFile> files){
+        return  postService.createReplyWithMedia(post,files);
+    }
 }

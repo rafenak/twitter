@@ -2,7 +2,7 @@ import React, { useRef, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { AppDisptach, RootState } from "../../../../redux/Store";
 import { updateCurrentPost } from '../../../../redux/Slices/PostSlice';
-//import { covertPostContentToElements } from "../../../../utils/EmojiUtils";
+import { covertPostContentToElements } from "../../../../utils/EmojiUtils";
 import './CreatePostTextArea.css'
 
 
@@ -53,13 +53,36 @@ export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location} 
       }
   } 
 
+  const textContent = ():{elements:JSX.Element[],content:string} =>{
+    if(location === "post" && state.post.currentPost){
+      //return covertPostContentToElements(state.post.currentPost.content,'creator')
+      return {
+        elements: covertPostContentToElements(state.post.currentPost.content,'creator'),
+        content:state.post.currentPost.content
+      };
+    }
+    else if(location === "reply" && state.post.currentReply){
+      //return covertPostContentToElements(state.post.currentReply.replyContent,'creator')
+      return {
+        elements: covertPostContentToElements(state.post.currentReply.replyContent,'creator'),
+        content:state.post.currentReply.replyContent
+      };
+    }
+    else{
+      return {
+        elements :[],
+        content : ""
+      }
+    }
+  }
+
   
   return (
     <div className='create-post-text-area' onClick={activate}>
 
         {/* {content !=='' &&
           <div className="create-post-text-area-content">
-            {covertPostContentToElements(content,'creator')}
+            {textContent().elements}
           </div>
         } */}
         <textarea 
@@ -74,7 +97,7 @@ export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location} 
           cols={50}
           maxLength={256}
           id={"post-text"}
-          value={content}/>
+          value={textContent().content}/>
     </div>
   )
 }

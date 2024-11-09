@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../../../../redux/Store';
-import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
+//import TagPeopleSVG from '../../../../components/SVGs/TagPeopleSVG';
 import ListSVG from '../../../../components/SVGs/ListSVG';
 import './FeedPostCreatorImages.css'
 import { createImageContainer, dispalyTagPeople } from '../../utils/FeedUtils';

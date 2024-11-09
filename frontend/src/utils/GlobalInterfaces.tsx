@@ -110,12 +110,13 @@ export interface Post{
   content:string;
   postDate?:Date;
   author:User;
+  bookmarks:User[];
   replies?:Post[];
-  likes:number;
+  likes:User[];
   images:PostImage[];
   poll?:Poll;
-  reposts:number;
-  views:number;
+  reposts:User[];
+  views:User[]; 
   scheduled:boolean;
   scheduledDate?:Date;
   audience: 'EVERYONE' | 'CIRCLE';

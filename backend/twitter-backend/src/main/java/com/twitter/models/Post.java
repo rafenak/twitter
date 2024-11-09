@@ -51,7 +51,6 @@ public class Post implements Comparable<Post>{
     @JoinTable(name = "post_reply", joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "reply_id")}
     )
-    @JsonIgnore
     private Set<Post> replies;
 
 

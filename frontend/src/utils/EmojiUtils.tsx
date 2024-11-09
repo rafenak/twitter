@@ -234,6 +234,10 @@ export const covertPostContentToElements = (content: string, location:string) : 
       let image = EMOJIS_IMG_MAP.find(e => e.emoji === char)?.image || "";
         tags.push(<img className={location ==='creator' ? 'feed-post-creator-post-content-emoji' : 'post-content-span-emoji'} src={image} alt={'Emoji'} />)
         tags.push(<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}></span>);
+    }else if(char === "\n" || char === "\r"){
+      tags.push(<br />);
+      tags.push(<span className={location ==='creator' ? 'feed-post-creator-post-content-paragraph' : 'post-content-span'}></span>);
+      currentWord="";
     }
     else if(char  !== " " ){
       currentWord += char; 

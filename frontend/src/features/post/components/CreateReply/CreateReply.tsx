@@ -11,6 +11,9 @@ export const CreateReply: React.FC = () => {
       topContent={<CreateReplyTop />}
       content={<CreateReplyBody />}
       bottomContent={<CreateReplyBottom />}
+      topPosition="29%"
+      leftPosition="25%" 
+      transform="translateY(-50%)"
     /> 
   );
 };
