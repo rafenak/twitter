@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
 import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
+import { count } from 'console';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -115,6 +116,16 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         dispatch(updateDisplayCreateReply())
     } 
 
+    const convertCount = (count: number): string => {
+        if (count >= 1_000_000) {
+            return (count / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        } else if (count >= 1_000) {
+            return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        return count.toString();
+    }; 
+
+
 
     return (
         <div className='post'>
@@ -156,33 +167,35 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                         <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={toggleReply}>
                             <ReplySVG height={20} width={20} color={colors.reply} />
                         </div>
-                        {/* To do number of replied beside it */}
+                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.replies?.length || 0)}</p> 
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-repost-wrapper' id='repost' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <RepostSVG height={20} width={20} color={colors.repost} />
                         </div>
-                        {/* To do number of replied beside it */}
+                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.reposts.length || 0)}</p> 
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <LikeSVG height={20} width={20} color={colors.like} />
                         </div>
-                        {/* To do number of replied beside it */}
+                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.likes.length || 0)}</p> 
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-blue-wrapper' id='views' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <ViewSVG height={20} width={20} color={colors.views} />
                         </div>
-                        {/* To do number of replied beside it */}
+                        {/* To do number of replied beside it */} 
+                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.views.length || 0)}</p> 
                     </div>
 
                     <div className='post-action-bar-right'>
                         <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <BookMarkSVG height={20} width={20} color={colors.bookmark} />
+                            <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.bookmarks.length || 0)}</p> 
                         </div>
                         <div className='post-action-bar-blue-wrapper' id='share' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <ShareSVG height={20} width={20} color={colors.share} />

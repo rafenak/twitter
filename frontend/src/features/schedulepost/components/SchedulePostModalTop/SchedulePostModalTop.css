@@ -53,13 +53,15 @@
     height: 30px;
     border-radius: 15px;
     border: none;
-    background-color: #000;
-    font-size: 14px;
+    /* background-color: #000; */
+    background-color: #1DA1F2;
+    font-size: 13px;
     color: white;
     font-weight: 600;
 }
 
 .schedule-post-modal-top-bar-confirm:hover{
-    background-color: rgba(0, 0, 0, 0.8);
+    /* background-color: rgba(0, 0, 0, 0.8); */
+    background-color: #1a91da;
     cursor: pointer;
 }

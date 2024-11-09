@@ -31,6 +31,12 @@ interface CreatePostBody {
   token: string;
 }
 
+
+interface CreateReplyBody{
+   reply:Reply,
+   token: string;
+}
+
 interface CreatePostWithMedia extends CreatePostBody {
   imagesFiles: File[]
 }
@@ -71,6 +77,33 @@ export const createPost = createAsyncThunk(
     }
   }
 );
+
+export const createReply =createAsyncThunk(
+  "post/reply",
+  async (body: CreateReplyBody, thuckAPI) => {
+
+    let reply = {
+      author: body.reply.author,
+      originalPost:body.reply.originalPost.postId,
+      replyContent:body.reply.replyContent,
+      images:body.reply.images,
+      scheduled:body.reply.scheduled,
+      scheduledDate:body.reply.scheduledDate,
+      poll:body.reply.poll 
+    };
+    try{
+      const req = await axios.post("http://localhost:8000/posts/reply", reply, {
+        headers: {
+          Authorization: `Bearer ${body.token}`, 
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
 
 export const createPostWithMedia = createAsyncThunk(
   "post/createWithMedia",
@@ -424,6 +457,18 @@ export const PostSlice = createSlice({
         error: false,
         currentPost: undefined,
       };
+      return state;
+    });
+
+
+    builder.addCase(createReply.fulfilled, (state, action) => {
+      state = {
+        ...state,
+        currentReply:undefined, 
+        loading: false,
+        error: false,
+        currentReplyImages:[] 
+      }
       return state;
     });
 
