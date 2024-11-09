@@ -27,22 +27,22 @@ interface CreatePostBody {
   scheduled: boolean;
   scheduledDate: Date | undefined;
   audience: "EVERYONE" | "CIRCLE";
-  replyRestriction: "EVERYONE" | "FOLLOW" | "CIRCLE" |"MENTION";
+  replyRestriction: "EVERYONE" | "FOLLOW" | "CIRCLE" | "MENTION";
   token: string;
 }
 
-interface CreatePostWithMedia extends CreatePostBody{
+interface CreatePostWithMedia extends CreatePostBody {
   imagesFiles: File[]
 }
 
-interface UpdatePollPayLoad{
-  index:number;
-  choiceText:string;
+interface UpdatePollPayLoad {
+  index: number;
+  choiceText: string;
 }
 
-interface GenerateReplyPayload{
-  post:Post,
-  user:User,
+interface GenerateReplyPayload {
+  post: Post,
+  user: User,
 }
 
 export const createPost = createAsyncThunk(
@@ -52,8 +52,8 @@ export const createPost = createAsyncThunk(
       let post = {
         content: body.content,
         author: body.author,
-        images:body.images,
-        poll:body.poll,
+        images: body.images,
+        poll: body.poll,
         replies: body.replies,
         scheduled: body.scheduled,
         scheduledDate: body.scheduledDate,
@@ -75,7 +75,7 @@ export const createPost = createAsyncThunk(
 export const createPostWithMedia = createAsyncThunk(
   "post/createWithMedia",
   async (body: CreatePostWithMedia, thuckAPI) => {
-    try{
+    try {
       const images = body.imagesFiles
       let data = new FormData();
 
@@ -87,20 +87,20 @@ export const createPostWithMedia = createAsyncThunk(
         scheduledDate: body.scheduledDate,
         audience: body.audience,
         replyRestriction: body.replyRestriction,
-      };  
+      };
 
-      data.append('post',JSON.stringify(post));
+      data.append('post', JSON.stringify(post));
 
-      images.forEach((image)=>{
-        data.append('media',image)
+      images.forEach((image) => {
+        data.append('media', image)
       })
 
-      let config ={
-        method:'post',
-        url:"http://localhost:8000/posts/media",
+      let config = {
+        method: 'post',
+        url: "http://localhost:8000/posts/media",
         headers: {
           'Authorization': `Bearer ${body.token}`,
-          'Content-Type': 'multipart/form-data' 
+          'Content-Type': 'multipart/form-data'
         },
         data
       }
@@ -108,7 +108,7 @@ export const createPostWithMedia = createAsyncThunk(
       let res = await axios(config)
       return res.data;
     }
-    catch(e){
+    catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
   }
@@ -119,7 +119,7 @@ const initialState: PostSliceState = {
   error: false,
   currentPost: undefined,
   posts: [],
-  currentPostImages : [],
+  currentPostImages: [],
   currentReply: undefined,
   currentReplyImages: []
 };
@@ -140,22 +140,22 @@ export const PostSlice = createSlice({
       return state;
     },
 
-    initializeCurrentReply(state,action:PayloadAction<GenerateReplyPayload>){
-      state ={
+    initializeCurrentReply(state, action: PayloadAction<GenerateReplyPayload>) {
+      state = {
         ...state,
         currentReply: {
-           author:action.payload.user,
-          originalPost:action.payload.post,
-          replyContent:"",
-          images:[],
-          scheduled:false,
+          author: action.payload.user,
+          originalPost: action.payload.post,
+          replyContent: "",
+          images: [],
+          scheduled: false,
         }
       }
 
       return state;
     },
 
-    
+
 
     // updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
     //   if (state.currentPost) {
@@ -175,7 +175,7 @@ export const PostSlice = createSlice({
 
     updateCurrentPost(state, action: PayloadAction<UpdatePostPayload>) {
       if (state.currentPost) {
-        state.currentPost = { 
+        state.currentPost = {
           ...state.currentPost,
           [action.payload.name]: action.payload.value,
         };
@@ -188,7 +188,7 @@ export const PostSlice = createSlice({
       return state;
     },
 
-    updateCurrentPostImages(state, action: PayloadAction<{files: File[]; location: string}>) {
+    updateCurrentPostImages(state, action: PayloadAction<{ files: File[]; location: string }>) {
       // if(state.currentPost ){
       //   state= {
       //     ...state,
@@ -203,22 +203,22 @@ export const PostSlice = createSlice({
       const { files, location } = action.payload;
 
       if (location === 'post') {
-        state= {
+        state = {
           ...state,
-          currentPostImages:files
+          currentPostImages: files
 
         }
       } else if (location === 'reply') {
-        state= {
+        state = {
           ...state,
-          currentReplyImages:files
+          currentReplyImages: files
 
         }
       }
       return state;
     },
 
-    createPoll(state){
+    createPoll(state) {
       let choices: PollChoice[] = [
         {
           pollChoiceId: 0,
@@ -231,118 +231,171 @@ export const PostSlice = createSlice({
           votes: [],
         },
       ];
-      let poll:Poll ={
-        pollId:0,
+      let poll: Poll = {
+        pollId: 0,
         endTime: " :0:0",
-        choices:choices,
+        choices: choices,
       }
 
-      let post = JSON.parse(JSON.stringify(state.currentPost))
-      post={
-        ...post,
-        poll
-      }
+      if (state.currentPost) {
+        let post = JSON.parse(JSON.stringify(state.currentPost))
+        post = {
+          ...post,
+          poll
+        }
 
-      state={
-        ...state,
-        currentPost:post
-      };
+        state = {
+          ...state,
+          currentPost: post
+        };
+      } else if (state.currentReply) {
+        let reply = JSON.parse(JSON.stringify(state.currentReply))
+        reply = {
+          ...reply,
+          poll
+        }
+
+        state = {
+          ...state,
+          currentReply: reply
+        }
+      }
       return state;
     },
-    updatePoll(state,action:PayloadAction<UpdatePollPayLoad>){
+    
+    updatePoll(state, action: PayloadAction<UpdatePollPayLoad>) {
 
-      if(state.currentPost && state.currentPost.poll){
-        let post=JSON.parse(JSON.stringify(state.currentPost))
-        let poll=post.poll;
-        let choices= poll.choices;
-        if(choices.length-1 < action.payload.index){
-            let choice:PollChoice={
-              pollChoiceId:0,
-              choiceText:action.payload.choiceText,
-              votes:[]
-            }
-            choices[action.payload.index]=choice
-        }else{
-          let choice:PollChoice= choices[action.payload.index]
-
-          choice={
-            ...choice,
-            choiceText:action.payload.choiceText
+      if (state.currentPost && state.currentPost.poll) {
+        let post = JSON.parse(JSON.stringify(state.currentPost))
+        let poll = post.poll;
+        let choices = poll.choices;
+        if (choices.length - 1 < action.payload.index) {
+          let choice: PollChoice = {
+            pollChoiceId: 0,
+            choiceText: action.payload.choiceText,
+            votes: []
           }
-          choices[action.payload.index]=choice
+          choices[action.payload.index] = choice
+        } else {
+          let choice: PollChoice = choices[action.payload.index]
+
+          choice = {
+            ...choice,
+            choiceText: action.payload.choiceText
+          }
+          choices[action.payload.index] = choice
 
         }
-        poll={
+        poll = {
           ...poll,
-          choices:choices
+          choices: choices
         }
-        post={
+        post = {
           ...post,
-          poll:poll
+          poll: poll
         }
-        state={
+        state = {
           ...state,
-          currentPost:post
+          currentPost: post
         }
       }
       return state;
     },
 
-    removePoll(state){
-      if(state.currentPost && state.currentPost.poll){
-        let post=JSON.parse(JSON.stringify(state.currentPost))
-        post={
+    removePoll(state) {
+      if (state.currentPost && state.currentPost.poll) {
+        let post = JSON.parse(JSON.stringify(state.currentPost))
+        post = {
           ...post,
-          poll:undefined
+          poll: undefined
         }
-        state={
+        state = {
           ...state,
-          currentPost:post
+          currentPost: post
         }
-        return state;
+      } else if (state.currentReply && state.currentReply.poll) {
+        let reply = JSON.parse(JSON.stringify(state.currentReply))
+        reply = {
+          ...reply,
+          poll: undefined
+        }
+        state = {
+          ...state,
+          currentReply: reply
+        }
       }
+      return state;
     },
 
-    setPollData(state,action:PayloadAction<string>){
-      if(state.currentPost && state.currentPost.poll !== undefined){
-        let post=JSON.parse(JSON.stringify(state.currentPost))
+    setPollData(state, action: PayloadAction<string>) {
+      if (state.currentPost && state.currentPost.poll !== undefined) {
+        let post = JSON.parse(JSON.stringify(state.currentPost))
         let poll = post.poll;
 
-        poll={
+        poll = {
           ...poll,
-          endTime:action.payload
+          endTime: action.payload
         }
-        post={
+        post = {
           ...post,
-          poll:poll
+          poll: poll
         }
-        state={
+        state = {
           ...state,
-          currentPost:post
+          currentPost: post
         }
-      }
+      } else if (state.currentReply && state.currentReply.poll !== undefined) {
+        let reply = JSON.parse(JSON.stringify(state.currentReply))
+        let poll = reply.poll;
 
+        poll = {
+          ...poll,
+          endTime: action.payload
+        }
+
+        reply = {
+          ...reply,
+          poll: poll
+        }
+
+        state = {
+          ...state,
+          currentReply: reply
+        }
+
+      }
       return state;
     },
-    setScheduleData(state,action:PayloadAction<Date>){
-      if(state.currentPost){
-        let post:Post=  JSON.parse(JSON.stringify(state.currentPost))
-        post={
-          ...post,
-          scheduledDate:action.payload,
-          scheduled:true
-        }
 
-        state={
+    setScheduleData(state, action: PayloadAction<Date>) {
+      if (state.currentPost) {
+        let post: Post = JSON.parse(JSON.stringify(state.currentPost))
+        post = {
+          ...post,
+          scheduledDate: action.payload,
+          scheduled: true
+        }
+        state = {
           ...state,
-          currentPost:post
+          currentPost: post
+        }
+      } else if (state.currentReply) {
+        let reply = JSON.parse(JSON.stringify(state.currentReply))
+        reply = {
+          ...reply,
+          scheduledDate: action.payload,
+          scheduled: true
+        }
+        state = {
+          ...state,
+          currentReply: reply
         }
 
       }
       return state;
     }
 
-    
+
   },
   extraReducers(builder) {
     builder.addCase(createPost.pending, (state, action) => {
@@ -382,7 +435,7 @@ export const PostSlice = createSlice({
         loading: false,
         error: false,
         currentPost: undefined,
-        currentPostImages: [] 
+        currentPostImages: []
       };
       return state;
     });
@@ -406,7 +459,7 @@ export const PostSlice = createSlice({
 });
 
 export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages,
-  createPoll ,updatePoll, removePoll ,setPollData, 
-  setScheduleData ,initializeCurrentReply} = PostSlice.actions;
+  createPoll, updatePoll, removePoll, setPollData,
+  setScheduleData, initializeCurrentReply } = PostSlice.actions;
 
 export default PostSlice.reducer;

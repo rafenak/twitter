@@ -181,7 +181,7 @@ export const FeedPostCreator: React.FC = () => {
           </div>
         </div>
       </div>
-      {displayEmoji ? <EmojiDropDown /> : <></>}
+      {displayEmoji && state.post.currentPost && <EmojiDropDown />}
     </div>
   );
 };

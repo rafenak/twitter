@@ -43,7 +43,7 @@ export const FeedPostCreatorImages: React.FC = () => {
 
             {/* Display FeedPostCreatorImage component only if there are images in currentPost or currentReply */}
             {((state.currentPost?.images || []).length > 0 || (state.currentReply?.images || []).length > 0) && (
-    <div className='feed-post-creator-images-container container-odd'>
+    <div className='feed-post-creator-images-container container-gif'>
         <FeedPostCreatorImage
             image={
                 (state.currentPost?.images || [])[0]?.imageUrl ||

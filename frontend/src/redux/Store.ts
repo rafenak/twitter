@@ -19,7 +19,7 @@ export const store = configureStore({
   middleware : (getDefaultMiddleware) =>  getDefaultMiddleware({
     serializableCheck: {
       ignoredActions : ['post/updateCurrentPostImages'],
-      ignoredPaths:  ['post.currentPostImages']
+      ignoredPaths:  ['post.currentPostImages','post.currentReplyImages']
     }
   })
 });

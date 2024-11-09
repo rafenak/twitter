@@ -1,5 +1,6 @@
 .feed-post-creator-image{
     height: 150px;
+    width: 280px;
     background-color: rgba(0, 0, 0, 0);
     border-radius: 16px;
     flex:  1 0 40%;
@@ -7,7 +8,6 @@
     background-repeat: no-repeat;
     background-position: center center;
     cursor:  pointer;
-    width: 300px;
     position: relative;
 }
 
