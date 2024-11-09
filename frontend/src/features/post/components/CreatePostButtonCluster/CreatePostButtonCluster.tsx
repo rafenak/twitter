@@ -46,7 +46,7 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
                 imageSelectorRef.current.value = "";
                 return;
             }
-
+ 
             let fileArr: File[] = [...imageList];
             for (let i = 0; i < e.target.files.length; i++) {
                 let file = e.target.files.item(i);
@@ -96,7 +96,7 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
     };
 
     const generatePoll = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (state.post.currentPost) {
+        if (state.post.currentPost || state.post.currentReply) {
             dispatch(createPoll());
         }
     };

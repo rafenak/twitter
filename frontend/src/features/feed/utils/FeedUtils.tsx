@@ -46,6 +46,23 @@ export function getReplyDropDownButton(
 }
 
 export function createImageContainer(images: File[]): JSX.Element {
+
+    if (images.length === 1) {
+        const image = images[0];
+        const url = window.URL.createObjectURL(image);
+        return (
+            <div className="feed-post-creator-images-container container-single">
+                <FeedPostCreatorImage
+                    image={url}
+                    name={image.name}
+                    key={`${image.name}-${image.lastModified}`}
+                    type={image.type}
+                />
+            </div>
+        );
+    }
+
+
     // Even number of images
     if (images.length % 2 === 0) {
         return (
@@ -86,7 +103,25 @@ export function createImageContainer(images: File[]): JSX.Element {
         );
     }
 
-    // Single image or odd count other than 3
+    // // Single image or odd count other than 3
+    // return (
+    //     <div className="feed-post-creator-images-container container-odd">
+    //         {images.map((image) => {
+    //             const url = window.URL.createObjectURL(image);
+    //             return (
+    //                 <FeedPostCreatorImage
+    //                     image={url}
+    //                     name={image.name}
+    //                     key={`${image.name}-${image.lastModified}`} // Ensuring unique key
+    //                     type={image.type}
+    //                 />
+    //             );
+    //         })}
+    //     </div>
+    // );
+
+
+    // Odd count other than 3
     return (
         <div className="feed-post-creator-images-container container-odd">
             {images.map((image) => {
@@ -95,7 +130,7 @@ export function createImageContainer(images: File[]): JSX.Element {
                     <FeedPostCreatorImage
                         image={url}
                         name={image.name}
-                        key={`${image.name}-${image.lastModified}`} // Ensuring unique key
+                        key={`${image.name}-${image.lastModified}`}
                         type={image.type}
                     />
                 );

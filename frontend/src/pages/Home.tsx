@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { RootState, AppDisptach } from "../redux/Store";
-import { getUserByToken, setToken } from "../redux/Slices/UserSlice";
-import { useNavigate } from "react-router-dom";
-import { Navigation } from "../components/Navigation/Navigation";
 import { Feed } from "../features/feed/components/Feed/Feed";
 import { FeedPostCreatorImageEditImageModal } from "../features/feed/components/FeedPostCreatorImageEditImageModal/FeedPostCreatorImageEditImageModal";
 import { FeedPostCreatorTagPeopleModal } from "../features/feed/components/FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
@@ -12,7 +8,6 @@ import { FeedPosterGifCreatorModal } from "../features/feed/components/FeedPostG
 import { SchedulePostModal } from "../features/schedulepost/components/SchedulePostModal/SchedulePostModal";
 import { EmojiDropDown } from "../components/EmojiDropDown/EmojiDropDown";
 import { updateDisplayEmojis } from "../redux/Slices/ModalSlice";
-import { Discovery } from "../features/discovery";
 import './Home.css'
 
 export const Home: React.FC = () => {

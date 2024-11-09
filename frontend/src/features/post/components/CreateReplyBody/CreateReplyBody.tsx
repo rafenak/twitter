@@ -10,6 +10,7 @@ import { CreatePostTextArea } from '../CreatePostTextArea/CreatePostTextArea'
 import { initializeCurrentReply } from '../../../../redux/Slices/PostSlice'
 import { FeedPostCreatorPoll } from '../../../feed/components/FeedPostCreatorPoll/FeedPostCreatorPoll'
 import { FeedPostCreatorImages } from '../../../feed/components/FeedPostCreatorImages/FeedPostCreatorImages'
+import { EmojiDropDown } from '../../../../components/EmojiDropDown/EmojiDropDown'
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 export const CreateReplyBody: React.FC = () => {
@@ -17,6 +18,7 @@ export const CreateReplyBody: React.FC = () => {
     const feedPost = useSelector((state: RootState) => state.feed.currentPost)
     const postState = useSelector((state: RootState) => state.post)
     const user = useSelector((state: RootState) => state.user.loggedIn)
+    const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
     const dispatch: AppDisptach = useDispatch();
 
     useEffect(() => {
@@ -29,8 +31,8 @@ export const CreateReplyBody: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [feedPost?.postId, user?.userId])
 
-    console.log('postState',postState);
-    
+    console.log('postState', postState);
+
 
     return (
         <div className='create-reply-body'>
@@ -39,7 +41,7 @@ export const CreateReplyBody: React.FC = () => {
                     <div className='create-reply-body-post-left'>
                         <img className='create-reply-body-post-pfp'
                             src={feedPost.author.profilePicture ? feedPost.author.profilePicture.imageURL : pfp}
-                            alt={`${feedPost.author.nickname}s pfp`} />
+                            alt={`${feedPost.author.nickname}s pfp`} height={40} width={40}/>
                         <div className='create-reply-body-post-divider'>  </div>
                     </div>
                     <div className='create-reply-body-post-right'>
@@ -75,11 +77,23 @@ export const CreateReplyBody: React.FC = () => {
                 </div>
             }
             <div className='create-reply-body-reply'>
-                <img className='create-reply-body-post-pfp' src={user && user.profilePicture ? user.profilePicture.imageURL : pfp} alt={user ? `${user?.username}'s pfp` : 'user pfp'} />
-                < CreatePostTextArea location='reply' />
-                {((postState.currentReplyImages.length > 0) || (postState.currentReply && postState.currentReply.images.length > 0)) &&
-                    <FeedPostCreatorImages />}
-                {postState.currentReply && postState.currentReply.poll && <FeedPostCreatorPoll />}
+                {postState.currentReply ?
+                    <>
+                    <div className='create-reply-body-reply-content-group'>
+                        <img className='create-reply-body-post-pfp'
+                            style={{marginTop: '8px'}} 
+                            src={user && user.profilePicture ? user.profilePicture.imageURL : pfp} 
+                            alt={user ? `${user?.username}'s pfp` : 'user pfp'} />
+                        <div className='create-reply-body-reply-content'>
+                            < CreatePostTextArea location='reply' />
+                        </div> 
+                    </div> 
+                        
+                        {((postState.currentReplyImages.length > 0) || (postState.currentReply.images.length > 0)) &&
+                            <FeedPostCreatorImages />}
+                        {(postState.currentReply.poll) && <FeedPostCreatorPoll />}
+                    </> : <></>
+                }
             </div>
         </div>
     )
