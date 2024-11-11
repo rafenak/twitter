@@ -1,12 +1,10 @@
 package com.twitter.controllers;
 
 import com.twitter.models.Post;
+import com.twitter.request.FeedRequest;
 import com.twitter.services.FeedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,11 +16,12 @@ public class FeedController {
 
     private final FeedService feedService;
 
-    @GetMapping("/{id}")
-    public List<Post> getPostsForFeed(@PathVariable("id") Integer userId) {
+    @PostMapping
+    public List<Post> getPostsForFeed(@RequestBody FeedRequest feedRequest) {
 
-        List<Post> feedPost = feedService.getFeedForUser(userId);
-        Collections.sort(feedPost);
+        List<Post> feedPost = feedService
+                    .getFeedForUser(feedRequest.getUserId(),feedRequest.getSessionStart(),feedRequest.getPage());
+        //Collections.sort(feedPost);
         return feedPost;
     }
 }

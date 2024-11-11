@@ -11,6 +11,10 @@ import com.twitter.repositories.PostRepository;
 import com.twitter.request.CreatePostRequest;
 import com.twitter.request.CreateReplyRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +33,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final ImageService imageService;
     private final PollService pollService;
+    private final TokenService tokenService;
+    private final UserService userService;
 
     public Post createPost(CreatePostRequest request) {
 
@@ -138,8 +144,10 @@ public class PostService {
         return postRepository.findByAuthor(author).orElse(new HashSet<>());
     }
 
-    public List<Post> getAllPostsByAuthors(Set<AppUser> authors) {
-        return postRepository.findPostsByAuthorIds(authors);
+    public Page<Post> getAllPostsByAuthors(Set<AppUser> authors, LocalDateTime sessionStart, Integer page) {
+        //Get the next 50 post starting pn page specified in the request
+        Pageable pageable = PageRequest.of(page,50, Sort.by("postDate").descending());
+        return postRepository.findPostsByAuthorIds (authors,sessionStart,pageable);
     }
 
     public void deletePost(Post post) {
@@ -221,5 +229,48 @@ public class PostService {
             throw new UnableToCreatePostException();
         }
     }
+
+
+    public Post repost(Integer postId,String token){
+        String username = tokenService.getUserNameFromToken(token);
+        AppUser user = userService.getUserByName(username);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
+
+        Set<AppUser> reposts = post.getReposts();
+        reposts.add(user);
+        post.setReposts(reposts);
+
+        return  postRepository.save(post);
+    }
+
+    public Post like (Integer postId,String token){
+        String username = tokenService.getUserNameFromToken(token);
+        AppUser user = userService.getUserByName(username);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
+
+        Set<AppUser> likes = post.getLikes();
+        likes.add(user);
+        post.setLikes(likes);
+
+        return  postRepository.save(post);
+    }
+
+
+
+    public Post bookmark (Integer postId,String token){
+        String username = tokenService.getUserNameFromToken(token);
+        AppUser user = userService.getUserByName(username);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
+
+        Set<AppUser> bookmarks = post.getBookmarks();
+        bookmarks.add(user);
+        post.setBookmarks(bookmarks);
+
+        return  postRepository.save(post);
+    }
+
 
 }
