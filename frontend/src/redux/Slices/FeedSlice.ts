@@ -2,81 +2,88 @@ import {
     createAsyncThunk,
     createSlice,
     PayloadAction,
-  } from "@reduxjs/toolkit";
-  import axios from "axios";
-import { Post } from "../../utils/GlobalInterfaces";
+} from "@reduxjs/toolkit";
+import axios from "axios";
+import { FeedPost, Post } from "../../utils/GlobalInterfaces";
 
-interface FeedSliceState{
-    post: Post[],
-    currentPost : Post | undefined, 
-    loading:boolean,
-    error:boolean
+interface FeedSliceState {
+    posts: FeedPost[],
+    currentPost: Post | undefined,
+    loading: boolean,
+    error: boolean
 }
 
-interface FeedPagePayload{
-    userId:number,
-    token:string
+interface FeedPagePayload {
+    userId: number,
+    token: string,
+    sessionStart: Date,
+    page: number
 }
 
-const initialState:FeedSliceState ={
-    post:[],
+const initialState: FeedSliceState = {
+    posts: [],
     currentPost: undefined,
-    loading:false,
-    error:false
+    loading: false,
+    error: false
 }
 
 export const loadFeedPage = createAsyncThunk(
     "feed/feedPage",
-    async (payload:FeedPagePayload, thuckAPI) => {
-      try {
-        let req = await axios.get(`http://localhost:8000/feed/${payload.userId}`,{
-            headers:{
-                Authorization: `Bearer ${payload.token}`,
-            }
-        })        
-        return req.data;
-      } catch (e) {
-        return thuckAPI.rejectWithValue(e);
-      }
+    async (payload: FeedPagePayload, thuckAPI) => {
+        try {
+            let req = await axios.post(`http://localhost:8000/feed`, {
+                userId: payload.userId,
+                page: payload.page,
+                sessionStart: payload.sessionStart
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${payload.token}`,
+                    }
+                })
+            return req.data;
+        } catch (e) {
+            return thuckAPI.rejectWithValue(e);
+        }
     }
-  );
+);
 
 
 export const FeedSlice = createSlice({
     name: "feed",
     initialState,
-    reducers : {
-        setCurrentPost(state, action:PayloadAction<Post | undefined>){
-                state ={
-                    ...state,
-                    currentPost: action.payload
-                }
-                return state; 
+    reducers: {
+        setCurrentPost(state, action: PayloadAction<Post | undefined>) {
+            state = {
+                ...state,
+                currentPost: action.payload
+            }
+            return state;
         }
     },
-    extraReducers: (builder) =>{
-        builder.addCase(loadFeedPage.pending,(state,action)=>{
-            state ={
+    extraReducers: (builder) => {
+        builder.addCase(loadFeedPage.pending, (state, action) => {
+            state = {
                 ...state,
-                loading:true, 
-                error:false
+                loading: true,
+                error: false
             }
             return state;
         });
 
-        builder.addCase(loadFeedPage.fulfilled ,(state,action)=>{
-            state ={
+        builder.addCase(loadFeedPage.fulfilled, (state, action) => {
+            state = {
                 ...state,
-                post:action.payload,
-                loading:false,
+                posts: action.payload,
+                loading: false,
             }
             return state;
         });
-        builder.addCase(loadFeedPage.rejected,(state,action)=>{
-            state ={
+        builder.addCase(loadFeedPage.rejected, (state, action) => {
+            state = {
                 ...state,
-                loading:false,
-                error:true
+                loading: false,
+                error: true
             }
             return state;
         })
@@ -84,6 +91,6 @@ export const FeedSlice = createSlice({
     }
 });
 
-export const {setCurrentPost} = FeedSlice.actions;
+export const { setCurrentPost } = FeedSlice.actions;
 
 export default FeedSlice.reducer;

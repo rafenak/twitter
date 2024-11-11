@@ -151,3 +151,11 @@ export interface Poll{
   endTime: string;
   choices: PollChoice[]
 }
+
+
+export interface FeedPost{
+  post:Post;
+  replyTo:Post;
+  repost:boolean;
+  repostUser:User;
+}

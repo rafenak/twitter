@@ -27,7 +27,7 @@ export const CreateReplyBody: React.FC = () => {
             }))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [feedPost?.postId, user?.userId])
+    }, [feedPost?.postId, user?.userId, postState.currentPost?.images])
 
     //console.log('postState', postState);
 
