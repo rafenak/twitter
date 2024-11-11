@@ -11,6 +11,7 @@ import com.twitter.services.PostService;
 import com.twitter.services.UserService;
 import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -85,5 +86,20 @@ public class PostController {
     @PostMapping(value = "/reply/media",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public Post createReplyPost(@RequestPart("reply") String post, @RequestPart("media")List<MultipartFile> files){
         return  postService.createReplyWithMedia(post,files);
+    }
+
+    @PutMapping("/repost/{id}")
+    public Post repost(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+       return postService.repost(id,token);
+    }
+
+    @PutMapping("/like/{id}")
+    public Post like(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return postService.like(id,token);
+    }
+
+    @PutMapping("/bookmark/{id}")
+    public Post bookmark(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return postService.bookmark(id,token);
     }
 }
