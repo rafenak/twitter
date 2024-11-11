@@ -1,21 +1,20 @@
 package com.twitter.request;
 
-import com.twitter.models.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class FeedPost {
+public class FeedPostRequest {
+    private  Integer userId;
 
-    private Post post;
+    private LocalDateTime sessionStart;
 
-    private Post reply;
-
-    private boolean repost;
-
+    private  Integer page;
 }

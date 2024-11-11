@@ -31,7 +31,7 @@ openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypar.pem -out priva
 ```sql
 ----Function for Getting feed Posts
 
-CREATE OR REPLACE FUNCTION get_feed_posts(id INT)
+CREATE OR REPLACE FUNCTION get_feed_posts(id INT, session_start date)
 RETURNS refcursor AS $$
 DECLARE
     ret refcursor;
@@ -47,6 +47,10 @@ BEGIN
     -- Open the cursor with the posts query using the following user IDs
     ret := 'ret_cursor';
     OPEN ret FOR
+
+		SELECT * FROM 
+
+		(
 
 		SELECT p.post_id, p.audience, p.content, p.posted_date, p.is_reply, p.reply_restriction,
                p.scheduled, p.scheduled_date, p.author_id, p.poll_id
@@ -65,7 +69,9 @@ BEGIN
         SELECT p.post_id, p.audience, p.content, p.posted_date, p.is_reply, p.reply_restriction,
                p.scheduled, p.scheduled_date, p.author_id, p.poll_id
         FROM posts p
-        WHERE p.author_id = ANY(following_ids);
+        WHERE p.author_id = ANY(following_ids)
+
+		) AS p WHERE p.posted_date <= session_start ORDER BY p.posted_date DESC;
 
     RETURN ret;
 END;
@@ -77,7 +83,7 @@ $$ LANGUAGE plpgsql;
 **How to call the function in Postgres**
 ```sql
 BEGIN;
-SELECT get_feed_posts(1);
+SELECT get_feed_posts(1,'2024-09-16T02:53:10'); 
 -- Fetch data from the cursor
 FETCH ALL IN ret_cursor;
 -- Close the cursor and commit the transaction

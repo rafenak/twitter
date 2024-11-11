@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import "./Feed.css";
 import { FeedTopBar } from "../FeedTopBar/FeedTopBar";
 import { FeedPostCreator } from "../FeedPostCreator/FeedPostCreator";
@@ -20,17 +20,26 @@ export const Feed: React.FC = () => {
   const displayTagPeopleModal = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
   const displayScheduleModal = useSelector((state: RootState) => state.modal.displaySchedule);
-  const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
+  //const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
   const displayCreateReply = useSelector((state: RootState) => state.modal.displayCreateReply);
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
+  // const [sessionStart,setSessionStart]= useState<Date>(()=> {return new Date()})
+  const [sessionStart, setSessionStart] = useState<Date>(() => {
+    const now = new Date();
+    now.setHours(now.getHours() + 10); // Adds 1 hour to the current time
+    return now;
+  });
 
   const dispatch: AppDisptach = useDispatch(); 
 
   useEffect(() => {
     if (userState.loggedIn && userState.token) {
       dispatch(
-        loadFeedPage({
+        loadFeedPage( {
           token: userState.token,
           userId: userState.loggedIn.userId,
+          page:currentPageNumber,
+          sessionStart:sessionStart
         })
       );
     }
@@ -49,8 +58,8 @@ export const Feed: React.FC = () => {
       <FeedPostCreator />
       {!feedState.loading && (
         <div className="feed-post">
-          {feedState.post.map((post) => (
-            <Post post={post} key={post.postId}></Post>
+          {feedState.posts.map((post) => (
+            <Post feedPost={post} key={post.post.postId}></Post>
           ))}
         </div>
       )}

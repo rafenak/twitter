@@ -32,6 +32,9 @@ public class Post implements Comparable<Post>{
     @Column(name = "is_reply",nullable = true)
     private Boolean reply;
 
+    @Column(name = "reply_to")
+    private Integer replyTo;
+
     @ManyToOne
     @JoinColumn(name = "author_id",nullable = false)
     private AppUser author;

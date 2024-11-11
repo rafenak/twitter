@@ -144,10 +144,15 @@ public class PostService {
         return postRepository.findByAuthor(author).orElse(new HashSet<>());
     }
 
-    public Page<Post> getAllPostsByAuthors(Set<AppUser> authors, LocalDateTime sessionStart, Integer page) {
-        //Get the next 50 post starting pn page specified in the request
-        Pageable pageable = PageRequest.of(page,50, Sort.by("postDate").descending());
-        return postRepository.findPostsByAuthorIds (authors,sessionStart,pageable);
+//    public Page<Post> getAllPostsByAuthors(Set<AppUser> authors, LocalDateTime sessionStart, Integer page) {
+//        //Get the next 50 post starting pn page specified in the request
+//        Pageable pageable = PageRequest.of(page,50, Sort.by("postDate").descending());
+//        return postRepository.findFeedPost (authors,sessionStart,pageable);
+//    }
+
+    public Page<Post> getFeedPage(Integer userId,LocalDateTime sessionStart,Integer page){
+        Pageable pageable = PageRequest.of(page,50);
+        return postRepository.findFeedPost (userId,sessionStart,pageable);
     }
 
     public void deletePost(Post post) {
@@ -170,6 +175,7 @@ public class PostService {
 
         Post reply = createPost(postRequest);
         reply.setReply(true);
+        reply.setReplyTo(request.getOriginalPost());
 
         Post original = postRepository.findById(request.getOriginalPost())
                 .orElseThrow(PostDoesNotExistsException::new);
@@ -204,6 +210,7 @@ public class PostService {
 
             Post replyPost = createPost(postRequest);
             replyPost.setReply(true);
+            replyPost.setReplyTo(replyRequest.getOriginalPost());
 
 
             Post original = postRepository.findById(replyRequest.getOriginalPost())

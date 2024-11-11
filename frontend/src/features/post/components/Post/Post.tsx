@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Post as IPost } from '../../../../utils/GlobalInterfaces'
+import { FeedPost } from '../../../../utils/GlobalInterfaces'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -18,11 +18,11 @@ import { useDispatch } from 'react-redux';
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
 import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
-import { count } from 'console';
+import { Reply } from '../Reply/Reply';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
-    post: IPost
+    feedPost: FeedPost
 }
 
 interface HoverColors {
@@ -34,11 +34,11 @@ interface HoverColors {
     share: string;
 }
 
-export const Post: React.FC<PostProps> = ({ post }) => {
+export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
-    const dispatch:AppDisptach = useDispatch(); 
+    const dispatch: AppDisptach = useDispatch();
 
-    const { author, content, postDate } = post;
+    const { post, replyTo, repost, repostUser } = feedPost;
 
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
@@ -49,7 +49,10 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         share: '#AAB8C2',
     })
 
-   
+    console.log(feedPost);
+    
+
+
     const updateHoverColors = (e: React.MouseEvent<HTMLDivElement>) => {
         const id = e.currentTarget.id;
 
@@ -111,10 +114,10 @@ export const Post: React.FC<PostProps> = ({ post }) => {
 
     }
 
-    const toggleReply = () =>{
+    const toggleReply = () => {
         dispatch(setCurrentPost(post))
         dispatch(updateDisplayCreateReply())
-    } 
+    }
 
     const convertCount = (count: number): string => {
         if (count >= 1_000_000) {
@@ -123,33 +126,33 @@ export const Post: React.FC<PostProps> = ({ post }) => {
             return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
         }
         return count.toString();
-    }; 
+    };
 
 
 
     return (
         <div className='post'>
             <div className='post-left'>
-                <img className="post-pfp" src={author.profilePicture ? author.profilePicture?.imageURL : pfp} alt={`${author.nickname}'s pfp`} />
+                <img className="post-pfp" src={post.author.profilePicture ? post.author.profilePicture?.imageURL : pfp} alt={`${post.author.nickname}'s pfp`} />
             </div>
             <div className='post-right'>
                 <div className='post-right-top'>
                     <div className='post-user-info'>
-                        <p className='post-nickname'>{author.nickname}</p>
-                        {author.verifiedAccount && <VerifiedIcon sx={{
+                        <p className='post-nickname'>{post.author.nickname}</p>
+                        {post.author.verifiedAccount && <VerifiedIcon sx={{
                             color: '#1DA1F2',
                             height: '20px',
                             width: '20px'
                         }} />}
-                        {author.organization && <img className='post-oragnization'
-                            src={author.organization.imageURL} alt={`${author.username}'s organization`} />}
-                        <p className='post-username'>@{author.username}</p>
+                        {post.author.organization && <img className='post-oragnization'
+                            src={post.author.organization.imageURL} alt={`${post.author.username}'s organization`} />}
+                        <p className='post-username'>@{post.author.username}</p>
                         <CircleIcon sx={{
                             width: "3.5px",
                             height: "3.5px",
                             color: "#657786"
                         }} />
-                        {postDate && <p className='post-posted-at'>{convertPostDateToString(postDate)}</p>}
+                        {post.postDate && <p className='post-posted-at'>{convertPostDateToString(post.postDate)}</p>}
                     </div>
                     <div className='post-more'>
                         <MoreHorizIcon sx={{
@@ -159,43 +162,46 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                     </div>
                 </div>
                 <div className='post-content'>
-                    {content}
+                    {post.content}
                     {/* {covertPostContentToElements(content,"post")} */}
                 </div>
+                {replyTo && <Reply reply={replyTo}/>}
                 <div className='post-action-bar'>
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={toggleReply}>
                             <ReplySVG height={20} width={20} color={colors.reply} />
                         </div>
-                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.replies?.length || 0)}</p> 
+                        <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.replies?.length || 0)}</p>
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-repost-wrapper' id='repost' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <RepostSVG height={20} width={20} color={colors.repost} />
                         </div>
-                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.reposts.length || 0)}</p> 
+                        <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.reposts.length || 0)}</p>
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <LikeSVG height={20} width={20} color={colors.like} />
                         </div>
-                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.likes.length || 0)}</p> 
+                        <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p>
                     </div>
 
                     <div className='post-action-bar-group'>
                         <div className='post-action-bar-blue-wrapper' id='views' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <ViewSVG height={20} width={20} color={colors.views} />
                         </div>
-                        {/* To do number of replied beside it */} 
-                        <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.views.length || 0)}</p> 
+                        {/* To do number of replied beside it */}
+                        <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.views.length || 0)}</p>
                     </div>
 
                     <div className='post-action-bar-right'>
-                        <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
-                            <BookMarkSVG height={20} width={20} color={colors.bookmark} />
-                            <p className='post-action-bar-count' style={{color:colors.reply}}>{convertCount(post.bookmarks.length || 0)}</p> 
+                        <div className='post-action-bar-group'>
+                            <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
+                                <BookMarkSVG height={20} width={20} color={colors.bookmark} />
+                                <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p>
+                            </div>
                         </div>
                         <div className='post-action-bar-blue-wrapper' id='share' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                             <ShareSVG height={20} width={20} color={colors.share} />
