@@ -10,7 +10,6 @@ import { FeedPostCreatorImageEditImageModal } from "../FeedPostCreatorImageEditI
 import { FeedPostCreatorTagPeopleModal } from "../FeedPostCreatorTagPeopleModal/FeedPostCreatorTagPeopleModal";
 import { FeedPosterGifCreatorModal } from "../FeedPostGifCreatorModal/FeedPostGifCreatorModal";
 import { SchedulePostModal } from "../../../schedulepost/components/SchedulePostModal/SchedulePostModal";
-import { EmojiDropDown } from "../../../../components/EmojiDropDown/EmojiDropDown";
 import { CreateReply } from "../../../post/components/CreateReply/CreateReply";
 
 export const Feed: React.FC = () => {

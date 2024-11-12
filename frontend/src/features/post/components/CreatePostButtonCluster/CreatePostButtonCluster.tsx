@@ -17,7 +17,7 @@ interface CreatePostButtonClusterProps{
 
 
 export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({location}) => {
-    const state = useSelector((state: RootState) => state);
+    const state = useSelector((state: RootState) => state.post);
     const dispatch: AppDisptach = useDispatch();
 
     const imageSelectorRef = useRef<HTMLInputElement>(null);
@@ -27,10 +27,10 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
 
         let imageList:File[] = []
         if(location === 'reply'){
-            imageList = state.post.currentReplyImages;
+            imageList = state.currentReplyImages;
         }
         else if (location === 'post'){
-            imageList = state.post.currentPostImages;
+            imageList = state.currentPostImages;
         }
 
          //const  imageList = state.post.currentPostImages;
@@ -74,12 +74,12 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
         let type:string='' 
 
         if( location === 'reply'){
-            length = state.post.currentReplyImages.length
-            type=state.post.currentReplyImages[0]?.type
+            length = state.currentReplyImages.length
+            type=state.currentReplyImages[0]?.type
         }
         else if(location === 'post'){
-            length = state.post.currentPostImages.length
-            type =state.post.currentPostImages[0]?.type
+            length = state.currentPostImages.length
+            type =state.currentPostImages[0]?.type
         }
 
         if (length === 4) {
@@ -96,7 +96,7 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
     };
 
     const generatePoll = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (state.post.currentPost || state.post.currentReply) {
+        if (state.currentPost || state.currentReply) {
             dispatch(createPoll());
         }
     };
@@ -120,11 +120,11 @@ export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({
                     <MediaSVG height={20} width={20} color={determineFull() ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
                 </label>
             </div>
-            <div className={(state.post.currentPostImages.length > 0 || state.post.currentReplyImages.length > 0)  ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={diplayGif}>
-                <GifSVG height={20} width={20} color={state.post.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
+            <div className={(state.currentPostImages.length > 0 || state.currentReplyImages.length > 0)  ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={diplayGif}>
+                <GifSVG height={20} width={20} color={state.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
-            <div className={(state.post.currentPostImages.length > 0  || state.post.currentReplyImages.length > 0) ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
-                <PollSVG height={20} width={20} color={(state.post.currentPostImages.length || state.post.currentReplyImages.length ) ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
+            <div className={(state.currentPostImages.length > 0  || state.currentReplyImages.length > 0) ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
+                <PollSVG height={20} width={20} color={(state.currentPostImages.length || state.currentReplyImages.length ) ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
             <div className="create-post-button-cluster-icon-bg icon-active" onClick={openEmojiModal}>
                 <EmojiSVG height={20} width={20} color={"#1DA1F2"} />

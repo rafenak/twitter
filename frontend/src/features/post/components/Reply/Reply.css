@@ -1,0 +1,133 @@
+.reply {
+    width: 100%;
+    height: fit-content;
+    border: 1px solid #E1E8ED;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 6px;
+}
+
+.reply-left {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.reply-pfp {
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    border: none;
+    object-fit: cover;
+}
+
+.reply-right {
+    width: 90%;
+    height: 100%;
+    /* padding: 16px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* row-gap: 4px; */
+    padding-top: 12px;
+    /* padding-left: 2px; */
+}
+
+.reply-right-top {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.reply-user-info {
+    width: 95%;
+    height: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 6px;
+  }
+  
+  .reply-nickname {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+  }
+  
+  .reply-username {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #657786;
+  }
+
+  .reply-oragnization{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+  
+  .reply-posted-at {
+    height: fit-content;
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    color: #657786;
+  }
+  
+  .reply-more {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .reply-more:hover {
+    background-color: rgba(29, 161, 242, 0.2);
+  }
+
+.reply-content {
+    line-height: 26px;
+    max-height: 135px;
+    height: fit-content;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 400;
+    /* padding-left: 16px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+}
+
+
+.reply-show-more{
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1DA1F2;
+}
+
+.reply-show-more:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
