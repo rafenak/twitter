@@ -102,7 +102,7 @@ export interface PostImage{
   imageId:number;
   imageName:string;
   imageType:string;
-  imageUrl:string;
+  imageURL:string;
 }
 
 export interface Post{

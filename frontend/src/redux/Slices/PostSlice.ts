@@ -76,8 +76,8 @@ interface createReplyWithMediaBody {
   replyContent: string;
   images: PostImage[],
   scheduled: boolean;
-  scheduledDate: Date;
-  poll: Poll;
+  scheduledDate:Date | undefined;
+  poll: Poll | undefined;
   imagesFiles: File[]
   token:string;
 }

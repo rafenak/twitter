@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { FeedPost } from '../../../../utils/GlobalInterfaces'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -20,6 +20,7 @@ import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
 import { Reply } from '../Reply/Reply';
 import { bookmarkPost, likePost, repostPost } from '../../../../redux/Slices/PostSlice';
+import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -36,12 +37,13 @@ interface HoverColors {
 }
 
 export const Post: React.FC<PostProps> = ({ feedPost }) => {
-
-    const token = useSelector((state:RootState)=> state.user.token)
-
-    const dispatch: AppDisptach = useDispatch();
-
     const { post, replyTo, repost, repostUser } = feedPost;
+    const token = useSelector((state:RootState)=> state.user.token)
+    const dispatch: AppDisptach = useDispatch();
+    const postImageContainer = useMemo(
+        () => createPostImageContainer(feedPost.post.images), [feedPost.post.postId]);
+
+   
 
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
@@ -187,6 +189,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                     {post.content}
                     {/* {covertPostContentToElements(content,"post")} */}
                 </div>
+                {feedPost.post.images.length > 0 && postImageContainer}
                 {replyTo && <Reply reply={replyTo}/>}
                 <div className='post-action-bar'>
                     <div className='post-action-bar-group'>

@@ -5,13 +5,13 @@ import './CreateReplyBottom.css'
 import { CreatePostButtonCluster } from '../CreatePostButtonCluster/CreatePostButtonCluster'
 import { EmojiDropDown } from '../../../../components/EmojiDropDown/EmojiDropDown'
 import { FeedPostCreatorProgress } from '../../../feed/components/FeedPostCreatorProgress/FeedPostCreatorProgress'
-import { createReply } from '../../../../redux/Slices/PostSlice'
+import { createReply, createReplyWithMedia } from '../../../../redux/Slices/PostSlice'
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice'
 
 export const CreateReplyBottom: React.FC = () => {
   const postState = useSelector((state: RootState) => state.post)
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
-  const token =  useSelector((state: RootState) => state.user.token);
+  const token = useSelector((state: RootState) => state.user.token);
   const dispatch: AppDisptach = useDispatch();
 
   const generateButtonClass = (): string => {
@@ -21,45 +21,58 @@ export const CreateReplyBottom: React.FC = () => {
         postState.currentReplyImages.length > 0 ||
         (postState.currentReply.images.length >= 1) ||
         (postState.currentReply.poll !== undefined)
-        ? "create-reply-bottom-button reply-button-active" 
+        ? "create-reply-bottom-button reply-button-active"
         : "create-reply-bottom-button reply-button-inactive";
     }
-    return "create-reply-bottom-button reply-button-inactive"; 
+    return "create-reply-bottom-button reply-button-inactive";
   };
 
   const activateButton = (): boolean => {
-    if (postState.currentReply ) {
-      let content: string = postState.currentReply.replyContent; 
+    if (postState.currentReply) {
+      let content: string = postState.currentReply.replyContent;
       return !(
         content !== "" ||
         postState.currentReplyImages.length > 0 ||
         (postState.currentReply.images.length >= 1) ||
         (postState.currentReply.poll !== undefined)
-      ); 
+      );
     }
     return false;
   };
 
 
-  const postReply = (e:React.MouseEvent<HTMLButtonElement>) =>{
+  const postReply = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if(postState.currentReply){
+    if (postState.currentReply && postState.currentReplyImages.length === 0) {
       dispatch(createReply({
         reply: postState.currentReply,
         token: token
       }));
       dispatch(updateDisplayCreateReply())
+    }else if(postState.currentReply && postState.currentReplyImages.length > 1){
+      dispatch(createReplyWithMedia({
+        author:postState.currentReply.author,
+        originalPost:postState.currentReply.originalPost.postId,
+        replyContent:postState.currentReply.replyContent,
+        images:[],
+        scheduled:postState.currentReply.scheduled,
+        scheduledDate:postState.currentReply.scheduledDate,
+        poll: postState.currentReply.poll,
+        imagesFiles: postState.currentReplyImages,
+        token:token
+      }));
+      dispatch(updateDisplayCreateReply());
     }
-    
   }
 
 
-  return (
+  return ( 
     <div className='create-reply-bottom'>
       <CreatePostButtonCluster location='reply' />
       <div className='create-reply-bottom-submit-group'>
-        {postState.currentReply && postState.currentReply.replyContent !== '' &&  <FeedPostCreatorProgress percent={(postState.currentReply ? postState.currentReply.replyContent.length / 255 : 0) * 100}
-        />}
+        {postState.currentReply && postState.currentReply.replyContent !== ''
+          && <FeedPostCreatorProgress percent={(postState.currentReply ? postState.currentReply.replyContent.length / 255 : 0) * 100}
+          />}
         <button className={generateButtonClass()} disabled={activateButton()} onClick={postReply}>Reply</button>
       </div>
       {displayEmoji && postState.currentReply && <EmojiDropDown />}
