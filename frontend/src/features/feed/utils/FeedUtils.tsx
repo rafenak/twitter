@@ -58,6 +58,7 @@ export function createImageContainer(images: File[]): JSX.Element {
                     name={image.name}
                     key={`${image.name}-${image.lastModified}`}
                     type={image.type}
+                    displayCloseIcon={true}
                 />
             </div>
         );
@@ -76,6 +77,7 @@ export function createImageContainer(images: File[]): JSX.Element {
                             name={image.name}
                             key={`${image.name}-${image.lastModified}`} // Ensuring unique key
                             type={image.type}
+                            displayCloseIcon={true}
                         />
                     );
                 })}
@@ -97,6 +99,7 @@ export function createImageContainer(images: File[]): JSX.Element {
                             name={image.name}
                             key={`${image.name}-${image.lastModified}`} // Ensuring unique key
                             type={image.type}
+                            displayCloseIcon={true}
                         />
                     );
                 })}
@@ -133,6 +136,7 @@ export function createImageContainer(images: File[]): JSX.Element {
                         name={image.name}
                         key={`${image.name}-${image.lastModified}`}
                         type={image.type}
+                        displayCloseIcon={true}
                     />
                 );
             })}
@@ -153,6 +157,7 @@ export function createPostImageContainer(images: PostImage[]): JSX.Element {
                     name={image.imageName}
                     key={`${image.imageName}-${image.imageId}`}
                     type={image.imageType}
+                    displayCloseIcon={false}
                 />
             </div>
         );
@@ -170,6 +175,7 @@ export function createPostImageContainer(images: PostImage[]): JSX.Element {
                             name={image.imageName}
                             key={`${image.imageName}-${image.imageId}`}
                             type={image.imageType}
+                            displayCloseIcon={false}
                         />
                     );
                 })}
@@ -190,6 +196,7 @@ export function createPostImageContainer(images: PostImage[]): JSX.Element {
                             name={image.imageName}
                             key={`${image.imageName}-${image.imageId}`}
                             type={image.imageType}
+                            displayCloseIcon={false}
                         />
                     );
                 })}
@@ -225,6 +232,7 @@ export function createPostImageContainer(images: PostImage[]): JSX.Element {
                         name={image.imageName} 
                         key={`${image.imageName}-${image.imageId}`}
                         type={image.imageType}
+                        displayCloseIcon={false}
                     />
                 );
             })}

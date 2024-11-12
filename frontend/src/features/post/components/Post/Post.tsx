@@ -40,10 +40,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     const { post, replyTo, repost, repostUser } = feedPost;
     const token = useSelector((state:RootState)=> state.user.token)
     const dispatch: AppDisptach = useDispatch();
-    const postImageContainer = useMemo(
-        () => createPostImageContainer(feedPost.post.images), [feedPost.post.postId]);
-
-   
+    const postImageContainer = useMemo(() => createPostImageContainer(feedPost.post.images), [feedPost.post.postId]);
 
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
@@ -155,6 +152,13 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
 
     return (
+        <>
+        {feedPost.post &&
+            <p className='post-repost-info'>
+                <RepostSVG height={15} width={15} color={"#AAB8C2"}/>
+                {feedPost.repostUser && feedPost.repostUser.nickname} reposted
+            </p>
+        }
         <div className='post'>
             <div className='post-left'>
                 <img className="post-pfp" src={post.author.profilePicture ? post.author.profilePicture?.imageURL : pfp} alt={`${post.author.nickname}'s pfp`} />
@@ -235,5 +239,6 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                 </div>
             </div>
         </div>
+        </>
     )
 }

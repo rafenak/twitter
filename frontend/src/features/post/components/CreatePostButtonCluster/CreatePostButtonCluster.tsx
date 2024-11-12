@@ -19,9 +19,7 @@ interface CreatePostButtonClusterProps{
 export const CreatePostButtonCluster:React.FC<CreatePostButtonClusterProps> = ({location}) => {
     const state = useSelector((state: RootState) => state.post);
     const dispatch: AppDisptach = useDispatch();
-
     const imageSelectorRef = useRef<HTMLInputElement>(null);
-
     const handleGetImages = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 

@@ -54,6 +54,7 @@ export const FeedPostCreatorImages: React.FC = () => {
                             (state.currentReply?.images || [])[0]?.imageName || ''
                         }
                         type={'gif'}
+                        displayCloseIcon={true}
                     />
                 </div>
             )}

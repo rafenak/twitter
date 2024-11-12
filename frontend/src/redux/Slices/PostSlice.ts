@@ -311,9 +311,11 @@ export const PostSlice = createSlice({
           replyContent: "",
           images: [],
           scheduled: false,
-        }
+        },
+      // Clear `currentPost` and `currentPostImages`
+      currentPost: undefined,
+      currentPostImages: []
       }
-
       return state;
     },
 

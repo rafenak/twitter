@@ -9,6 +9,7 @@
     background-position: center center;
     cursor:  pointer;
     position: relative;
+    object-fit: cover;
 }
 
 .feed-post-creator-image-clear{
