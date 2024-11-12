@@ -37,7 +37,7 @@ public class FeedService {
             FeedPostResponse response = new FeedPostResponse();
             response.setPost(post);
 //            request.setReply(post.getReply() ? postService.getPostById(post.getPostId()) : null);
-            response.setReplyTo((post.getReply() != null && post.getReply()) ? postService.getPostById(post.getPostId()) : null);
+            response.setReplyTo((post.getReply() != null && post.getReply()) ? postService.getPostById(post.getReplyTo()) : null);
             response.setRepost(!post.getAuthor().getFollowers().contains(userService.getUserById(id))
                     && !post.getAuthor().equals(userService.getUserById(id)));
             response.setRepostUser(response.isRepost() ?

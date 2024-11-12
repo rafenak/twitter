@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Poll, PollChoice, Post, PostImage, Reply, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
+import { Rtt } from "@mui/icons-material";
 
 export interface PostSliceState {
   loading: boolean;
@@ -32,9 +33,14 @@ interface CreatePostBody {
 }
 
 
-interface CreateReplyBody{
-   reply:Reply,
-   token: string;
+interface CreateReplyBody {
+  reply: Reply,
+  token: string;
+}
+
+interface PostActionBody {
+  postId: number;
+  token: string;
 }
 
 interface CreatePostWithMedia extends CreatePostBody {
@@ -49,6 +55,31 @@ interface UpdatePollPayLoad {
 interface GenerateReplyPayload {
   post: Post,
   user: User,
+}
+
+/*
+{
+    "author": {
+        "userId": "1"
+    },
+    "originalPost": "1",
+    "replyContent": "This is reply with media",
+    "images": [],
+    "scheduled": false,
+    "scheduledDate": null,
+    "poll": null
+}
+*/
+interface createReplyWithMediaBody {
+  author: User;
+  originalPost: number;
+  replyContent: string;
+  images: PostImage[],
+  scheduled: boolean;
+  scheduledDate: Date;
+  poll: Poll;
+  imagesFiles: File[]
+  token:string;
 }
 
 export const createPost = createAsyncThunk(
@@ -78,23 +109,23 @@ export const createPost = createAsyncThunk(
   }
 );
 
-export const createReply =createAsyncThunk(
+export const createReply = createAsyncThunk(
   "post/reply",
   async (body: CreateReplyBody, thuckAPI) => {
 
     let reply = {
       author: body.reply.author,
-      originalPost:body.reply.originalPost.postId,
-      replyContent:body.reply.replyContent,
-      images:body.reply.images,
-      scheduled:body.reply.scheduled,
-      scheduledDate:body.reply.scheduledDate,
-      poll:body.reply.poll 
+      originalPost: body.reply.originalPost.postId,
+      replyContent: body.reply.replyContent,
+      images: body.reply.images,
+      scheduled: body.reply.scheduled,
+      scheduledDate: body.reply.scheduledDate,
+      poll: body.reply.poll
     };
-    try{
+    try {
       const req = await axios.post("http://localhost:8000/posts/reply", reply, {
         headers: {
-          Authorization: `Bearer ${body.token}`, 
+          Authorization: `Bearer ${body.token}`,
         },
       });
       return req.data;
@@ -146,6 +177,104 @@ export const createPostWithMedia = createAsyncThunk(
     }
   }
 )
+
+
+export const createReplyWithMedia = createAsyncThunk(
+  "post/repostmedia",
+  async (body: createReplyWithMediaBody, thuckAPI) => {
+    try {
+      const images = body.imagesFiles;
+      let data = new FormData();
+
+      let reply = {
+        author: body.author,
+        originalPost: body.originalPost,
+        replyContent: body.replyContent,
+        images: [],
+        scheduled: body.scheduled,
+        scheduledDate: body.scheduledDate,
+        poll: body.poll
+      };
+
+      data.append('reply', JSON.stringify(reply));
+
+      images.forEach((image) => {
+        data.append('media', image)
+      })
+
+      let config = {
+        method: 'post',
+        url: "http://localhost:8000/posts/reply/media",
+        headers: {
+          'Authorization': `Bearer ${body.token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+        data
+      }
+
+      let res = await axios(config)
+      return res.data;      
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
+
+export const repostPost = createAsyncThunk(
+  "post/repost",
+  async (body: PostActionBody, thuckAPI) => {
+    try {
+      let req = await axios.put(`http://localhost:8000/posts/repost/${body.postId}`, {}, {
+        headers: {
+          "Authorization": `Bearer ${body.token}`,
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
+
+export const likePost = createAsyncThunk(
+  "post/like",
+  async (body: PostActionBody, thuckAPI) => {
+    try {
+      let req = await axios.put(`http://localhost:8000/posts/like/${body.postId}`, {}, {
+        headers: {
+          "Authorization": `Bearer ${body.token}`,
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
+
+export const bookmarkPost = createAsyncThunk(
+  "post/bookmark",
+  async (body: PostActionBody, thuckAPI) => {
+    try {
+      let req = await axios.put(`http://localhost:8000/posts/bookmark/${body.postId}`, {}, {
+        headers: {
+          "Authorization": `Bearer ${body.token}`,
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
 
 const initialState: PostSliceState = {
   loading: false,
@@ -295,7 +424,7 @@ export const PostSlice = createSlice({
       }
       return state;
     },
-    
+
     updatePoll(state, action: PayloadAction<UpdatePollPayLoad>) {
 
       if (state.currentPost && state.currentPost.poll) {
@@ -464,13 +593,24 @@ export const PostSlice = createSlice({
     builder.addCase(createReply.fulfilled, (state, action) => {
       state = {
         ...state,
-        currentReply:undefined, 
+        currentReply: undefined,
         loading: false,
         error: false,
-        currentReplyImages:[] 
+        currentReplyImages: []
       }
       return state;
     });
+
+    builder.addCase(createReplyWithMedia.fulfilled, (state, action) => {
+      state={
+        ...state,
+        currentReply:undefined,
+        loading: false,
+        error: false,
+        currentReplyImages:[]
+      };
+      return state;
+    })
 
     builder.addCase(createPostWithMedia.fulfilled, (state, action) => {
       let post: Post = action.payload;
@@ -482,6 +622,21 @@ export const PostSlice = createSlice({
         currentPost: undefined,
         currentPostImages: []
       };
+      return state;
+    });
+
+    builder.addCase(repostPost.fulfilled, (state, action) => {
+      //TODO: Setup such that it modified the current feeed page
+      return state;
+    });
+
+    builder.addCase(likePost.fulfilled, (state, action) => {
+      //TODO: Setup such that it modified the current feeed page
+      return state;
+    });
+
+    builder.addCase(bookmarkPost.fulfilled, (state, action) => {
+      //TODO: Setup such that it modified the current feeed page
       return state;
     });
 

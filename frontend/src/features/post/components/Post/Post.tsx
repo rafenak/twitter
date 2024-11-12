@@ -13,12 +13,13 @@ import BookMarkSVG from '../../../../components/SVGs/BookMarkSVG';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 import './Post.css'
-import { AppDisptach } from '../../../../redux/Store';
-import { useDispatch } from 'react-redux';
+import { AppDisptach, RootState } from '../../../../redux/Store';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
 import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
 import { Reply } from '../Reply/Reply';
+import { bookmarkPost, likePost, repostPost } from '../../../../redux/Slices/PostSlice';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -36,6 +37,8 @@ interface HoverColors {
 
 export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
+    const token = useSelector((state:RootState)=> state.user.token)
+
     const dispatch: AppDisptach = useDispatch();
 
     const { post, replyTo, repost, repostUser } = feedPost;
@@ -48,10 +51,6 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
         bookmark: '#AAB8C2',
         share: '#AAB8C2',
     })
-
-    console.log(feedPost);
-    
-
 
     const updateHoverColors = (e: React.MouseEvent<HTMLDivElement>) => {
         const id = e.currentTarget.id;
@@ -128,6 +127,29 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
         return count.toString();
     };
 
+    const createRepost = () =>{
+        dispatch(repostPost({
+            postId: post.postId,
+            token: token
+        }))
+    }
+
+    const createLike = () =>{
+        dispatch(likePost({
+            postId: post.postId,
+            token: token
+        }))
+    }
+
+
+    const createBookmark = () =>{
+        dispatch(bookmarkPost({
+            postId: post.postId,
+            token: token
+        }))
+    }
+
+
 
 
     return (
@@ -175,14 +197,14 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                     </div>
 
                     <div className='post-action-bar-group'>
-                        <div className='post-action-bar-repost-wrapper' id='repost' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
+                        <div className='post-action-bar-repost-wrapper' id='repost' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createRepost}>
                             <RepostSVG height={20} width={20} color={colors.repost} />
                         </div>
                         <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.reposts.length || 0)}</p>
                     </div>
 
                     <div className='post-action-bar-group'>
-                        <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
+                        <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createLike}>
                             <LikeSVG height={20} width={20} color={colors.like} />
                         </div>
                         <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p>
@@ -198,7 +220,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
                     <div className='post-action-bar-right'>
                         <div className='post-action-bar-group'>
-                            <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
+                            <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createBookmark}>
                                 <BookMarkSVG height={20} width={20} color={colors.bookmark} />
                                 <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p>
                             </div>
