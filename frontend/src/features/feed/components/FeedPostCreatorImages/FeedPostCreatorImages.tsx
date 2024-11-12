@@ -14,12 +14,12 @@ export const FeedPostCreatorImages: React.FC = () => {
 
     // Create containers for post and reply images only when they are empty
     const postImageContainer = useMemo(
-        () => createImageContainer(state.currentPostImages), 
+        () => createImageContainer(state.currentPostImages),
         [state.currentPostImages]
     );
 
     const replyImageContainer = useMemo(
-        () => createImageContainer(state.currentReplyImages), 
+        () => createImageContainer(state.currentReplyImages),
         [state.currentReplyImages]
     );
 
@@ -37,26 +37,26 @@ export const FeedPostCreatorImages: React.FC = () => {
             {state.currentPost && (state.currentPost.images?.length === 0)
                 ? postImageContainer
                 : state.currentReply && (state.currentReply.images?.length === 0)
-                ? replyImageContainer
-                : null
+                    ? replyImageContainer
+                    : null
             }
 
             {/* Display FeedPostCreatorImage component only if there are images in currentPost or currentReply */}
             {((state.currentPost?.images || []).length > 0 || (state.currentReply?.images || []).length > 0) && (
-    <div className='feed-post-creator-images-container container-gif'>
-        <FeedPostCreatorImage
-            image={
-                (state.currentPost?.images || [])[0]?.imageUrl ||
-                (state.currentReply?.images || [])[0]?.imageUrl || ''
-            }
-            name={
-                (state.currentPost?.images || [])[0]?.imageName ||
-                (state.currentReply?.images || [])[0]?.imageName || ''
-            }
-            type={'gif'} 
-        />
-    </div>
-)}
+                <div className='feed-post-creator-images-container container-gif'>
+                    <FeedPostCreatorImage
+                        image={
+                            (state.currentPost?.images || [])[0]?.imageURL ||
+                            (state.currentReply?.images || [])[0]?.imageURL || ''
+                        }
+                        name={
+                            (state.currentPost?.images || [])[0]?.imageName ||
+                            (state.currentReply?.images || [])[0]?.imageName || ''
+                        }
+                        type={'gif'}
+                    />
+                </div>
+            )}
 
             {/* Display options section with Tag People and Add Description */}
             <div className='feed-post-creator-images-options'>

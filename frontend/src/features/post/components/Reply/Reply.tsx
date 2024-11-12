@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Post } from '../../../../utils/GlobalInterfaces'
 import pfp from '../../../../assets/Generic-Profile.jpg'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -7,6 +7,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import { convertPostDateToString } from '../../utils/PostUtils';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 import './Reply.css'
+import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 
 interface ReplyProps {
     reply: Post
@@ -16,6 +17,8 @@ export const Reply: React.FC<ReplyProps> = ({ reply }) => {
 
     const overFlowRef = useRef<HTMLDivElement>(null);
     const [overFlowing,setOverFlowing] = useState<boolean>(false);
+    const rpleyImageContainer = useMemo(
+        () => createPostImageContainer(reply.images), [reply.postId]);
 
 
     useEffect(()=>{
@@ -65,6 +68,7 @@ export const Reply: React.FC<ReplyProps> = ({ reply }) => {
                     {/* {covertPostContentToElements(reply.content,"post")} */}
                 </div>
                 {overFlowing && <p className='reply-show-more'>Show More</p>}
+                 {reply.images.length > 0 && rpleyImageContainer}       
             </div>
         </div>
     )
