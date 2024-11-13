@@ -148,9 +148,6 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
         }))
     }
 
-
-
-
     return (
         <>
         {feedPost.post &&
