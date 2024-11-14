@@ -1,14 +1,50 @@
 .post {
   width: 100%;
   height: fit-content;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
   border-top: 1px solid #e1e8ed;
   border-bottom: 1px solid #e1e8ed;
   padding: 0;
   margin: 0;
 }
+
+.post-body-wrapper{
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+}
+
+.post-repost-info{
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  column-gap: 12px;
+  padding: 0px 30px; 
+}
+
+
+.post-repost-user{
+  font-size: 13px;
+  font-weight: 600;
+  color: #657786;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-repost-user:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
 
 .post-left {
   width: 10%;
@@ -17,7 +53,8 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 16px;
+  padding-left: 20px;
+  padding-top: 10px;
 }
 
 .post-pfp {
