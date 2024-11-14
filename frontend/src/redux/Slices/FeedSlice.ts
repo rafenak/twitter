@@ -74,11 +74,12 @@ export const FeedSlice = createSlice({
         builder.addCase(loadFeedPage.fulfilled, (state, action) => {
             state = {
                 ...state,
-                posts: action.payload,
+                posts: [...state.posts,...action.payload],
                 loading: false,
             }
             return state;
         });
+        
         builder.addCase(loadFeedPage.rejected, (state, action) => {
             state = {
                 ...state,

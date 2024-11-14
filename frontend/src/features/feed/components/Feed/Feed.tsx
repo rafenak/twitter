@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Feed.css";
 import { FeedTopBar } from "../FeedTopBar/FeedTopBar";
 import { FeedPostCreator } from "../FeedPostCreator/FeedPostCreator";
@@ -29,19 +29,52 @@ export const Feed: React.FC = () => {
     return now;
   });
 
-  const dispatch: AppDisptach = useDispatch(); 
+  const dispatch: AppDisptach = useDispatch();
+  const hiddenDiv = useRef<HTMLDivElement>(null);
+
+  const feedNextPost = (entries: any) => {
+    entries.forEach((entry: any) => {
+      if (entry.isIntersecting && userState.loggedIn && userState.token) {
+        dispatch(
+          loadFeedPage({
+            token: userState.token,
+            userId: userState.loggedIn.userId,
+            page: currentPageNumber + 1,
+            sessionStart: sessionStart
+          }));
+       
+        console.log('Page Number', (currentPageNumber+1));
+        setCurrentPageNumber(currentPageNumber + 1);
+      }
+    });
+
+   
+    
+  }
 
   useEffect(() => {
     if (userState.loggedIn && userState.token) {
       dispatch(
-        loadFeedPage( {
+        loadFeedPage({
           token: userState.token,
           userId: userState.loggedIn.userId,
-          page:currentPageNumber,
-          sessionStart:sessionStart
+          page: currentPageNumber,
+          sessionStart: sessionStart
         })
       );
     }
+
+    if(hiddenDiv && hiddenDiv.current){
+      const observer = new IntersectionObserver(feedNextPost,{
+          root:null,
+          threshold:1
+      });
+      const target = hiddenDiv.current;
+      observer.observe(target);
+    }
+
+    console.log(feedState.posts.length);
+
   }, [userState.loggedIn && userState.token]);
 
   return (
@@ -52,16 +85,17 @@ export const Feed: React.FC = () => {
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
       {displayScheduleModal && <SchedulePostModal />}
-      {displayCreateReply && <CreateReply /> }
+      {displayCreateReply && <CreateReply />}
 
       <FeedPostCreator />
-      {!feedState.loading && (
+      {feedState.posts.length > 0 && (
         <div className="feed-post">
           {feedState.posts.map((post) => (
             <Post feedPost={post} key={post.post.postId}></Post>
           ))}
         </div>
       )}
+      <div id="autoload" ref={hiddenDiv} hidden={feedState.posts.length === 0}> </div>
     </div>
   );
-};
+}; 
