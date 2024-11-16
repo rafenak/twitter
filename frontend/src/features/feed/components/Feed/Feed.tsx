@@ -19,38 +19,36 @@ export const Feed: React.FC = () => {
   const displayTagPeopleModal = useSelector((state: RootState) => state.modal.displayTagPeople);
   const displayGifModal = useSelector((state: RootState) => state.modal.displayGif);
   const displayScheduleModal = useSelector((state: RootState) => state.modal.displaySchedule);
-  //const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
   const displayCreateReply = useSelector((state: RootState) => state.modal.displayCreateReply);
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  // const [sessionStart,setSessionStart]= useState<Date>(()=> {return new Date()})
-  const [sessionStart, setSessionStart] = useState<Date>(() => {
+  const [sessionStart] = useState<Date>(() => {
     const now = new Date();
-    now.setHours(now.getHours() + 10); // Adds 1 hour to the current time
+    now.setHours(now.getHours() + 10); // Adds 10 hours to the current time
     return now;
   });
 
   const dispatch: AppDisptach = useDispatch();
   const hiddenDiv = useRef<HTMLDivElement>(null);
 
-  const feedNextPost = (entries: any) => {
-    entries.forEach((entry: any) => {
-      if (entry.isIntersecting && userState.loggedIn && userState.token) {
-        dispatch(
-          loadFeedPage({
-            token: userState.token,
-            userId: userState.loggedIn.userId,
-            page: currentPageNumber + 1,
-            sessionStart: sessionStart
-          }));
-       
-        console.log('Page Number', (currentPageNumber+1));
-        setCurrentPageNumber(currentPageNumber + 1);
+  const feedNextPost = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !feedState.loading && userState.loggedIn && userState.token) {
+        setCurrentPageNumber((prevPage) => {
+          const nextPage = prevPage + 1;
+          dispatch(
+            loadFeedPage({
+              token: userState.token,
+              userId: 5,
+              page: nextPage,
+              sessionStart: sessionStart,
+            })
+          );
+          console.log("Page Number", nextPage);
+          return nextPage;
+        });
       }
     });
-
-   
-    
-  }
+  };
 
   useEffect(() => {
     if (userState.loggedIn && userState.token) {
@@ -58,24 +56,27 @@ export const Feed: React.FC = () => {
         loadFeedPage({
           token: userState.token,
           userId: userState.loggedIn.userId,
-          page: currentPageNumber,
-          sessionStart: sessionStart
+          page: 0,
+          sessionStart: sessionStart,
         })
       );
     }
 
-    if(hiddenDiv && hiddenDiv.current){
-      const observer = new IntersectionObserver(feedNextPost,{
-          root:null,
-          threshold:1
-      });
-      const target = hiddenDiv.current;
-      observer.observe(target);
+    const observer = new IntersectionObserver(feedNextPost, {
+      root: null,
+      threshold: 1.0,
+    });
+
+    if (hiddenDiv.current) {
+      observer.observe(hiddenDiv.current);
     }
 
-    console.log(feedState.posts.length);
-
-  }, [userState.loggedIn && userState.token]);
+    return () => {
+      if (hiddenDiv.current) {
+        observer.unobserve(hiddenDiv.current);
+      }
+    };
+  }, [userState.loggedIn, userState.token]);
 
   return (
     <div className="feed">
@@ -95,7 +96,9 @@ export const Feed: React.FC = () => {
           ))}
         </div>
       )}
-      <div id="autoload" ref={hiddenDiv} hidden={feedState.posts.length === 0}> </div>
+      <div id="autoload" ref={hiddenDiv} hidden={feedState.posts.length === 0}>
+        {" "}
+      </div>
     </div>
   );
-}; 
+};

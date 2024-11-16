@@ -71,14 +71,32 @@ export const FeedSlice = createSlice({
             return state;
         });
 
+        // builder.addCase(loadFeedPage.fulfilled, (state, action) => {
+        //     state = {
+        //         ...state,
+        //         posts: [...state.posts,...action.payload],
+        //         loading: false,
+        //     }
+        //     return state;
+        // });
+
+
         builder.addCase(loadFeedPage.fulfilled, (state, action) => {
-            state = {
-                ...state,
-                posts: [...state.posts,...action.payload],
-                loading: false,
-            }
+            const newPosts: FeedPost[] = action.payload;
+            // Create a set of existing postIds from current state
+            const existingPostIds = new Set(state.posts.map(feedPost => feedPost.post.postId));
+            // Filter out posts from newPosts that already exist in the state
+            const uniquePosts = [
+              ...state.posts,
+              ...newPosts.filter(feedPost => feedPost.post.postId && !existingPostIds.has(feedPost.post.postId))
+            ];
+            // Update the state with the unique posts
+            state.posts = uniquePosts;
+            state.loading = false;
+
             return state;
-        });
+          });
+     
         
         builder.addCase(loadFeedPage.rejected, (state, action) => {
             state = {
