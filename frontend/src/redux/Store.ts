@@ -18,8 +18,8 @@ export const store = configureStore({
   },
   middleware : (getDefaultMiddleware) =>  getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions : ['post/updateCurrentPostImages'],
-      ignoredPaths:  ['post.currentPostImages','post.currentReplyImages']
+      ignoredActions : ['post/updateCurrentPostImages','feed/loadFeedPage','feed/setSessionStart'],
+      ignoredPaths:  ['post.currentPostImages','post.currentReplyImages','feed.sessionStart']
     }
   })
 });
