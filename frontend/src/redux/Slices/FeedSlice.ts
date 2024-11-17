@@ -14,6 +14,7 @@ interface FeedSliceState {
 interface LoadFeedPagePayload {
     userId: number;
     token: string;
+    sessionStart: Date;
 }
 
 interface FetchNextPagePayLoad {
@@ -36,15 +37,13 @@ export const loadFeedPage = createAsyncThunk(
     "feed/feedPage",
     async (payload: LoadFeedPagePayload, thuckAPI) => {
         console.log(payload);
-        const currentDate = new Date();
-        const newDate = new Date(currentDate.setHours(currentDate.getHours() + 10));
         try {
             let req = await axios.post(
                 `http://localhost:8000/feed`,
                 {
                     userId: payload.userId,
                     page: 0,
-                    sessionStart: newDate,
+                    sessionStart: payload.sessionStart,
                 },
                 {
                     headers: {
@@ -96,21 +95,22 @@ export const FeedSlice = createSlice({
             return state;
         },
 
-        // setSessionStart(state, action: PayloadAction<Date | undefined>) {
-        //     state = {
-        //         ...state,
-        //         sessionStart: action.payload
-        //     }
-        //     return state;
-        // },
+        setSessionStart(state, action: PayloadAction<Date | undefined>) {
+            state = {
+                ...state,
+                sessionStart: action.payload
+            }
+            return state;
+        },
 
-        // setCurrentPageNumber(state, action: PayloadAction<number>) {
-        //     state = {
-        //         ...state,
-        //         currentPageNumber: action.payload
-        //     }
-        //     return state;
-        // },
+        setCurrentPageNumber(state, action: PayloadAction<number>) {
+            state = {
+                ...state,
+                //currentPageNumber: action.payload
+                currentPageNumber: state.posts.length / 100
+            }
+            return state;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(loadFeedPage.pending, (state, action) => {
@@ -149,7 +149,7 @@ export const FeedSlice = createSlice({
             // Update the state with the unique posts
             state.posts = uniquePosts;
             state.sessionStart = action.payload.sessionStart;
-            state.currentPageNumber = 1;
+            // state.currentPageNumber = 1;
             state.loading = false;
             state.error = false;
 
@@ -157,6 +157,8 @@ export const FeedSlice = createSlice({
         });
 
         builder.addCase(fetchFeedNextPage.fulfilled, (state, action) => {
+            if(state.posts.length > 0 &&  state.posts[0].post.postId === action.payload.posts[0].post.postId) return state;
+
             const newPosts: FeedPost[] = action.payload.posts;
             // Create a set of existing postIds from current state
             const existingPostIds = new Set(state.posts.map((feedPost) => feedPost.post.postId)
@@ -169,7 +171,7 @@ export const FeedSlice = createSlice({
             // Update the state with the unique posts
             state.posts = uniquePosts;
             state.sessionStart = action.payload.sessionStart;
-            state.currentPageNumber = action.payload.page + 1;
+            // state.currentPageNumber = action.payload.page + 1;
             state.loading = false;
             state.error = false;
 
@@ -187,6 +189,7 @@ export const FeedSlice = createSlice({
     },
 });
 
-export const { setCurrentPost } = FeedSlice.actions;
+export const { setCurrentPost,setSessionStart,setCurrentPageNumber } = FeedSlice.actions;
 
 export default FeedSlice.reducer;
+ 

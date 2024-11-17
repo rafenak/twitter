@@ -190,7 +190,15 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                     </div>
                     <div className='post-content'>
                         {post.content}
-                        {/* {covertPostContentToElements(content,"post")} */}
+                        {/* {covertPostContentToElements(post.content,"post").map((element:JSX.Element,index)=>{
+
+                            let elementWithKey = createElement(
+                                element.type,
+                                {...element.props,key:index}
+                            )
+                            return elementWithKey;
+                        })
+                        } */}
                     </div>
                     {feedPost.post.images.length > 0 && postImageContainer}
                     {replyTo && <Reply reply={replyTo} />}
