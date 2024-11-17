@@ -3,6 +3,7 @@ package com.twitter.services;
 import com.twitter.models.AppUser;
 import com.twitter.models.Post;
 import com.twitter.response.FeedPostResponse;
+import com.twitter.response.FetchFeedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class FeedService {
     private final UserService userService;
     private final PostService postService;
 
-    public List<FeedPostResponse> getFeedForUser(Integer id, LocalDateTime sessionStart, Integer page) {
+    public FetchFeedResponse  getFeedForUser(Integer id, LocalDateTime sessionStart, Integer page) {
 
         AppUser currentUser = userService.getUserById(id);
 
@@ -55,7 +56,7 @@ public class FeedService {
 //        allPost.addAll(currentUserPosts);
 //        allPost.addAll(followingPosts);
 
-        return feedPostResponse;
+        return new FetchFeedResponse(page,sessionStart,feedPostResponse);
 
     }
 }

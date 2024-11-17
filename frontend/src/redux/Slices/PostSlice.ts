@@ -2,13 +2,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Poll, PollChoice, Post, PostImage, Reply, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
-import { Rtt } from "@mui/icons-material";
+import { loadFeedPage } from "./FeedSlice";
 
 export interface PostSliceState {
   loading: boolean;
   error: boolean;
   currentPost: Post | undefined;
-  posts: Post[];
   currentPostImages: File[];
   currentReply: Reply | undefined;
   currentReplyImages: File[];
@@ -102,7 +101,14 @@ export const createPost = createAsyncThunk(
           Authorization: `Bearer ${body.token}`,
         },
       });
-      return req.data;
+
+      const data =req.data;
+      // thuckAPI.dispatch(loadFeedPag e({
+      //   token:body.token,
+      //   userId:body.author.userId,
+      // }))
+
+      return data;
     } catch (e) {
       return thuckAPI.rejectWithValue(e);
     }
@@ -280,7 +286,6 @@ const initialState: PostSliceState = {
   loading: false,
   error: false,
   currentPost: undefined,
-  posts: [],
   currentPostImages: [],
   currentReply: undefined,
   currentReplyImages: []
@@ -583,7 +588,7 @@ export const PostSlice = createSlice({
       let post: Post = action.payload;
       state = {
         ...state,
-        posts: [post, ...state.posts],
+        // posts: [post, ...state.posts],
         loading: false,
         error: false,
         currentPost: undefined,
@@ -618,7 +623,7 @@ export const PostSlice = createSlice({
       let post: Post = action.payload;
       state = {
         ...state,
-        posts: [post, ...state.posts],
+        // posts: [post, ...state.posts],
         loading: false,
         error: false,
         currentPost: undefined,

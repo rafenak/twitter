@@ -53,7 +53,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "    )\n" +
             ") AS p \n" +
             "WHERE p.posted_date <= :session_start \n" +
-            "ORDER BY p.posted_date DESC;\n";
+            "ORDER BY p.posted_date DESC\n";
 
 
 //    @Query( "SELECT p from Post p WHERE p.author IN(:authors) and p.postDate <= :sessionStart")
@@ -66,7 +66,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(nativeQuery = true,
             value = FEED_QUERY,
-            countQuery = "SELECT COUNT(1) FROM posts p WHERE p.author_id = :id")
+            countQuery = "SELECT COUNT(1) FROM ("+ FEED_QUERY + ")")
     Page<Post> findFeedPost(@Param("id") Integer userId, @Param("session_start") LocalDateTime sessionStart, Pageable pageable);
 
 
