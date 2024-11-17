@@ -43,7 +43,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     const dispatch: AppDisptach = useDispatch();
     const postImageContainer = useMemo(() => createPostImageContainer(feedPost.post.images), [feedPost.post.postId]);
     const navigate = useNavigate();
-
+    
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
         repost: '#AAB8C2',
@@ -152,7 +152,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
     return (
         <div className='post'>
-            {feedPost.post &&
+            {repost &&
                 <p className='post-repost-info' onMouseOver={()=> {/** Popup a modal with the user information on Mouse Over*/}}>
                     <RepostSVG height={16} width={16} color={"#657786"}/>
                     <span className='post-repost-user' onClick={()=> navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser && feedPost.repostUser.nickname} reposted </span>
@@ -199,36 +199,35 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                             <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={toggleReply}>
                                 <ReplySVG height={20} width={20} color={colors.reply} />
                             </div>
-                            <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.replies?.length || 0)}</p>
+                            { post.replies && post.replies?.length> 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.replies?.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-group'>
                             <div className='post-action-bar-repost-wrapper' id='repost' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createRepost}>
                                 <RepostSVG height={20} width={20} color={colors.repost} />
                             </div>
-                            <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.reposts.length || 0)}</p>
+                            {post.reposts.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.reposts.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-group'>
                             <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createLike}>
                                 <LikeSVG height={20} width={20} color={colors.like} />
                             </div>
-                            <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p>
+                            {post.likes.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p> }
                         </div>
 
                         <div className='post-action-bar-group'>
                             <div className='post-action-bar-blue-wrapper' id='views' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                                 <ViewSVG height={20} width={20} color={colors.views} />
                             </div>
-                            {/* To do number of replied beside it */}
-                            <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.views.length || 0)}</p>
+                            {post.views.length > 0 &&  <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.views.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-right'>
                             <div className='post-action-bar-group'>
                                 <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createBookmark}>
                                     <BookMarkSVG height={20} width={20} color={colors.bookmark} />
-                                    <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p>
+                                   {post.bookmarks.length > 0 &&  <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p> }
                                 </div>
                             </div>
                             <div className='post-action-bar-blue-wrapper' id='share' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
