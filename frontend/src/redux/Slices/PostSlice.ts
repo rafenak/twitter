@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Poll, PollChoice, Post, PostImage, Reply, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
-import { loadFeedPage } from "./FeedSlice";
+import { loadFeedPage, setSessionStart } from "./FeedSlice";
 
 export interface PostSliceState {
   loading: boolean;
@@ -103,10 +103,6 @@ export const createPost = createAsyncThunk(
       });
 
       const data =req.data;
-      // thuckAPI.dispatch(loadFeedPag e({
-      //   token:body.token,
-      //   userId:body.author.userId,
-      // }))
 
       return data;
     } catch (e) {
@@ -134,6 +130,11 @@ export const createReply = createAsyncThunk(
           Authorization: `Bearer ${body.token}`,
         },
       });
+
+      const currentDate = new Date();
+      const newDate = new Date(currentDate.setHours(currentDate.getHours() + 10));
+
+      thuckAPI.dispatch(setSessionStart(newDate))
       return req.data;
     }
     catch (e) {
