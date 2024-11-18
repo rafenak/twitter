@@ -75,7 +75,7 @@ export const Feed: React.FC = () => {
 
   const feedNextPost = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && userState.loggedIn && userState.token && sessionStart) {
+      if (entry.isIntersecting && userState.loggedIn && userState.token) {
         dispatch(setCurrentPageNumber(currentPageNumber + 1))
       }
     });
@@ -102,7 +102,7 @@ export const Feed: React.FC = () => {
 
     const observer = new IntersectionObserver(feedNextPost, {
       root: null,
-      threshold: 1.0,
+      threshold: 0.1,
     });
 
     if (hiddenDiv.current) {
@@ -128,7 +128,7 @@ export const Feed: React.FC = () => {
         })
       );
     }
-  }, [currentPageNumber])
+  }, [currentPageNumber,sessionStart])
 
   return (
     <div className="feed">

@@ -36,7 +36,7 @@ const initialState: FeedSliceState = {
 export const loadFeedPage = createAsyncThunk(
     "feed/feedPage",
     async (payload: LoadFeedPagePayload, thuckAPI) => {
-        console.log(payload);
+        console.log(payload);  
         try {
             let req = await axios.post(
                 `http://localhost:8000/feed`,
@@ -111,6 +111,26 @@ export const FeedSlice = createSlice({
             }
             return state;
         },
+
+        updatePost(state,action: PayloadAction<Post>){
+            let updatedPosts:FeedPost[] = state.posts.map((post)=>{
+                if(action.payload.postId === post.post.postId){
+                    return {
+                        post:action.payload,
+                        replyTo: post.replyTo,
+                        repost:post.repost,
+                        repostUser:post.repostUser
+                    }
+                }
+                return post;
+            })    
+            state ={
+                ...state,
+                posts:updatedPosts
+            }   
+            return state;
+        }
+
     },
     extraReducers: (builder) => {
         builder.addCase(loadFeedPage.pending, (state, action) => {
@@ -146,15 +166,20 @@ export const FeedSlice = createSlice({
                 ...newPosts.filter((feedPost) =>feedPost.post.postId && !existingPostIds.has(feedPost.post.postId)
                 ),
             ];
-            // Update the state with the unique posts
-            state.posts = uniquePosts;
-            state.sessionStart = action.payload.sessionStart;
-            // state.currentPageNumber = 1;
-            state.loading = false;
-            state.error = false;
+            state= {
+                ...state,
+                posts: uniquePosts, // Use immutable update
+                sessionStart: action.payload.sessionStart,
+                loading: false,
+                error: false,
+              };
+
 
             return state;
         });
+
+
+        
 
         builder.addCase(fetchFeedNextPage.fulfilled, (state, action) => {
             if(state.posts.length > 0 &&  state.posts[0].post.postId === action.payload.posts[0].post.postId) return state;
@@ -168,12 +193,14 @@ export const FeedSlice = createSlice({
                 ...state.posts,
                 ...newPosts.filter((feedPost) =>feedPost.post.postId && !existingPostIds.has(feedPost.post.postId))
             ];
-            // Update the state with the unique posts
-            state.posts = uniquePosts;
-            state.sessionStart = action.payload.sessionStart;
-            // state.currentPageNumber = action.payload.page + 1;
-            state.loading = false;
-            state.error = false;
+
+            state= {
+                ...state,
+                posts: uniquePosts, // Use immutable update
+                sessionStart: action.payload.sessionStart,
+                loading: false,
+                error: false,
+              };
 
             return state;
         });
@@ -189,7 +216,7 @@ export const FeedSlice = createSlice({
     },
 });
 
-export const { setCurrentPost,setSessionStart,setCurrentPageNumber } = FeedSlice.actions;
+export const { setCurrentPost,setSessionStart,setCurrentPageNumber,updatePost } = FeedSlice.actions;
 
 export default FeedSlice.reducer;
  
