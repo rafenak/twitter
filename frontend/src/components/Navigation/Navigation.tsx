@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React  from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
@@ -22,13 +22,7 @@ interface NavigationProps{
 
 export const Navigation: React.FC<NavigationProps> = ({currentPage}) => {
 
-  useEffect(()=>{
-
-  }
-,[currentPage])
-
-    const state = useSelector((state:RootState)=>state.user)
-
+  const state = useSelector((state:RootState)=>state.user)
   return (
     <div className="navigation">
       <nav className="navigation-container">

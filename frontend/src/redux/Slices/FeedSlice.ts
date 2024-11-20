@@ -36,7 +36,6 @@ const initialState: FeedSliceState = {
 export const loadFeedPage = createAsyncThunk(
     "feed/feedPage",
     async (payload: LoadFeedPagePayload, thuckAPI) => {
-        console.log(payload);  
         try {
             let req = await axios.post(
                 `http://localhost:8000/feed`,
@@ -61,7 +60,6 @@ export const loadFeedPage = createAsyncThunk(
 export const fetchFeedNextPage = createAsyncThunk(
     "feed/nextPage",
     async (payload: FetchNextPagePayLoad, thuckAPI) => {
-        console.log(payload);
         try {
             let req = await axios.post(
                 `http://localhost:8000/feed`,
@@ -103,7 +101,7 @@ export const FeedSlice = createSlice({
             return state;
         },
 
-        setCurrentPageNumber(state, action: PayloadAction<number>) {
+        setCurrentPageNumber(state /*, action: PayloadAction<number>*/) {
             state = {
                 ...state,
                 //currentPageNumber: action.payload

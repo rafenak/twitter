@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Poll, PollChoice, Post, PostImage, Reply, User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
 import FormData from "form-data";
-import { loadFeedPage, setSessionStart } from "./FeedSlice";
+import { loadFeedPage, setSessionStart, updatePost } from "./FeedSlice";
 
 export interface PostSliceState {
   loading: boolean;
@@ -75,10 +75,10 @@ interface createReplyWithMediaBody {
   replyContent: string;
   images: PostImage[],
   scheduled: boolean;
-  scheduledDate:Date | undefined;
+  scheduledDate: Date | undefined;
   poll: Poll | undefined;
   imagesFiles: File[]
-  token:string;
+  token: string;
 }
 
 export const createPost = createAsyncThunk(
@@ -102,7 +102,7 @@ export const createPost = createAsyncThunk(
         },
       });
 
-      const data =req.data;
+      const data = req.data;
 
       return data;
     } catch (e) {
@@ -220,7 +220,7 @@ export const createReplyWithMedia = createAsyncThunk(
       }
 
       let res = await axios(config)
-      return res.data;      
+      return res.data;
     }
     catch (e) {
       return thuckAPI.rejectWithValue(e);
@@ -238,6 +238,7 @@ export const repostPost = createAsyncThunk(
           "Authorization": `Bearer ${body.token}`,
         },
       });
+
       return req.data;
     }
     catch (e) {
@@ -270,6 +271,24 @@ export const bookmarkPost = createAsyncThunk(
   async (body: PostActionBody, thuckAPI) => {
     try {
       let req = await axios.put(`http://localhost:8000/posts/bookmark/${body.postId}`, {}, {
+        headers: {
+          "Authorization": `Bearer ${body.token}`,
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
+
+export const viewPost = createAsyncThunk(
+  "post/view",
+  async (body: PostActionBody, thuckAPI) => {
+    try {
+      let req = await axios.put(`http://localhost:8000/posts/view/${body.postId}`, {}, {
         headers: {
           "Authorization": `Bearer ${body.token}`,
         },
@@ -318,9 +337,9 @@ export const PostSlice = createSlice({
           images: [],
           scheduled: false,
         },
-      // Clear `currentPost` and `currentPostImages`
-      currentPost: undefined,
-      currentPostImages: []
+        // Clear `currentPost` and `currentPostImages`
+        currentPost: undefined,
+        currentPostImages: []
       }
       return state;
     },
@@ -584,6 +603,15 @@ export const PostSlice = createSlice({
       return state;
     });
 
+    builder.addCase(viewPost.pending, (state, action) => {
+      state = {
+        ...state,
+        loading: true,
+      };
+      return state;
+    });
+
+
 
     builder.addCase(createPost.fulfilled, (state, action) => {
       let post: Post = action.payload;
@@ -610,12 +638,12 @@ export const PostSlice = createSlice({
     });
 
     builder.addCase(createReplyWithMedia.fulfilled, (state, action) => {
-      state={
+      state = {
         ...state,
-        currentReply:undefined,
+        currentReply: undefined,
         loading: false,
         error: false,
-        currentReplyImages:[]
+        currentReplyImages: []
       };
       return state;
     })
@@ -635,16 +663,41 @@ export const PostSlice = createSlice({
 
     builder.addCase(repostPost.fulfilled, (state, action) => {
       //TODO: Setup such that it modified the current feeed page
+      state = {
+        ...state,
+        loading: false,
+        error: false
+      }
       return state;
     });
 
     builder.addCase(likePost.fulfilled, (state, action) => {
       //TODO: Setup such that it modified the current feeed page
+      state = {
+        ...state,
+        loading: false,
+        error: false
+      }
       return state;
     });
 
     builder.addCase(bookmarkPost.fulfilled, (state, action) => {
       //TODO: Setup such that it modified the current feeed page
+      state = {
+        ...state,
+        loading: false,
+        error: false
+      }
+      return state;
+    });
+
+    builder.addCase(viewPost.fulfilled, (state, action) => {
+      //TODO: Setup such that it modified the current feeed page
+      state = {
+        ...state,
+        loading: false,
+        error: false
+      }
       return state;
     });
 
@@ -663,6 +716,16 @@ export const PostSlice = createSlice({
       };
       return state;
     });
+
+    builder.addCase(viewPost.rejected, (state, action) => {
+      state = {
+        ...state,
+        loading: false,
+        error: true,
+      };
+      return state;
+    });
+
   },
 });
 

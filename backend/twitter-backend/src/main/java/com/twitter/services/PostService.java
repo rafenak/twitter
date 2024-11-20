@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -245,7 +246,12 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
 
         Set<AppUser> reposts = post.getReposts();
-        reposts.add(user);
+        if(reposts.contains(user)){
+            reposts = reposts.stream().filter(u-> u.getUserId() != user.getUserId()).collect(Collectors.toSet());
+        }
+        else {
+            reposts.add(user);
+        }
         post.setReposts(reposts);
 
         return  postRepository.save(post);
@@ -258,7 +264,12 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
 
         Set<AppUser> likes = post.getLikes();
-        likes.add(user);
+        if(likes.contains(user)){
+            likes = likes.stream().filter(u-> u.getUserId() != user.getUserId()).collect(Collectors.toSet());
+        }
+        else {
+            likes.add(user);
+        }
         post.setLikes(likes);
 
         return  postRepository.save(post);
@@ -273,8 +284,32 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
 
         Set<AppUser> bookmarks = post.getBookmarks();
-        bookmarks.add(user);
+        if(bookmarks.contains(user)){
+            bookmarks = bookmarks.stream().filter(u-> u.getUserId() != user.getUserId()).collect(Collectors.toSet());
+        }
+        else {
+            bookmarks.add(user);
+        }
         post.setBookmarks(bookmarks);
+
+        return  postRepository.save(post);
+    }
+
+
+    public Post views (Integer postId,String token){
+        String username = tokenService.getUserNameFromToken(token);
+        AppUser user = userService.getUserByName(username);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostDoesNotExistsException::new);
+
+        Set<AppUser> views = post.getViews();
+        if(views.contains(user)){
+            return  post;
+        }
+
+        views.add(user);
+
+        post.setViews(views);
 
         return  postRepository.save(post);
     }

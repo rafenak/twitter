@@ -102,4 +102,9 @@ public class PostController {
     public Post bookmark(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         return postService.bookmark(id,token);
     }
+
+    @PutMapping("/view/{id}")
+    public Post view(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return postService.views(id,token);
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { FeedPost } from '../../../../utils/GlobalInterfaces'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -16,12 +16,13 @@ import './Post.css'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
-import { setCurrentPost } from '../../../../redux/Slices/FeedSlice';
+import { setCurrentPost, updatePost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
 import { Reply } from '../Reply/Reply';
-import { bookmarkPost, likePost, repostPost } from '../../../../redux/Slices/PostSlice';
+import { bookmarkPost, likePost, repostPost, viewPost } from '../../../../redux/Slices/PostSlice';
 import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../../../utils/GlobalInterfaces'
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -40,10 +41,12 @@ interface HoverColors {
 export const Post: React.FC<PostProps> = ({ feedPost }) => {
     const { post, replyTo, repost, repostUser } = feedPost;
     const token = useSelector((state: RootState) => state.user.token)
+    const loggegIn = useSelector((state: RootState) => state.user.loggedIn)
     const dispatch: AppDisptach = useDispatch();
     const postImageContainer = useMemo(() => createPostImageContainer(feedPost.post.images), [feedPost.post.postId]);
     const navigate = useNavigate();
-    
+    const postRef = useRef<HTMLDivElement>(null);
+
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
         repost: '#AAB8C2',
@@ -129,6 +132,24 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     };
 
     const createRepost = () => {
+        let updatedPost = JSON.parse(JSON.stringify(post))
+        if (loggegIn && !post.reposts.some((user) => user.userId === loggegIn.userId)) {
+            let reposts = [...post.reposts, loggegIn]
+            updatedPost = {
+                ...updatedPost,
+                reposts
+            }
+            dispatch(updatePost(updatedPost))
+        }
+        if (loggegIn && post.reposts.some((user) => user.userId === loggegIn.userId)) {
+            let reposts = updatedPost.reposts.filter((user: User) => user.userId !== loggegIn?.userId)
+            updatedPost = {
+                ...updatedPost,
+                reposts
+            }
+            dispatch(updatePost(updatedPost))
+        }
+
         dispatch(repostPost({
             postId: post.postId,
             token: token
@@ -136,6 +157,25 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     }
 
     const createLike = () => {
+        let updatedPost = JSON.parse(JSON.stringify(post))
+        if (loggegIn && !post.likes.some((user) => user.userId === loggegIn.userId)) {
+            let likes = [...post.likes, loggegIn]
+            updatedPost = {
+                ...updatedPost,
+                likes
+            }
+            dispatch(updatePost(updatedPost))
+        }
+        if (loggegIn && post.likes.some((user) => user.userId === loggegIn.userId)) {
+            let likes = updatedPost.likes.filter((user: User) => user.userId !== loggegIn?.userId)
+            updatedPost = {
+                ...updatedPost,
+                likes
+            }
+            dispatch(updatePost(updatedPost))
+        }
+
+
         dispatch(likePost({
             postId: post.postId,
             token: token
@@ -144,23 +184,74 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
 
     const createBookmark = () => {
+
+        let updatedPost = JSON.parse(JSON.stringify(post))
+        if (loggegIn && !post.bookmarks.some((user) => user.userId === loggegIn.userId)) {
+            let bookmarks = [...post.bookmarks, loggegIn]
+            updatedPost = {
+                ...updatedPost,
+                bookmarks
+            }
+            dispatch(updatePost(updatedPost))
+        }
+        if (loggegIn && post.bookmarks.some((user) => user.userId === loggegIn.userId)) {
+            let bookmarks = updatedPost.bookmarks.filter((user: User) => user.userId !== loggegIn?.userId)
+            updatedPost = {
+                ...updatedPost,
+                bookmarks
+            }
+            dispatch(updatePost(updatedPost))
+        }
+
         dispatch(bookmarkPost({
             postId: post.postId,
             token: token
         }))
     }
 
+
+    const createView = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                let updatedPost = JSON.parse(JSON.stringify(post))
+
+                if (loggegIn && !post.views.some((user) => user.userId === loggegIn.userId)) {
+                    let views = [...post.views, loggegIn]
+                    updatedPost = {
+                        ...updatedPost,
+                        views
+                    };
+                    dispatch(updatePost(updatedPost))
+                    dispatch(viewPost({
+                        postId: post.postId,
+                        token: token
+                    }))
+                }
+            }
+        })
+    }
+
+    useEffect(()=>{
+        if(postRef && postRef.current){
+            const observer = new IntersectionObserver(createView, {
+                root: null,
+                threshold: 1,
+              });
+             observer.observe(postRef.current);
+        }
+    },[])
+
     return (
-        <div className='post'>
+        <div className='post' ref={postRef}>
             {repost &&
-                <p className='post-repost-info' onMouseOver={()=> {/** Popup a modal with the user information on Mouse Over*/}}>
-                    <RepostSVG height={16} width={16} color={"#657786"}/>
-                    <span className='post-repost-user' onClick={()=> navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser && feedPost.repostUser.nickname} reposted </span>
+                <p className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
+                    <RepostSVG height={16} width={16} color={"#657786"} />
+                    <span className='post-repost-user' onClick={() => navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser && feedPost.repostUser.nickname} reposted </span>
                 </p>
             }
             <div className='post-body-wrapper'>
                 <div className='post-left'>
-                    <img className="post-pfp" src={post.author.profilePicture ? post.author.profilePicture?. imageURL : pfp} alt={`${post.author.nickname}'s pfp`} />
+                    <img className="post-pfp" src={post.author.profilePicture ? post.author.profilePicture?.imageURL : pfp} alt={`${post.author.nickname}'s pfp`} />
                 </div>
                 <div className='post-right'>
                     <div className='post-right-top'>
@@ -207,7 +298,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                             <div className='post-action-bar-blue-wrapper' id='reply' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={toggleReply}>
                                 <ReplySVG height={20} width={20} color={colors.reply} />
                             </div>
-                            { post.replies && post.replies?.length> 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.replies?.length || 0)}</p>}
+                            {post.replies && post.replies?.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.replies?.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-group'>
@@ -221,21 +312,21 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                             <div className='post-action-bar-like-wrapper' id='like' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createLike}>
                                 <LikeSVG height={20} width={20} color={colors.like} />
                             </div>
-                            {post.likes.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p> }
+                            {post.likes.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.likes.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-group'>
                             <div className='post-action-bar-blue-wrapper' id='views' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
                                 <ViewSVG height={20} width={20} color={colors.views} />
                             </div>
-                            {post.views.length > 0 &&  <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.views.length || 0)}</p>}
+                            {post.views.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.views.length || 0)}</p>}
                         </div>
 
                         <div className='post-action-bar-right'>
                             <div className='post-action-bar-group'>
                                 <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={createBookmark}>
                                     <BookMarkSVG height={20} width={20} color={colors.bookmark} />
-                                   {post.bookmarks.length > 0 &&  <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p> }
+                                    {post.bookmarks.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p>}
                                 </div>
                             </div>
                             <div className='post-action-bar-blue-wrapper' id='share' onMouseOver={updateHoverColors} onMouseLeave={restColors}>
