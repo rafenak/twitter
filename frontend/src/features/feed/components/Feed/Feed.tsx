@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./Feed.css";
 import { FeedTopBar } from "../FeedTopBar/FeedTopBar";
 import { FeedPostCreator } from "../FeedPostCreator/FeedPostCreator";
@@ -75,8 +75,8 @@ export const Feed: React.FC = () => {
 
   const feedNextPost = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && userState.loggedIn && userState.token) {
-        dispatch(setCurrentPageNumber(currentPageNumber + 1))
+      if (entry.isIntersecting && userState.loggedIn && userState.token && sessionStart) {
+        dispatch(setCurrentPageNumber(/*currentPageNumber + 1*/))
       }
     });
   };
@@ -84,7 +84,7 @@ export const Feed: React.FC = () => {
 
   useEffect(() => {
     if (sessionStart === undefined) {
-      const currentDate = new Date();
+      const currentDate = new Date(); 
       const newDate = new Date(currentDate.setHours(currentDate.getHours() + 10));
       dispatch(setSessionStart(newDate))
     }
@@ -102,7 +102,7 @@ export const Feed: React.FC = () => {
 
     const observer = new IntersectionObserver(feedNextPost, {
       root: null,
-      threshold: 0.1,
+      threshold: 1,
     });
 
     if (hiddenDiv.current) {
@@ -118,7 +118,7 @@ export const Feed: React.FC = () => {
 
 
   useEffect(() => {
-    if (currentPageNumber !== 0 && userState.loggedIn && userState.token && sessionStart) {
+    if (currentPageNumber !== 0 && userState.loggedIn && sessionStart) {
       dispatch(
         fetchFeedNextPage({
           token: userState.token,

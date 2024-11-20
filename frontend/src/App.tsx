@@ -1,4 +1,3 @@
-import React from "react";
 import "../src/assets/global.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
