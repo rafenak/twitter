@@ -247,7 +247,8 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
             {repost &&
                 <p className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
                     <RepostSVG height={16} width={16} color={"#657786"} />
-                    <span className='post-repost-user' onClick={() => navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser && feedPost.repostUser.nickname} reposted </span>
+                    {/* <span className='post-repost-user' onClick={() => navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser && feedPost.repostUser.nickname} reposted </span> */}
+                    <PostUsername author={feedPost.repostUser} repost={true} key={feedPost.repostUser.userId}/>
                 </p>
             }
             <div className='post-body-wrapper'>
@@ -258,7 +259,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                     <div className='post-right-top'>
                         <div className='post-user-info'>
                             {/* <p className='post-nickname'>{post.author.nickname}</p> */}
-                            <PostUsername author={post.author}/>
+                            <PostUsername author={post.author} key={post.postId} repost={false}/>
                             {post.author.verifiedAccount && <VerifiedIcon sx={{
                                 color: '#1DA1F2',
                                 height: '20px',

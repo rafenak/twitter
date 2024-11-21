@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../utils/GlobalInterfaces";
 import axios from "axios";
+import { getFollowers, getFollowing } from "../../services/UserService";
 
 interface UserSliceState {
   loggedIn: User | undefined;
@@ -38,27 +39,7 @@ const initialState: UserSliceState = {
   token: "",
 };
 
-async function getFollowers(username: string) {
-  try {
-    const req = await axios.get(
-      `http://localhost:8000/user/followers/${username}`
-    );
-    return req.data;
-  } catch (e) {
-    return [];
-  }
-}
 
-async function getFollowing(username: string) {
-  try {
-    const req = await axios.get(
-      `http://localhost:8000/user/following/${username}`
-    );
-    return req.data;
-  } catch (e) {
-    return [];
-  }
-}
 
 /**
  *  Create a login request
