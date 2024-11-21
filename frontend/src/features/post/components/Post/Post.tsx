@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { FeedPost } from '../../../../utils/GlobalInterfaces'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import pfp from '../../../../assets/Generic-Profile.jpg'
@@ -23,6 +22,7 @@ import { bookmarkPost, likePost, repostPost, viewPost } from '../../../../redux/
 import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../../utils/GlobalInterfaces'
+import { PostMore } from '../PostMore/PostMore';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -272,12 +272,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                             }} />
                             {post.postDate && <p className='post-posted-at'>{convertPostDateToString(post.postDate)}</p>}
                         </div>
-                        <div className='post-more'>
-                            <MoreHorizIcon sx={{
-                                width: "20px",
-                                height: "20px",
-                            }} />
-                        </div>
+                        <PostMore postId={post.postId} postAuthor={post.author} key={post.postId} />
                     </div>
                     <div className='post-content'>
                         {post.content}

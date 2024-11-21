@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../redux/Store'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { getUserByToken, setToken } from '../redux/Slices/UserSlice'
-import { updateDisplayEmojis } from '../redux/Slices/ModalSlice'
+import { updateDisplayEmojis, updateDisplayPostMore } from '../redux/Slices/ModalSlice'
 
 
 export const LayoutPage: React.FC = () => {
   const state = useSelector((state: RootState) => state.user);
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
+  const displayPostMore = useSelector((state: RootState) => state.modal.displayPostMore);
   const dispatch: AppDisptach = useDispatch();
   const [jwt, setJwt] = useLocalStorage("token", "");
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ export const LayoutPage: React.FC = () => {
   const closedOpenedModals = (e: React.MouseEvent) => {
     if (displayEmoji) {
       dispatch(updateDisplayEmojis())
+    }
+    if(displayPostMore){
+      dispatch(updateDisplayPostMore())
     }
   }
 
