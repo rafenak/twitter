@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { FeedPost } from '../../../../utils/GlobalInterfaces'
 import CircleIcon from '@mui/icons-material/Circle';
 
-import pfp from '../../../../assets/Generic-Profile.jpg'
+import pfp from '../../../../assets/Generic-Profile.webp'
 import ReplySVG from '../../../../components/SVGs/ReplySVG';
 import RepostSVG from '../../../../components/SVGs/RepostSVG';
 import LikeSVG from '../../../../components/SVGs/LikeSVG';
@@ -23,6 +23,7 @@ import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../../utils/GlobalInterfaces'
 import { PostMore } from '../PostMore/PostMore';
+import { PostUsername } from '../PostUsername/PostUsername';
 // import { covertPostContentToElements } from '../../../../utils/EmojiUtils';
 
 interface PostProps {
@@ -256,7 +257,8 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                 <div className='post-right'>
                     <div className='post-right-top'>
                         <div className='post-user-info'>
-                            <p className='post-nickname'>{post.author.nickname}</p>
+                            {/* <p className='post-nickname'>{post.author.nickname}</p> */}
+                            <PostUsername author={post.author}/>
                             {post.author.verifiedAccount && <VerifiedIcon sx={{
                                 color: '#1DA1F2',
                                 height: '20px',

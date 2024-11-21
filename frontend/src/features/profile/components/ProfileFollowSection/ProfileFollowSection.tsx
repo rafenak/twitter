@@ -1,7 +1,7 @@
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React, { useState } from 'react'
 import './ProfileFollowSection.css'
-import pfp from '../../../../assets/Generic-Profile.jpg'
+import pfp from '../../../../assets/Generic-Profile.webp'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import { useDispatch, useSelector } from 'react-redux';
 import { followUser } from '../../../../redux/Slices/UserSlice';

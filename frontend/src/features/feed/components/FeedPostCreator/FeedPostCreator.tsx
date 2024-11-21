@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import defaultProfile from "../../../../assets/Generic-Profile.jpg";
+import defaultProfile from "../../../../assets/Generic-Profile.webp";
 import "./FeedPostCreator.css";
 import { FeedPostCreatorProgress } from "../FeedPostCreatorProgress/FeedPostCreatorProgress";
 import { useDispatch, useSelector } from "react-redux";

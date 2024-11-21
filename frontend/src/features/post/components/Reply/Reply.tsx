@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Post } from '../../../../utils/GlobalInterfaces'
-import pfp from '../../../../assets/Generic-Profile.jpg'
+import pfp from '../../../../assets/Generic-Profile.webp'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CircleIcon from '@mui/icons-material/Circle';
 import VerifiedIcon from '@mui/icons-material/Verified';

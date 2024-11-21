@@ -12,7 +12,7 @@ import CommunitieSVG from "../SVGs/CommuniteSVG";
 import VerifiedSVG from "../SVGs/VerifiedSVG";
 import ProfileSVG from "../SVGs/ProfileSVG";
 import MoreSVG from "../SVGs/MoreSVG";
-import defaultProfile from '../../assets/Generic-Profile.jpg'
+import defaultProfile from '../../assets/Generic-Profile.webp'
 import "./Navigation.css";
 
 

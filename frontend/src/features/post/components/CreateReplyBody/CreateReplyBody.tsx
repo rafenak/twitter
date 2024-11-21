@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './CreateReplyBody.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDisptach, RootState } from '../../../../redux/Store'
-import pfp from '../../../../assets/Generic-Profile.jpg'
+import pfp from '../../../../assets/Generic-Profile.webp'
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CircleIcon from '@mui/icons-material/Circle';
 import { convertPostDateToString } from '../../utils/PostUtils';
