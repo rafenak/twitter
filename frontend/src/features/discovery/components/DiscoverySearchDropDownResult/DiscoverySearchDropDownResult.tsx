@@ -2,7 +2,7 @@ import React from 'react'
 import VerifiedSVG from '../../../../components/SVGs/VerifiedSVG'
 import LockSVG from '../../../../components/SVGs/LockSVG'
 
-import DefaultPfp from '../../../../assets/Generic-Profile.jpg'
+import DefaultPfp from '../../../../assets/Generic-Profile.webp'
 import './DiscoverySearchDropDownResult.css'
 import { ImageInfo } from '../../../../utils/GlobalInterfaces'
 
