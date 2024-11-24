@@ -76,7 +76,7 @@ public class UserController {
     public Set<AppUser> followUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody LinkedHashMap<String, String> body) throws FollowException {
         String loggedInUser = tokenService.getUserNameFromToken(token);
         String followedUser = body.get("followedUser");
-        return userService.followingUser(loggedInUser, followedUser);
+        return userService.followUser(loggedInUser, followedUser);
     }
 
     @GetMapping("/following/{username}")

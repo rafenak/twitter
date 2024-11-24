@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import { followUser } from '../../../../redux/Slices/UserSlice';
 import { checkFollowing } from '../../../../services/UserService';
+import { PostProfilePopupIcons } from '../PostProfilePopupIcons/PostProfilePopupIcons';
 
 interface PostProfilePopupProps {
     author: User,
@@ -49,7 +50,7 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
             content += `and ${followedBy.length - 3} other you follow.`
         }
         else {
-            content = content.slice(0, 2) + ".";
+            content += content.slice(0, 2) + ".";
         }
         return content;
     }
@@ -102,7 +103,9 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
             {
                 followedBy.length > 0 &&
             <div className='post-profile-followed-by-container'>
-                <div className='post-profile-followed-by-pfps'>{/*how to stack up to three pfps*/}</div>
+                <div className='post-profile-followed-by-pfps'>
+                    <PostProfilePopupIcons followedBy={followedBy.slice(0,3)} key={loggedIn?.userId}/>
+                </div>
                 <p className='post-profile-followed-by-users'>{mapFollowedByContent()}</p>
             </div>
             }

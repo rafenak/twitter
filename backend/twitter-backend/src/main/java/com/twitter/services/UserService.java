@@ -294,7 +294,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public Set<AppUser> followingUser(String user, String followee) throws FollowException {
+    public Set<AppUser> followUser(String user, String followee) throws FollowException {
 
         if (user.equals(followee)) throw new FollowException();
 
@@ -304,12 +304,21 @@ public class UserService implements UserDetailsService {
         AppUser followedUser = userRepository.findByUsername(followee).orElseThrow(UserDoesNotExistException::new);
         Set<AppUser> followersList = followedUser.getFollowers();
 
+        if(followersList.contains(followedUser)){
+            followersList.remove(followedUser);
+        }
+        else{
+            followingList.add(followedUser);
+        }
         //Add the followed use to following list
-        followingList.add(followedUser);
         loggedInUser.setFollowing(followingList);
 
         //Add the current user into follower list of the followee
-        followersList.add(loggedInUser);
+        if(followersList.contains(loggedInUser)){
+            followersList.remove(loggedInUser);
+        }else{
+            followersList.add(loggedInUser);
+        }
         followedUser.setFollowers(followersList);
 
         //update both  users
