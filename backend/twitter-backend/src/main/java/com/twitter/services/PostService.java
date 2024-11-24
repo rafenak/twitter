@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -317,6 +314,56 @@ public class PostService {
             return post;
         }
     }
+
+    public  List<Post> viewPosts(List<Integer> postIds,String token){
+        String username = tokenService.getUserNameFromToken(token);
+        AppUser user = userService.getUserByName(username);
+
+        List<Post> posts    = postRepository.findByPostIdIn(postIds).orElse(new ArrayList<>());
+
+        List<Post> postToUpdate = posts.stream()
+                .filter(post -> !post.getViews().contains(user))
+                .map(post -> {
+            Set<AppUser> views = post.getViews();
+            views.add(user);
+            post.setViews(views);
+            return post;
+        }).toList();
+
+        List<Post> updatedPosts = postRepository.saveAll(postToUpdate);
+
+        posts.removeAll(updatedPosts);
+        posts.addAll(updatedPosts);
+
+        Collections.sort(posts);
+
+        return posts;
+
+    }
+
+//    public List<Post> viewPosts(List<Integer> postIds, String token) {
+//        String username = tokenService.getUserNameFromToken(token);
+//        AppUser user = userService.getUserByName(username);
+//
+//        // Fetch posts by IDs
+//        List<Post> posts = postRepository.findByPostIdIn(postIds).orElse(Collections.emptyList());
+//
+//        // Update views for posts that don't already include the user
+//        List<Post> postsToUpdate = posts.stream()
+//                .filter(post -> !post.getViews().contains(user))
+//                .peek(post -> post.getViews().add(user))
+//                .collect(Collectors.toList());
+//
+//        // Save updated posts and return sorted results
+//        if (!postsToUpdate.isEmpty()) {
+//            postRepository.saveAll(postsToUpdate);
+//        }
+//
+//        return posts.stream()
+//                .sorted()
+//                .collect(Collectors.toList());
+//    }
+
 
 
 }

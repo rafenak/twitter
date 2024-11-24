@@ -30,11 +30,16 @@ insert into followers values (5,1) ,(5,2), (5,3) ,(5,6) , (5,7);
 insert into following values (1,3) ,(2,3), (3,3), (6,3), (7,3);
 insert into followers values (3,1) ,(3,2), (3,3) ,(3,6) , (3,7);
 
-insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled,
-scheduled_date, author_id, poll_id)
-values (0, 'Hi Im bird person', '2024-11-24 06:00:57', null, 0, null, false, null, 2, null);
+--insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled,
+--scheduled_date, author_id, poll_id)
+--values (0, 'Hi Im bird person', '2024-11-24 06:00:57', null, 0, null, false, null, 2, null);
+--
+--insert into post_repost values(1,3);
 
-insert into post_repost values(1,3);
+
+
+
+
 
 
 insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled, scheduled_date, author_id, poll_id) values (0, 'Fusce consequat. Nulla nisl.', '2024-04-13 14:00:57', null, 0, null, false, null, 2, null);
@@ -1037,3 +1042,5 @@ insert into posts (audience, content, posted_date, is_reply, reply_restriction, 
 insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled, scheduled_date, author_id, poll_id) values (0, 'Morbi vel lectus in quam fringilla rhoncus. Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.', '2024-07-25 06:10:39', null, 0, null, false, null, 4, null);
 insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled, scheduled_date, author_id, poll_id) values (0, 'Integer tincidunt ante vel ipsum.', '2024-02-19 05:40:14', null, 0, null, false, null, 3, null);
 insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled, scheduled_date, author_id, poll_id) values (0, 'Aliquam non mauris. Morbi non lectus.', '2024-01-16 19:38:42', null, 0, null, false, null, 3, null);
+
+

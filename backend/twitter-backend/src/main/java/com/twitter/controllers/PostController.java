@@ -7,6 +7,7 @@ import com.twitter.models.AppUser;
 import com.twitter.models.Post;
 import com.twitter.request.CreatePostRequest;
 import com.twitter.request.CreateReplyRequest;
+import com.twitter.request.CreateViewRequest;
 import com.twitter.services.PostService;
 import com.twitter.services.UserService;
 import jakarta.mail.Multipart;
@@ -106,5 +107,10 @@ public class PostController {
     @PutMapping("/view/{id}")
     public Post view(@PathVariable("id") int id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
         return postService.views(id,token);
+    }
+
+    @PutMapping("/view/all")
+    public List<Post> viewPostById(@RequestBody CreateViewRequest views, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        return postService.viewPosts(views.getIds(),token);
     }
 }

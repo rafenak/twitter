@@ -11,6 +11,7 @@ export interface PostSliceState {
   currentPostImages: File[];
   currentReply: Reply | undefined;
   currentReplyImages: File[];
+  batchedViews: number[]
 }
 
 interface UpdatePostPayload {
@@ -79,6 +80,11 @@ interface createReplyWithMediaBody {
   poll: Poll | undefined;
   imagesFiles: File[]
   token: string;
+}
+
+interface BathedViewsBody{
+  ids: number[],
+  token: string
 }
 
 export const createPost = createAsyncThunk(
@@ -301,6 +307,28 @@ export const viewPost = createAsyncThunk(
   }
 )
 
+export const sendBatchViews = createAsyncThunk(
+  "post/batchedviews",
+  async (body: BathedViewsBody, thuckAPI) => {
+    try {
+
+      let ids={
+        ids: body.ids
+      }
+      let req = await axios.put(`http://localhost:8000/posts/view/all`, ids, {
+        headers: {
+          "Authorization": `Bearer ${body.token}`,
+        },
+      });
+      return req.data;
+    }
+    catch (e) {
+      return thuckAPI.rejectWithValue(e);
+    }
+  }
+)
+
+
 
 const initialState: PostSliceState = {
   loading: false,
@@ -308,7 +336,8 @@ const initialState: PostSliceState = {
   currentPost: undefined,
   currentPostImages: [],
   currentReply: undefined,
-  currentReplyImages: []
+  currentReplyImages: [],
+  batchedViews:[]
 };
 
 export const PostSlice = createSlice({
@@ -583,6 +612,18 @@ export const PostSlice = createSlice({
       }
       return state;
     }
+    ,
+
+    batchPostView(state,action:PayloadAction<number>){
+      if(state.batchedViews.includes(action.payload)) return state;
+
+      state ={
+        ...state,
+        batchedViews: [action.payload, ...state.batchedViews]
+      }
+
+      return state;
+    }
 
 
   },
@@ -701,6 +742,19 @@ export const PostSlice = createSlice({
       return state;
     });
 
+    builder.addCase(sendBatchViews.fulfilled, (state, action) => {
+      //TODO: Setup such that it modified the current feeed page
+      state = {
+        ...state,
+        batchedViews:[],
+        loading: false,
+        error: false
+      }
+      return state;
+    });
+
+
+    
     builder.addCase(createPost.rejected, (state, action) => {
       state = {
         ...state,
@@ -731,6 +785,6 @@ export const PostSlice = createSlice({
 
 export const { initializeCurrentPost, updateCurrentPost, updateCurrentPostImages,
   createPoll, updatePoll, removePoll, setPollData,
-  setScheduleData, initializeCurrentReply } = PostSlice.actions;
+  setScheduleData, initializeCurrentReply, batchPostView } = PostSlice.actions;
 
 export default PostSlice.reducer;

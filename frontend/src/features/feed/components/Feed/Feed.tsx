@@ -11,6 +11,8 @@ import { FeedPostCreatorTagPeopleModal } from "../FeedPostCreatorTagPeopleModal/
 import { FeedPosterGifCreatorModal } from "../FeedPostGifCreatorModal/FeedPostGifCreatorModal";
 import { SchedulePostModal } from "../../../schedulepost/components/SchedulePostModal/SchedulePostModal";
 import { CreateReply } from "../../../post/components/CreateReply/CreateReply";
+import { sendBatchViews } from "../../../../redux/Slices/PostSlice";
+import { CircularProgress } from "@mui/material";
 
 export const Feed: React.FC = () => {
   const userState = useSelector((state: RootState) => state.user);
@@ -32,7 +34,7 @@ export const Feed: React.FC = () => {
   //   return now;
   // });
 
-  
+
 
   /* This is old method 
   const feedNextPost = (entries: IntersectionObserverEntry[]) => {
@@ -81,10 +83,20 @@ export const Feed: React.FC = () => {
     });
   };
 
+  const initBeforeUnload = () => {
+    window.onbeforeunload = (event: Event) => {
+      if (!userState.token || !postState.batchedViews.length) return;
+      dispatch(sendBatchViews({
+        ids: postState.batchedViews,
+        token: userState.token,
+      }))
+    }
+  }
+
 
   useEffect(() => {
     if (sessionStart === undefined) {
-      const currentDate = new Date(); 
+      const currentDate = new Date();
       const newDate = new Date(currentDate.setHours(currentDate.getHours() + 10));
       dispatch(setSessionStart(newDate))
     }
@@ -119,6 +131,12 @@ export const Feed: React.FC = () => {
 
   useEffect(() => {
     if (currentPageNumber !== 0 && userState.loggedIn && sessionStart) {
+
+      dispatch(sendBatchViews({
+        ids: postState.batchedViews,
+        token: userState.token,
+      }))
+
       dispatch(
         fetchFeedNextPage({
           token: userState.token,
@@ -128,12 +146,24 @@ export const Feed: React.FC = () => {
         })
       );
     }
-  }, [currentPageNumber,sessionStart])
+  }, [currentPageNumber, sessionStart])
+
+  useEffect(() => {
+
+    initBeforeUnload();
+
+    return () => {
+      dispatch(sendBatchViews({
+        ids: postState.batchedViews,
+        token: userState.token,
+      }))
+    }
+  }, [])
 
   return (
     <div className="feed">
       <FeedTopBar />
-      
+
       {displayEditImageModal && <FeedPostCreatorImageEditImageModal />}
       {displayTagPeopleModal && <FeedPostCreatorTagPeopleModal />}
       {displayGifModal && <FeedPosterGifCreatorModal />}
@@ -149,7 +179,7 @@ export const Feed: React.FC = () => {
         </div>
       )}
       <div id="autoload" ref={hiddenDiv} hidden={feedState.posts.length === 0}>
-        {" "}
+        <CircularProgress sx={{color: "#1DA1F2"}} size={20} />
       </div>
     </div>
   );
