@@ -18,7 +18,7 @@ import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice';
 import { setCurrentPost, updatePost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
 import { Reply } from '../Reply/Reply';
-import { bookmarkPost, likePost, repostPost, viewPost } from '../../../../redux/Slices/PostSlice';
+import { batchPostView, bookmarkPost, likePost, repostPost, viewPost } from '../../../../redux/Slices/PostSlice';
 import { createPostImageContainer } from '../../../feed/utils/FeedUtils';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../../utils/GlobalInterfaces'
@@ -213,87 +213,47 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     }
 
 
-    // const createView = (entries: IntersectionObserverEntry[]) => {
-    //     entries.forEach((entry) => {
-    //         if (entry.isIntersecting) {
-    //             let updatedPost = JSON.parse(JSON.stringify(post))
-
-    //             if (loggegIn && !post.views.some((user) => user.userId === loggegIn.userId)) {
-    //                 let views = [...post.views, loggegIn]
-    //                 updatedPost = {
-    //                     ...updatedPost,
-    //                     views
-    //                 };
-    //                 dispatch(updatePost(updatedPost))
-    //                 dispatch(viewPost({
-    //                     postId: post.postId,
-    //                     token: token
-    //                 }))
-    //             }
-    //         }
-    //     })
-    // }
-
-    
-    const createView = (entries:IntersectionObserverEntry[]) => {
+    const createView = (entries: IntersectionObserverEntry[]) => {
         entries.forEach((entry) => {
-            if (entry.isIntersecting && !observedPosts.has(post.postId)) {
-                // Add the postId to the observed set
-                setObservedPosts((prev) => new Set(Array.from(prev).concat(post.postId)));
-
-                let updatedPost = JSON.parse(JSON.stringify(post));
+            if (entry.isIntersecting) {
+                let updatedPost = JSON.parse(JSON.stringify(post))
 
                 if (loggegIn && !post.views.some((user) => user.userId === loggegIn.userId)) {
-                    const views = [...post.views, loggegIn];
+                    let views = [...post.views, loggegIn]
                     updatedPost = {
                         ...updatedPost,
-                        views,
+                        views
                     };
-
-                    // Dispatch Redux actions
-                    dispatch(updatePost(updatedPost));
-                    dispatch(
-                        viewPost({
-                            postId: post.postId,
-                            token: token,
-                        })
-                    );
+                    dispatch(updatePost(updatedPost))
+                    // dispatch(viewPost({
+                    //     postId: post.postId,
+                    //     token: token
+                    // }))
+                    dispatch(batchPostView(post.postId))
                 }
             }
-        });
-    };
-    // useEffect(()=>{
-    //     if(postRef && postRef.current){
-    //         const observer = new IntersectionObserver(createView, {
-    //             root: null,
-    //             threshold: 1,
-    //           });
-    //          observer.observe(postRef.current);
-    //     }
-    // },[])
+        })
+    }
 
-
-    useEffect(() => {
-        if (postRef && postRef.current) {
+    useEffect(()=>{
+        if(postRef && postRef.current){
             const observer = new IntersectionObserver(createView, {
                 root: null,
                 threshold: 1,
-            });
-            observer.observe(postRef.current);
-
-            // Cleanup the observer on component unmount
-            return () => observer.disconnect();
+              });
+             observer.observe(postRef.current);
         }
-    }, [post, observedPosts]);
+    },[])
+
    
     return (
         <div className='post' ref={postRef}>
             {repost &&
-                <p className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
+                <div className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
                     <RepostSVG height={16} width={16} color={"#657786"} />
                     {/* <span className='post-repost-user' onClick={() => navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser.nickname} reposted </span> */}
                     <PostUsername author={feedPost.repostUser} repost={true} key={feedPost.repostUser.userId}/>
-                </p>
+                </div>
             }
             <div className='post-body-wrapper'> 
                 <div className='post-left'>

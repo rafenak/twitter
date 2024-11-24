@@ -85,4 +85,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p.replyTo FROM Post p WHERE p.id = :postId")
     Optional<Post> findReplyToByPostId(@Param("postId") Long postId);
 
+    Optional<List<Post>> findByPostIdIn(List<Integer> postIds);
+
 }

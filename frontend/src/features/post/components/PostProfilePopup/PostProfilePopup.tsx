@@ -104,7 +104,7 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
                 followedBy.length > 0 &&
             <div className='post-profile-followed-by-container'>
                 <div className='post-profile-followed-by-pfps'>
-                    <PostProfilePopupIcons followedBy={followedBy.slice(0,3)} key={loggedIn?.userId}/>
+                    <PostProfilePopupIcons followedBy={followedBy.slice(0,3)} key={`${author.userId}-${author.nickname}` }/>
                 </div>
                 <p className='post-profile-followed-by-users'>{mapFollowedByContent()}</p>
             </div>
