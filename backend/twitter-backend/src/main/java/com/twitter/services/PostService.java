@@ -33,6 +33,7 @@ public class PostService {
     private final PollService pollService;
     private final TokenService tokenService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     public Post createPost(CreatePostRequest request) {
 
@@ -88,7 +89,9 @@ public class PostService {
         p.setPoll(savedPoll);
 
         try {
-            return postRepository.save(p);
+            Post posted = postRepository.save(p);
+            notificationService.createAndSendPostNotification(posted);
+            return posted;
         } catch (Exception e) {
             throw new UnableToCreatePostException();
         }

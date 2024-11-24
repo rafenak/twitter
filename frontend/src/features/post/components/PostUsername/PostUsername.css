@@ -30,3 +30,17 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+.post-repost-user{
+    font-size: 13px;
+    font-weight: 600;
+    color: #657786;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .post-repost-user:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
