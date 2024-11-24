@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { User } from "../../../../utils/GlobalInterfaces";
 import NotInterestedSVG from "../../../../components/SVGs/NotInterestedSVG";
 import SubscribeSVG from "../../../../components/SVGs/SubscribeSVG";
@@ -11,6 +11,7 @@ import ViewSVG from "../../../../components/SVGs/ViewSVG";
 import EmbedVG from "../../../../components/SVGs/EmbedSVG";
 import ReportSVG from "../../../../components/SVGs/ReportSVG";
 import './PostMoreModal.css'
+import { checkFollowing } from "../../../../services/UserService";
 
 interface PostMoreModalProps {
   author: User;
@@ -21,9 +22,10 @@ export const PostMoreModal: React.FC<PostMoreModalProps> = ({
   author,
   followingList,
 }) => {
-  const following = () => {
-    return followingList.some((user) => user.userId === author.userId);
-  };
+
+  const [following,setFollowing] = useState<boolean>(()=> {
+    return checkFollowing(followingList,author);
+  });
 
   return (
     <div className="post-more-modal">
@@ -42,11 +44,11 @@ export const PostMoreModal: React.FC<PostMoreModalProps> = ({
         </div>
       )}
       <div className="post-more-modal-option">
-      {following() ? <UnfollowSVG height={18} width={18}/> : <FollowSVG height={18} width={18}/>}
+      {following ? <UnfollowSVG height={18} width={18}/> : <FollowSVG height={18} width={18}/>}
         <p className="post-more-modal-option-text">
-          {following() ? "Unfollow" : "Follow"}  @{author.username}
+          {following ? "Unfollow" : "Follow"}  @{author.username}
         </p>
-      </div>
+      </div> 
       <div className="post-more-modal-option">
         <ListAddRemoveSVG height={18} width={18}/>
         <p className="post-more-modal-option-text">

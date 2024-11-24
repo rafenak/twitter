@@ -310,8 +310,12 @@ public class PostService {
         views.add(user);
 
         post.setViews(views);
-
-        return  postRepository.save(post);
+        try{
+            return  postRepository.save(post);
+        }
+        catch (Exception e){
+            return post;
+        }
     }
 
 

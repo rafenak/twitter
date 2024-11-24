@@ -12,11 +12,29 @@ insert into users(first_name,last_name,email,username,password,bio,nickname,veri
 values ('Rafe','Nakhuda','rafe@test.com','rafen','$2a$10$BCUOcPxHx.2xqAGe1qd08uujzI2jk25cDYjslFzC37MXbVTmmjj7u',
 'Software Engineer','Rafe Nakhuda',true,false,'9876543210');
 
-insert into user_role(role_id,user_id) values (1,1) ,(1,2), (1,3), (1,4),(1,5 );
+insert into users(first_name,last_name,email,username,password,bio,nickname,verified_account,private_account,phone)
+values ('Jerry','Smith','Jerry@test.com','JerrySmith','$2a$10$BCUOcPxHx.2xqAGe1qd08uujzI2jk25cDYjslFzC37MXbVTmmjj7u',
+'Software Engineer','Jerry Smith',true,false,'9876543210');
+
+insert into users(first_name,last_name,email,username,password,bio,nickname,verified_account,private_account,phone)
+values ('Beth','Smith','Beth@test.com','BethSmith','$2a$10$BCUOcPxHx.2xqAGe1qd08uujzI2jk25cDYjslFzC37MXbVTmmjj7u',
+'Software Engineer','Beth Smith',true,false,'9876543210');
 
 
-insert into following values (1,5) ,(2,5), (3,5);
-insert into followers values (5,1) ,(5,2), (5,3);
+insert into user_role(role_id,user_id) values (1,1) ,(1,2), (1,3), (1,4),(1,5 ), (1,6 ),(1,7 );
+
+
+insert into following values (1,5) ,(2,5), (3,5), (6,5), (7,5);
+insert into followers values (5,1) ,(5,2), (5,3) ,(5,6) , (5,7);
+
+insert into following values (1,3) ,(2,3), (3,3), (6,3), (7,3);
+insert into followers values (3,1) ,(3,2), (3,3) ,(3,6) , (3,7);
+
+insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled,
+scheduled_date, author_id, poll_id)
+values (0, 'Hi Im bird person', '2024-11-24 06:00:57', null, 0, null, false, null, 2, null);
+
+insert into post_repost values(1,3);
 
 
 insert into posts (audience, content, posted_date, is_reply, reply_restriction, reply_to, scheduled, scheduled_date, author_id, poll_id) values (0, 'Fusce consequat. Nulla nisl.', '2024-04-13 14:00:57', null, 0, null, false, null, 2, null);
