@@ -67,12 +67,14 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(header -> header.frameOptions(frame -> frame.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/user/followers/**").permitAll()
                         .requestMatchers("/user/following/**").permitAll()
                         .requestMatchers("/posts/id/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
