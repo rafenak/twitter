@@ -294,6 +294,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
     public Set<AppUser> followUser(String user, String followee) throws FollowException {
 
         if (user.equals(followee)) throw new FollowException();

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,21 +24,25 @@ public class NotificationService {
 
     public void createAndSendPostNotification(Post post) {
         AppUser author = userService.getUserById(post.getAuthor().getUserId());
+        System.out.println(author.getUsername());
         Set<AppUser> followers = userService.retrieveFollowersList(author.getUsername());
+        System.out.println(followers);
 
-        List<Notification> notifications =
-                followers.stream()
-                        .map(follower -> {
-                            Notification notification = new Notification();
-                            notification.setNotificationType(NotificationType.NEW_POST);
-                            notification.setNotificationTimeStamp(LocalDateTime.now());
-                            notification.setAcknowledged(true);
-                            notification.setRecipient(follower);
-                            notification.setActionUser(author);
-                            notification.setPost(post);
+        List<Notification> notifications = followers.stream()
+                .map(follower -> {
+                    Notification notification = new Notification();
+                    notification.setNotificationType(NotificationType.NEW_POST);
+                    notification.setNotificationTimeStamp(LocalDateTime.now());
+                    notification.setAcknowledged(true);
+                    notification.setRecipient(follower);
+                    notification.setActionUser(author);
+                    notification.setPost(post);
 
-                            return notification;
-                        }).toList();
+                    return notification;
+                })
+                .collect(Collectors.toList());
+
+        System.out.println(notifications);
 
         notificationRepository.saveAll(notifications);
 
