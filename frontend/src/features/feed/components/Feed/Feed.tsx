@@ -179,7 +179,7 @@ export const Feed: React.FC = () => {
         </div>
       )}
       <div id="autoload" ref={hiddenDiv} hidden={feedState.posts.length === 0}>
-        <CircularProgress sx={{color: "#1DA1F2"}} size={20} />
+        {feedState.posts.length === 100 &&<CircularProgress sx={{color: "#1DA1F2"}} size={20} /> }
       </div>
     </div>
   );
