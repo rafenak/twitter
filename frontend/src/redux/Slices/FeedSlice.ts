@@ -160,9 +160,9 @@ export const FeedSlice = createSlice({
             );
             // Filter out posts from newPosts that already exist in the state
             const uniquePosts = [
-                ...state.posts,
                 ...newPosts.filter((feedPost) =>feedPost.post.postId && !existingPostIds.has(feedPost.post.postId)
                 ),
+                ...state.posts
             ];
             state= {
                 ...state,
@@ -188,8 +188,8 @@ export const FeedSlice = createSlice({
             );
             // Filter out posts from newPosts that already exist in the state
             const uniquePosts = [
-                ...state.posts,
-                ...newPosts.filter((feedPost) =>feedPost.post.postId && !existingPostIds.has(feedPost.post.postId))
+                ...newPosts.filter((feedPost) =>feedPost.post.postId && !existingPostIds.has(feedPost.post.postId)),
+                ...state.posts
             ];
 
             state= {
