@@ -24,9 +24,7 @@ public class NotificationService {
 
     public void createAndSendPostNotification(Post post) {
         AppUser author = userService.getUserById(post.getAuthor().getUserId());
-        System.out.println(author.getUsername());
         Set<AppUser> followers = userService.retrieveFollowersList(author.getUsername());
-        System.out.println(followers);
 
         List<Notification> notifications = followers.stream()
                 .map(follower -> {
@@ -41,8 +39,6 @@ public class NotificationService {
                     return notification;
                 })
                 .collect(Collectors.toList());
-
-        System.out.println(notifications);
 
         notificationRepository.saveAll(notifications);
 

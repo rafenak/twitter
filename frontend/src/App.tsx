@@ -41,46 +41,35 @@ export const App = () => {
 
   function connect() {
     if (user) {
-      const socket = new SockJS("http://localhost:8000/ws");
-      stompClient = over(socket);
+        const socket = new SockJS("http://localhost:8000/ws");
+        stompClient = over(socket);
 
-      stompClient.connect({}, onConnected, onError);
+        stompClient.connect({}, onConnected, onError);
     }
-  }
+}
 
-  function onConnected() {
-    console.log("WebSocket connected");
-    setConnected(true);
-  
-    if (stompClient) {
+function onConnected() {
+  console.log("WebSocket connected");
+  setConnected(true);
+
+  if (stompClient) {
       const subscription = `/user/${user?.username}/notifications`;
       console.log(`Subscribing to: ${subscription}`);
-      
+
       stompClient.subscribe(subscription, (message) => {
-        try {
-          // Parse the message body (assuming JSON format)
-          const payload = JSON.parse(message.body);
-          console.log("Message received:", payload);
-          onMessageRecieved(payload);
-        } catch (error) {
-          console.error("Error parsing WebSocket message:", error);
-        }
+          try {
+              const payload = JSON.parse(message.body);
+              console.log("Message received:", payload);
+              onMessageRecieved(payload);
+          } catch (error) {
+              console.error("Error parsing WebSocket message:", error);
+          }
       });
-    } else {
+  } else {
       console.error("stompClient is not initialized");
-    }
   }
-  
-  function onError(error: any) {
-    console.error("WebSocket connection error:", error);
-    setConnected(false);
-  }
-  
-  function onMessageRecieved(payload: any) {
-    // Handle the payload
-    console.log("Processing message:", payload);
-  }
-  
+}
+
 
   // function onConnected() {
   //   setConnected(true);
@@ -94,32 +83,20 @@ export const App = () => {
 
  
 
-  // function onError() {
-  //   setConnected(false);
-  // }
+  function onError() {
+    setConnected(false);
+  }
 
-  // function onMessageRecieved(payload: any) {
-  //   console.log(payload);
-  // }
-
-  // useEffect(() => {
-  //   if (user && !connected) {
-  //     connect();
-  //   }
-  // }, [user]);
+  function onMessageRecieved(payload: any) {
+    console.log(payload);
+  }
 
   useEffect(() => {
     if (user && !connected) {
       connect();
     }
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect(() => {
-          console.log('WebSocket disconnected');
-        });
-      }
-    };
-  }, [user, connected]);
+  }, [user]);
+
   
 
   return (

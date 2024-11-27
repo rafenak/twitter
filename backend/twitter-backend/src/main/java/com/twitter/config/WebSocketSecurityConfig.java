@@ -1,21 +1,30 @@
 package com.twitter.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
-import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
-import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 
 @Configuration
-@EnableWebSocketSecurity
-public class WebSocketSecurityConfig {
+public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
-    @Bean
-    AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
-        messages
-                .simpDestMatchers("/ws").permitAll().anyMessage().permitAll();
+//    @Bean
+//    AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
+//        messages
+//                .simpDestMatchers("/ws/**").permitAll().anyMessage().permitAll();
+//
+//        return messages.build();
+//    }
 
-        return messages.build();
+    @Override
+    protected void configureInbound(final MessageSecurityMetadataSourceRegistry messages) {
+        // You can customize your authorization mapping here.
+        messages.simpDestMatchers("/ws").permitAll().anyMessage().permitAll();
+    }
+
+    @Override
+    protected boolean sameOriginDisabled() {
+        return true;
     }
 }
+
