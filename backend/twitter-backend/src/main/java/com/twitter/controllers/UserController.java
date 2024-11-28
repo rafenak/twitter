@@ -6,6 +6,7 @@ import com.twitter.exceptions.UnableToResolvePhotoException;
 import com.twitter.exceptions.UnableToSavePhotoException;
 import com.twitter.models.AppUser;
 import com.twitter.services.ImageService;
+import com.twitter.services.NotificationService;
 import com.twitter.services.TokenService;
 import com.twitter.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final TokenService tokenService;
     private final ImageService imageService;
+    private final NotificationService notificationService;
 
     @GetMapping("/{username}")
     public AppUser getUserByUserName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String username) {
@@ -76,7 +78,17 @@ public class UserController {
     public Set<AppUser> followUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody LinkedHashMap<String, String> body) throws FollowException {
         String loggedInUser = tokenService.getUserNameFromToken(token);
         String followedUser = body.get("followedUser");
-        return userService.followUser(loggedInUser, followedUser);
+
+       AppUser user= userService.followUser(loggedInUser, followedUser);
+       AppUser followed = user
+               .getFollowing()
+               .stream()
+               .filter(u-> u.getUsername().equals(followedUser))
+               .findAny().orElse(null);
+
+       notificationService.createAndSendFollowNotification(followed,user);
+
+        return user.getFollowing();
     }
 
     @GetMapping("/following/{username}")

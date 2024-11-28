@@ -48,38 +48,15 @@ export const App = () => {
     }
 }
 
-function onConnected() {
-  console.log("WebSocket connected");
-  setConnected(true);
-
-  if (stompClient) {
-      const subscription = `/user/${user?.username}/notifications`;
-      console.log(`Subscribing to: ${subscription}`);
-
-      stompClient.subscribe(subscription, (message) => {
-          try {
-              const payload = JSON.parse(message.body);
-              console.log("Message received:", payload);
-              onMessageRecieved(payload);
-          } catch (error) {
-              console.error("Error parsing WebSocket message:", error);
-          }
-      });
-  } else {
-      console.error("stompClient is not initialized");
+  function onConnected() {
+    setConnected(true);
+    if (stompClient) {
+      stompClient?.subscribe(
+        `/user/${user?.username}/notifications`,
+        onMessageRecieved
+      );
+    }
   }
-}
-
-
-  // function onConnected() {
-  //   setConnected(true);
-  //   if (stompClient) {
-  //     stompClient?.subscribe(
-  //       `/user/${user?.username}/notifications`,
-  //       onMessageRecieved
-  //     );
-  //   }
-  // }
 
  
 
@@ -88,7 +65,7 @@ function onConnected() {
   }
 
   function onMessageRecieved(payload: any) {
-    console.log(payload);
+    console.log('Playload ',payload);
   }
 
   useEffect(() => {

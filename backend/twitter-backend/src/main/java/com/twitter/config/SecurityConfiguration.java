@@ -55,7 +55,7 @@ public class SecurityConfiguration {
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With","Accept"));
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","OPTIONS"));
-        configuration.setMaxAge(3600L);  // 1 hour
+        //configuration.setMaxAge(3600L);  // 1 hour
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -67,6 +67,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .headers(header -> header.frameOptions(frame -> frame.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
