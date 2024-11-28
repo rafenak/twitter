@@ -51,4 +51,49 @@ public class NotificationService {
                         ));
 
     }
+
+    public void createAndSendNotification(NotificationType type, AppUser recipient, AppUser actionUser, Post post) {
+        Notification notification = new Notification();
+        notification.setNotificationType(type);
+        notification.setNotificationTimeStamp(LocalDateTime.now());
+        notification.setAcknowledged(false);
+        notification.setRecipient(recipient);
+        notification.setActionUser(actionUser);
+        notification.setPost(post);
+
+        notificationRepository.save(notification);
+
+        template.convertAndSendToUser(notification.getRecipient().getUsername(),
+                "/notifications", notification);
+
+    }
+
+    public void createAndSendFollowNotification(AppUser recipient, AppUser actionUser) {
+        Notification notification = new Notification();
+        notification.setNotificationType(NotificationType.FOLLOW);
+        notification.setNotificationTimeStamp(LocalDateTime.now());
+        notification.setAcknowledged(false);
+        notification.setRecipient(recipient);
+        notification.setActionUser(actionUser);
+
+        notificationRepository.save(notification);
+
+        template.convertAndSendToUser(notification.getRecipient().getUsername(),
+                "/notifications", notification);
+    }
+
+    public List<Notification> fetchUserNotification(Integer userId){
+        AppUser user = userService.getUserById(userId);
+        return  notificationRepository.getByRecipientAndAcknowledgedFalse(user);
+    }
+
+    public void acknowledgeNotifications(List<Notification> notifications){
+        List<Notification> acknowledgedNotifications = notifications
+                            .stream()
+                            .map(notification ->
+                            {notification.setAcknowledged(true); return notification;}).toList();
+
+        notificationRepository.saveAll(acknowledgedNotifications);
+
+    }
 }

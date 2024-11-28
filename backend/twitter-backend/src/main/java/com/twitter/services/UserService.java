@@ -295,7 +295,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Set<AppUser> followUser(String user, String followee) throws FollowException {
+    public AppUser followUser(String user, String followee) throws FollowException {
 
         if (user.equals(followee)) throw new FollowException();
 
@@ -326,7 +326,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(loggedInUser);
         userRepository.save(followedUser);
 
-        return loggedInUser.getFollowing();
+        return loggedInUser;
     }
 
     public Set<AppUser> retrieveFollowingList(String username) {

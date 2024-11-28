@@ -3,6 +3,7 @@ package com.twitter.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twitter.enums.Audience;
+import com.twitter.enums.NotificationType;
 import com.twitter.enums.ReplyRestriction;
 import com.twitter.exceptions.PostDoesNotExistsException;
 import com.twitter.exceptions.UnableToCreatePostException;
@@ -127,7 +128,12 @@ public class PostService {
                 postImages.add(postImage);
             }
             p.setImages(postImages);
-            return postRepository.save(p);
+
+            Post posted = postRepository.save(p);
+            notificationService.createAndSendPostNotification(posted);
+            return posted;
+
+            //return postRepository.save(p);
         } catch (Exception e) {
             throw new UnableToCreatePostException();
         }
@@ -187,7 +193,11 @@ public class PostService {
 
         postRepository.save(original);
 
-        return postRepository.save(reply);
+        Post savedReply = postRepository.save(reply);
+        notificationService.createAndSendNotification(NotificationType.REPLY,
+                original.getAuthor(),savedReply.getAuthor(),original);
+
+        return savedReply;
     }
 
 
@@ -231,7 +241,11 @@ public class PostService {
             }
             replyPost.setImages(postImages);
 
-           return postRepository.save(replyPost);
+            Post savedReply = postRepository.save(replyPost);
+            notificationService.createAndSendNotification(NotificationType.REPLY,
+                    original.getAuthor(),savedReply.getAuthor(),original);
+
+           return savedReply;
         }
         catch (Exception e) {
             throw new UnableToCreatePostException();
@@ -254,6 +268,9 @@ public class PostService {
         }
         post.setReposts(reposts);
 
+        notificationService.createAndSendNotification(NotificationType.REPOST,
+                post.getAuthor(),user,post);
+
         return  postRepository.save(post);
     }
 
@@ -271,6 +288,9 @@ public class PostService {
             likes.add(user);
         }
         post.setLikes(likes);
+
+        notificationService.createAndSendNotification(NotificationType.LIKE,
+                post.getAuthor(),user,post);
 
         return  postRepository.save(post);
     }
@@ -291,6 +311,9 @@ public class PostService {
             bookmarks.add(user);
         }
         post.setBookmarks(bookmarks);
+
+        notificationService.createAndSendNotification(NotificationType.BOOKMARK,
+                post.getAuthor(),user,post);
 
         return  postRepository.save(post);
     }
