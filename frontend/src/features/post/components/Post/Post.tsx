@@ -213,7 +213,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     }
 
 
-    const createView = (entries: IntersectionObserverEntry[]) => {
+    const createBatchView = (entries: IntersectionObserverEntry[]) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 let updatedPost = JSON.parse(JSON.stringify(post))
@@ -235,9 +235,13 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
         })
     }
 
+    const openPost= () =>{
+        navigate(`/post/${post.postId}`)
+    }
+
     useEffect(()=>{
         if(postRef && postRef.current){
-            const observer = new IntersectionObserver(createView, {
+            const observer = new IntersectionObserver(createBatchView, {
                 root: null,
                 threshold: 1,
               });
@@ -247,7 +251,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
 
    
     return (
-        <div className='post' ref={postRef}>
+        <div className='post' ref={postRef} onClick={openPost}>
             {repost &&
                 <div className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
                     <RepostSVG height={16} width={16} color={"#657786"} />
