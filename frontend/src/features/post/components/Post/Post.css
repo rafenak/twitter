@@ -118,7 +118,7 @@
   color: #657786;
 }
 
-.post-content {
+/* .post-content {
   height: fit-content;
   width: 100%;
   word-break: keep-all;
@@ -126,11 +126,11 @@
   margin: 0;
   font-size: 15px;
   font-weight: 400;
-  /* padding-left: 16px; */
+  --padding-left: 16px;
   margin-bottom: 8px;
-}
+} */
 
-.post-action-bar {
+/* .post-action-bar {
   height: fit-content;
   width: 100%;
   display: flex;
@@ -202,7 +202,7 @@
   justify-content: space-between;
   align-items: center;
 }
-
+ */
 
 .post-oragnization{
     width: 20px;

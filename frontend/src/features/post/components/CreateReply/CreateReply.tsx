@@ -10,7 +10,7 @@ export const CreateReply: React.FC = () => {
     <Modal
       topContent={<CreateReplyTop />}
       content={<CreateReplyBody />}
-      bottomContent={<CreateReplyBottom />}
+      bottomContent={<CreateReplyBottom type="post"/>}
       topPosition="29%"
       leftPosition="25%" 
       transform="translateY(-50%)"

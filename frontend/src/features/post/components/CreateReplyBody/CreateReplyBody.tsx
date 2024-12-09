@@ -83,7 +83,7 @@ export const CreateReplyBody: React.FC = () => {
                             src={user && user.profilePicture ? user.profilePicture.imageURL : pfp} 
                             alt={user ? `${user?.username}'s pfp` : 'user pfp'} />
                         <div className='create-reply-body-reply-content'>
-                            < CreatePostTextArea location='reply' />
+                            < CreatePostTextArea location='reply' placeHolder='Post your reply' />
                         </div> 
                     </div> 
                         
