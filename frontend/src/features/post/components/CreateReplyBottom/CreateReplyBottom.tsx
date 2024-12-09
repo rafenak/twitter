@@ -8,7 +8,12 @@ import { FeedPostCreatorProgress } from '../../../feed/components/FeedPostCreato
 import { createReply, createReplyWithMedia } from '../../../../redux/Slices/PostSlice'
 import { updateDisplayCreateReply } from '../../../../redux/Slices/ModalSlice'
 
-export const CreateReplyBottom: React.FC = () => {
+
+interface CreateReplyBottomProps {
+  type: string
+}
+
+export const CreateReplyBottom: React.FC<CreateReplyBottomProps> = ({ type }) => {
   const postState = useSelector((state: RootState) => state.post)
   const displayEmoji = useSelector((state: RootState) => state.modal.displayEmojis);
   const token = useSelector((state: RootState) => state.user.token);
@@ -48,27 +53,32 @@ export const CreateReplyBottom: React.FC = () => {
         reply: postState.currentReply,
         token: token
       }));
-      dispatch(updateDisplayCreateReply())
-    }else if(postState.currentReply && postState.currentReplyImages.length > 1){
+      if (type === 'reply') {
+        dispatch(updateDisplayCreateReply())
+      }
+    } else if (postState.currentReply && postState.currentReplyImages.length > 1) {
       dispatch(createReplyWithMedia({
-        author:postState.currentReply.author,
-        originalPost:postState.currentReply.originalPost.postId,
-        replyContent:postState.currentReply.replyContent,
-        images:[],
-        scheduled:postState.currentReply.scheduled,
-        scheduledDate:postState.currentReply.scheduledDate,
+        author: postState.currentReply.author,
+        originalPost: postState.currentReply.originalPost.postId,
+        replyContent: postState.currentReply.replyContent,
+        images: [],
+        scheduled: postState.currentReply.scheduled,
+        scheduledDate: postState.currentReply.scheduledDate,
         poll: postState.currentReply.poll,
         imagesFiles: postState.currentReplyImages,
-        token:token
+        token: token
       }));
-      dispatch(updateDisplayCreateReply());
+
+      if (type === 'reply') {
+        dispatch(updateDisplayCreateReply())
+      }
     }
   }
 
 
-  return ( 
+  return (
     <div className='create-reply-bottom'>
-      <CreatePostButtonCluster location='reply' />
+      <CreatePostButtonCluster location='reply' type={type} />
       <div className='create-reply-bottom-submit-group'>
         {postState.currentReply && postState.currentReply.replyContent !== ''
           && <FeedPostCreatorProgress percent={(postState.currentReply ? postState.currentReply.replyContent.length / 255 : 0) * 100}

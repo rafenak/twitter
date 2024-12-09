@@ -11,7 +11,7 @@ export function usePostActions(){
     const loggegIn = useSelector((state:RootState)=> state.user.loggedIn);
     const dispatch:AppDisptach = useDispatch();
 
-    const toogleReply = (post:Post) =>{
+    const toggleReply = (post:Post) =>{
         dispatch(setCurrentPost(post))
         dispatch(updateDisplayCreateReply())
     }
@@ -113,7 +113,7 @@ export function usePostActions(){
         }))
     }
 
-    return {toogleReply,createRepost,createLike,createBookmark,createSingleView }
+    return {toggleReply,createRepost,createLike,createBookmark,createSingleView }
 
 
 

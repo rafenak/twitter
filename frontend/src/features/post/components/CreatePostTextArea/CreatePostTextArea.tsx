@@ -7,11 +7,12 @@ import './CreatePostTextArea.css'
 
 
 interface CreatePostTextAreaProps{
-    location:string
+    location:string,
+    placeHolder:string
 }
 
 
-export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location} ) => {
+export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location,placeHolder } ) => {
 
   const state = useSelector((state: RootState) => state);
   const dispatch: AppDisptach = useDispatch();
@@ -91,7 +92,7 @@ export const CreatePostTextArea:React.FC<CreatePostTextAreaProps> = ({location} 
               ? "create-post-text-area-creator-input input-active"
               : "create-post-text-area-creator-input"
           }
-          placeholder="what is happening?!"
+          placeholder={placeHolder}
           ref={textAreaRef}
           onChange={autoGrow}
           cols={50}

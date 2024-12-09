@@ -111,6 +111,7 @@ export interface Post{
   postDate?:Date;
   author:User;
   bookmarks:User[];
+  replyTo?:Post | null;
   replies?:Post[];
   likes:User[];
   images:PostImage[];

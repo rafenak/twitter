@@ -146,7 +146,7 @@ export const FeedPostCreator: React.FC = () => {
       </Link>
       <div className="feed-post-creator-right">
         {state.post.currentPost ? <FeedPostAudienceDropDown /> : <></>}
-        <CreatePostTextArea location="post" />
+        <CreatePostTextArea location="post" placeHolder="what is happening?!"/>
         {((state.post.currentPostImages.length > 0) || (state.post.currentPost && state.post.currentPost.images.length > 0)) &&
           <FeedPostCreatorImages />}
         {state.post.currentPost && state.post.currentPost.poll && <FeedPostCreatorPoll />}
@@ -159,7 +159,7 @@ export const FeedPostCreator: React.FC = () => {
           }
         >
           <div className="feed-post-creator-botton-icons-left">
-          <CreatePostButtonCluster location="post"/>
+          <CreatePostButtonCluster location="post" type="post"/>
           </div>
           <div className="feed-post-creator-submit-cluster">
             {state.post.currentPost && (state.post.currentPost.content) !== "" ? (
