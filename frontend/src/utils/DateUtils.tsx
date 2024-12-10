@@ -76,3 +76,44 @@ export const getYears = (): JSX.Element[] => {
 export const stringifyDate = (date: Dob): string => {
   return `${MONTHS[date.month].substring(0, 3)} ${date.day}, ${date.year}`;
 };
+
+export const stringifyTime = (date: Date): string => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let amPm;
+
+  if (hours === 0) {
+    hours = 12;
+    amPm = "AM";
+  } else if (hours > 12) {
+    hours = hours % 12;
+    amPm = "PM";
+  } else {
+    amPm = "AM";
+  }
+
+  return `${hours}:${minutes < 10 ? `0${minutes}` : `${minutes}`} ${amPm}`;
+};
+
+export const stringifyFullDate = (date: Date): string => {
+  return `${MONTHS[date.getMonth() +1 ]} ${date.getDay()}, ${date.getFullYear()}`;
+};
+
+export const cleanDateForRequest = (date: Dob): string => {
+  let month: string = "";
+  let day: string = "";
+
+  if (date.month < 10) {
+    month = `0${date.month}`;
+  } else {
+    month = `${date.month}`;
+  }
+
+  if (date.day < 10) {
+    day = `0${date.day}`;
+  } else {
+    day = `${date.day}`;
+  }
+
+  return `${date.year}/${month}/${day}`;
+};

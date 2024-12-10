@@ -21,15 +21,6 @@ interface PostProps {
     feedPost: FeedPost
 }
 
-interface HoverColors {
-    reply: string;
-    repost: string;
-    like: string;
-    views: string;
-    bookmark: string;
-    share: string;
-}
-
 export const Post: React.FC<PostProps> = ({ feedPost }) => {
     const { post, repost } = feedPost;
     const loggegIn = useSelector((state: RootState) => state.user.loggedIn)
