@@ -1,0 +1,7 @@
+.view-post{
+    width: 100%;
+    min-height: 100vh;
+    border-left: 1px solid #E1E8ED;
+    border-right : 1px solid #E1E8ED;
+    position: relative;
+}

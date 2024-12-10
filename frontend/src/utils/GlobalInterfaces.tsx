@@ -156,7 +156,7 @@ export interface Poll{
 
 export interface FeedPost{
   post:Post;
-  replyTo:Post;
+  replyTo:Post | null;
   repost:boolean;
   repostUser:User;
 }

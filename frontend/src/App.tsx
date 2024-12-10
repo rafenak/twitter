@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/Store";
 import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
+import { ViewPost } from "./pages/ViewPost";
 
 const theme: Theme = {
   colors: {
@@ -86,7 +87,8 @@ export const App = () => {
             <Route path="/home" element={<Feed />} />
             <Route path="/explore" element={<>Explore</>} />
             <Route path="/:username" element={<Profile />} />
-          </Route>
+            <Route path={"/post/:postId"} element={<ViewPost />} />
+          </Route> 
           {/* <Route path="/home" element={<Home></Home>} /> */}
         </Routes>
       </Router>
