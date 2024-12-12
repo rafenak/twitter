@@ -140,8 +140,17 @@ export const createReply = createAsyncThunk(
       const currentDate = new Date();
       const newDate = new Date(currentDate.setHours(currentDate.getHours() + 10));
 
-      thuckAPI.dispatch(setSessionStart(newDate))
-      return req.data;
+      thuckAPI.dispatch(setSessionStart(newDate));
+
+      const savedReply = req.data;
+      let original  = body.reply.originalPost;
+      original={
+        ...original,
+        replies: [...(original.replies ?? []), savedReply]
+      }
+      thuckAPI.dispatch(updatePost(original));
+
+      return savedReply;
     }
     catch (e) {
       return thuckAPI.rejectWithValue(e);
@@ -183,7 +192,19 @@ export const createPostWithMedia = createAsyncThunk(
       }
 
       let res = await axios(config)
-      return res.data;
+
+      const savedReply = res.data; 
+      let original = savedReply?.replyTo;
+
+      if(original){
+      original={
+        ...original,
+        replies:[...original.replies,savedReply] 
+      }
+      thuckAPI.dispatch(updatePost(original));
+    }
+
+      return savedReply;
     }
     catch (e) {
       return thuckAPI.rejectWithValue(e);
@@ -225,8 +246,17 @@ export const createReplyWithMedia = createAsyncThunk(
         data
       }
 
-      let res = await axios(config)
-      return res.data;
+      let res = await axios(config);
+
+      const savedReply = res.data;
+      let original = savedReply.replyTo;
+      original={
+        ...original,
+        replies:[...original.replies,savedReply] 
+      }
+      thuckAPI.dispatch(updatePost(original));
+
+      return savedReply;
     }
     catch (e) {
       return thuckAPI.rejectWithValue(e);

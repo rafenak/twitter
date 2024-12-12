@@ -9,6 +9,7 @@ import { AppDisptach, RootState } from '../redux/Store'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { getUserByToken, setToken } from '../redux/Slices/UserSlice'
 import { updateDisplayEmojis, updateDisplayPostMore } from '../redux/Slices/ModalSlice'
+import ModalContainer from '../components/ModalContainer/ModalContainer'
 
 
 export const LayoutPage: React.FC = () => {
@@ -27,7 +28,7 @@ export const LayoutPage: React.FC = () => {
       setJwt(state.token);
     } else if (jwt !== "" && state.token === "") {
       dispatch(setToken(jwt));
-    } else {
+    } else if(!location.pathname.startsWith("/post")){
       navigate("/");
     }
   }, [state.token]);
@@ -44,6 +45,7 @@ export const LayoutPage: React.FC = () => {
 
     return (
         <div className='layout-page' onClick={closedOpenedModals}>
+          <ModalContainer />
             <div className='layout-layout'>
                 <div className="layout-navigation-section">
                     <Navigation currentPage={location.pathname} />

@@ -121,12 +121,26 @@ export const FeedSlice = createSlice({
                     }
                 }
                 return post;
-            })    
-            state ={
+            })
+            if(state.currentPost && state.currentPost.postId=== action.payload.postId){
+                state ={
+                    ...state,
+                    currentPost:action.payload
+                }   
+            }   
+            state={
                 ...state,
                 posts:updatedPosts
-            }   
+            } 
             return state;
+        },
+
+        setFeedPosts(state,action:PayloadAction<FeedPost[]>){
+            state ={
+                ...state,
+                posts:action.payload
+            }  
+            return state; 
         }
 
     },
@@ -214,7 +228,7 @@ export const FeedSlice = createSlice({
     },
 });
 
-export const { setCurrentPost,setSessionStart,setCurrentPageNumber,updatePost } = FeedSlice.actions;
+export const { setCurrentPost,setSessionStart,setCurrentPageNumber,updatePost,setFeedPosts } = FeedSlice.actions;
 
 export default FeedSlice.reducer;
  
