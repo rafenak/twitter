@@ -136,18 +136,18 @@ export const CreatePostButtonCluster: React.FC<CreatePostButtonClusterProps> = (
             <div className={disableGif() ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={diplayGif}>
                 <GifSVG height={20} width={20} color={state.currentPostImages.length ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
             </div>
-            { type === 'post' &&
-            <div className={(state.currentPostImages.length > 0 || state.currentReplyImages.length > 0) ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
-                <PollSVG height={20} width={20} color={(state.currentPostImages.length || state.currentReplyImages.length) ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
-            </div>
+            {type === 'post' &&
+                <div className={(state.currentPostImages.length > 0 || state.currentReplyImages.length > 0) ? "create-post-button-cluster-icon-bg" : "create-post-button-cluster-icon-bg icon-active"} onClick={generatePoll} >
+                    <PollSVG height={20} width={20} color={(state.currentPostImages.length || state.currentReplyImages.length) ? "rgba(19,161,242,0.5)" : "#1DA1F2"} />
+                </div>
             }
             <div className="create-post-button-cluster-icon-bg icon-active" onClick={openEmojiModal}>
                 <EmojiSVG height={20} width={20} color={"#1DA1F2"} />
             </div>
-            { type === 'post' &&
-            <div className="create-post-button-cluster-icon-bg icon-active" onClick={openScheduleModal}>
-                <ScheduleSVG height={20} width={20} color={"#1DA1F2"} />
-            </div>
+            {type === 'post' &&
+                <div className="create-post-button-cluster-icon-bg icon-active" onClick={openScheduleModal}>
+                    <ScheduleSVG height={20} width={20} color={"#1DA1F2"} />
+                </div>
             }
             <div className="create-post-button-cluster-icon-location ">
                 <LocationSVG

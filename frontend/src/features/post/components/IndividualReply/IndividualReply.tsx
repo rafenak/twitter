@@ -51,7 +51,7 @@ export const IndividualReply: React.FC<IndividualReplyProps> = ({
             }
         >
             <div className="inidividual-reply-left">
-                <ProfilePicture size={"40"} user={user}/>
+                <ProfilePicture size={"40"} user={user} />
             </div>
             <div className="inidividual-reply-right">
                 {postState.currentReply && (
