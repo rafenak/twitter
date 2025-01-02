@@ -21,7 +21,7 @@ export const PostUsername: React.FC<PostUsernameProps> = ({ author, repost }) =>
 
     const navigateToProfile = () => {
         navigate(`/${author.username}`)
-    }    
+    }
 
     // const openPopup = async () => {
     //     //Do the logic to fetch the authors following and followers list
@@ -43,12 +43,12 @@ export const PostUsername: React.FC<PostUsernameProps> = ({ author, repost }) =>
     const openPopup = useCallback(async () => {
         // Open the modal regardless of fetching state
         setDisplayModal(true);
-    
+
         // Prevent unnecessary re-fetches
         if (isDataFetched || isFetching.current) return;
-    
+
         isFetching.current = true;
-    
+
         try {
             const [fetchedFollowers, fetchedFollowing] = await Promise.all([
                 getFollowers(author.username),
@@ -100,5 +100,5 @@ export const PostUsername: React.FC<PostUsernameProps> = ({ author, repost }) =>
             )}
         </div>
     );
-    
+
 }

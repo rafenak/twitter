@@ -28,7 +28,7 @@ interface HoverColors {
 
 export const PostActionBar: React.FC<PostActionBarProps> = ({ post, isIndividual }) => {
 
-    const {toggleReply,createRepost,createLike ,createBookmark} = usePostActions();
+    const { toggleReply, createRepost, createLike, createBookmark } = usePostActions();
 
     const [colors, setColors] = useState<HoverColors>({
         reply: '#AAB8C2',
@@ -100,8 +100,8 @@ export const PostActionBar: React.FC<PostActionBarProps> = ({ post, isIndividual
 
     }
 
-  
-   
+
+
 
     return (
         <div className='post-action-bar'>
@@ -135,7 +135,7 @@ export const PostActionBar: React.FC<PostActionBarProps> = ({ post, isIndividual
 
             <div className='post-action-bar-right'>
                 <div className='post-action-bar-group'>
-                    <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={() =>   (post)}>
+                    <div className='post-action-bar-blue-wrapper' id='bookmark' onMouseOver={updateHoverColors} onMouseLeave={restColors} onClick={() => (post)}>
                         <BookMarkSVG height={20} width={20} color={colors.bookmark} />
                         {post.bookmarks.length > 0 && <p className='post-action-bar-count' style={{ color: colors.reply }}>{convertCount(post.bookmarks.length || 0)}</p>}
                     </div>
