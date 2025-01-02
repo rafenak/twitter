@@ -22,9 +22,9 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
     const loggedIn = useSelector((state: RootState) => state.user.loggedIn);
     const token = useSelector((state: RootState) => state.user.token);
     const dispatch: AppDisptach = useDispatch();
-    const [following, setFollowing] = useState<boolean>(()=>{
-        if(loggedIn){
-            return checkFollowing(followersList,loggedIn);
+    const [following, setFollowing] = useState<boolean>(() => {
+        if (loggedIn) {
+            return checkFollowing(followersList, loggedIn);
         }
         return false;
     });
@@ -72,17 +72,17 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
                     onMouseOver={followingBtnActive}
                     onMouseLeave={followingBtnInActive}
                     onClick={follow}>
-                        {followingBtnContent}
+                    {followingBtnContent}
                 </button>
-                :<button  className='post-profile-follow-btn' onClick={follow}>Follow</button>  
-            }
+                    : <button className='post-profile-follow-btn' onClick={follow}>Follow</button>
+                }
             </div>
             <div className='post-profile-nickname-bar'>
                 <p className='post-profile-nickname'>{author.nickname}</p>
                 {author.verifiedAccount && <VerifiedIcon sx={{
                     color: '#1DA1F2',
                     height: '20px',
-                    width: '20px' 
+                    width: '20px'
                 }} />}
 
                 {author.organization && <img className='post-profile-oragnization'
@@ -102,12 +102,12 @@ export const PostProfilePopup: React.FC<PostProfilePopupProps> = ({ author, foll
             </div>
             {
                 followedBy.length > 0 &&
-            <div className='post-profile-followed-by-container'>
-                <div className='post-profile-followed-by-pfps'>
-                    <PostProfilePopupIcons followedBy={followedBy.slice(0,3)} key={`${author.userId}-${author.nickname}` }/>
+                <div className='post-profile-followed-by-container'>
+                    <div className='post-profile-followed-by-pfps'>
+                        <PostProfilePopupIcons followedBy={followedBy.slice(0, 3)} key={`${author.userId}-${author.nickname}`} />
+                    </div>
+                    <p className='post-profile-followed-by-users'>{mapFollowedByContent()}</p>
                 </div>
-                <p className='post-profile-followed-by-users'>{mapFollowedByContent()}</p>
-            </div>
             }
         </div>
     )

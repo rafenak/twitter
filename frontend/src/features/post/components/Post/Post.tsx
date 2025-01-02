@@ -6,9 +6,9 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import './Post.css'
 import { AppDisptach, RootState } from '../../../../redux/Store';
 import { useDispatch, useSelector } from 'react-redux';
-import {  updatePost } from '../../../../redux/Slices/FeedSlice';
+import { updatePost } from '../../../../redux/Slices/FeedSlice';
 import { convertPostDateToString } from '../../utils/PostUtils';
-import { batchPostView} from '../../../../redux/Slices/PostSlice';
+import { batchPostView } from '../../../../redux/Slices/PostSlice';
 import { useNavigate } from 'react-router-dom';
 import { PostMore } from '../PostMore/PostMore';
 import { PostUsername } from '../PostUsername/PostUsername';
@@ -27,7 +27,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
     const dispatch: AppDisptach = useDispatch();
     const navigate = useNavigate();
     const postRef = useRef<HTMLDivElement>(null);
-   
+
 
     const createBatchView = (entries: IntersectionObserverEntry[]) => {
         entries.forEach((entry) => {
@@ -51,31 +51,31 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
         })
     }
 
-    const openPost= () =>{
+    const openPost = () => {
         navigate(`/post/${post.postId}`)
     }
 
-    useEffect(()=>{
-        if(postRef && postRef.current){
+    useEffect(() => {
+        if (postRef && postRef.current) {
             const observer = new IntersectionObserver(createBatchView, {
                 root: null,
                 threshold: 1,
-              });
-             observer.observe(postRef.current);
+            });
+            observer.observe(postRef.current);
         }
-    },[])
+    }, [])
 
-   
+
     return (
         <div className='post' ref={postRef} onClick={openPost}>
             {repost &&
                 <div className='post-repost-info' onMouseOver={() => {/** Popup a modal with the user information on Mouse Over*/ }}>
                     <RepostSVG height={16} width={16} color={"#657786"} />
                     {/* <span className='post-repost-user' onClick={() => navigate(`/${feedPost.repostUser.username}`)}>{feedPost.repostUser.nickname} reposted </span> */}
-                    <PostUsername author={feedPost.repostUser} repost={true} key={feedPost.repostUser.userId}/>
+                    <PostUsername author={feedPost.repostUser} repost={true} key={feedPost.repostUser.userId} />
                 </div>
             }
-            <div className='post-body-wrapper'> 
+            <div className='post-body-wrapper'>
                 <div className='post-left'>
                     <img className="post-pfp" src={post.author.profilePicture ? post.author.profilePicture?.imageURL : pfp} alt={`${post.author.nickname}'s pfp`} />
                 </div>
@@ -83,7 +83,7 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                     <div className='post-right-top'>
                         <div className='post-user-info'>
                             {/* <p className='post-nickname'>{post.author.nickname}</p> */}
-                            <PostUsername author={post.author} key={post.postId} repost={false}/>
+                            <PostUsername author={post.author} key={post.postId} repost={false} />
                             {post.author.verifiedAccount && <VerifiedIcon sx={{
                                 color: '#1DA1F2',
                                 height: '20px',
@@ -101,8 +101,8 @@ export const Post: React.FC<PostProps> = ({ feedPost }) => {
                         </div>
                         <PostMore postId={post.postId} postAuthor={post.author} key={post.postId} />
                     </div>
-                    <PostContent post={feedPost.post} key={feedPost.post.postId}/>
-                    <PostActionBar post={feedPost.post} isIndividual={false}/>
+                    <PostContent post={feedPost.post} key={feedPost.post.postId} />
+                    <PostActionBar post={feedPost.post} isIndividual={false} />
                 </div>
             </div>
         </div>
