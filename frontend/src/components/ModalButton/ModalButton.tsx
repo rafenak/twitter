@@ -22,12 +22,12 @@ export const ModalButton = styled.button<ModalButtonProps>`
   &:hover {
     cursor: ${(props) => (props.active ? "pointer" : "auto")};
     background-color: ${(props) =>
-      props.active
-        ? `rgba(${props.hoverBackgound.r},${props.hoverBackgound.g},${props.hoverBackgound.b},${props.hoverBackgound.a})`
-        : props.backgroundColor};
+    props.active
+      ? `rgba(${props.hoverBackgound.r},${props.hoverBackgound.g},${props.hoverBackgound.b},${props.hoverBackgound.a})`
+      : props.backgroundColor};
     border: ${(props) =>
-      props.hoverBorder && props.active
-        ? `solid 1px rgba(${props.hoverBorder.r},${props.hoverBorder.g},${props.hoverBorder.b},${props.hoverBorder.a})`
-        : "none"};
+    props.hoverBorder && props.active
+      ? `solid 1px rgba(${props.hoverBorder.r},${props.hoverBorder.g},${props.hoverBorder.b},${props.hoverBorder.a})`
+      : "none"};
   }
 `;

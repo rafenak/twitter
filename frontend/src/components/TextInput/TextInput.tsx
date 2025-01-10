@@ -26,8 +26,8 @@ export const TextInput: React.FC<TextInputProps> = ({
 
   return <div className="text-input">
     <div>
-        <span>{label}</span>
-        <input  name={name} onChange={updateInput} />
+      <span>{label}</span>
+      <input name={name} onChange={updateInput} />
     </div>
   </div>;
 };

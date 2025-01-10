@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
@@ -16,13 +16,13 @@ import defaultProfile from '../../assets/Generic-Profile.webp'
 import "./Navigation.css";
 
 
-interface NavigationProps{
-    currentPage:string
+interface NavigationProps {
+  currentPage: string
 }
 
-export const Navigation: React.FC<NavigationProps> = ({currentPage}) => {
+export const Navigation: React.FC<NavigationProps> = ({ currentPage }) => {
 
-  const state = useSelector((state:RootState)=>state.user)
+  const state = useSelector((state: RootState) => state.user)
   return (
     <div className="navigation">
       <nav className="navigation-container">
@@ -39,7 +39,7 @@ export const Navigation: React.FC<NavigationProps> = ({currentPage}) => {
             <p className={`navigation-text ${currentPage === '/home' ? 'navigation-active' : 'navigation-inactive'}`}>Home</p>
           </Link>
         </div>
-        <div className="navigation-item"> 
+        <div className="navigation-item">
           <Link to="/explore" className="navigation-link">
             <ExploreSVG height={26} width={26} />
             <p className={`navigation-text ${currentPage === '/explore' ? 'navigation-active' : 'navigation-inactive'}`}>Explore</p>
@@ -97,7 +97,7 @@ export const Navigation: React.FC<NavigationProps> = ({currentPage}) => {
         />
         <div className="navigation-options-info">
           <p className="navigation-options-info-display-name">{state.loggedIn && state.loggedIn.nickname ? state.loggedIn.nickname : state.loggedIn?.username}</p>
-          <p className="navigation-options-info-handle">{state.username ? state.username : "" }</p>
+          <p className="navigation-options-info-handle">{state.username ? state.username : ""}</p>
         </div>
         <p className="navigation-options-dotdotdot">...</p>
       </div>
