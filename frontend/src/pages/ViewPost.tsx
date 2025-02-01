@@ -58,6 +58,7 @@ export const ViewPost:React.FC = () => {
             feed.forEach((post,idx)=>{
                 if(post.post.postId === +postId){
                     setCurrentPostAndFeed(post.post);
+                    return;
                 }
             })
         }else{

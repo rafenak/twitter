@@ -4,7 +4,7 @@ import {
   StyledInputBox,
   StyledInputLabel,
 } from "../ValidatedInput/StyledInput";
-import '../ValidatedInput/ValidatedInput.css'
+import "../ValidatedInput/ValidatedInput.css";
 
 interface DropDownProps {
   content(): JSX.Element[];
@@ -20,14 +20,14 @@ export const DropDown: React.FC<DropDownProps> = ({
   defaultValue,
 }) => {
   const [active, setActive] = useState<boolean>(false);
-  const [data,setData] = useState<string>("");
+  const [data, setData] = useState<string>("");
 
   const toggleSelect = () => {
     setActive(!active);
   };
 
   const changeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setData(e.target.value)
+    setData(e.target.value);
     change(e);
   };
 
@@ -39,17 +39,25 @@ export const DropDown: React.FC<DropDownProps> = ({
           valid={true}
           color={active ? "blue" : "gray"}
         >
-            {label}
-            <ExpandMoreRoundedIcon sx={{
-                fontSize :34,
-                color : active ? '#1DA1F2' : '#657786',
-                position : 'absolute',
-                right : '15px',
-                top : '35%'
-            }} />
+          {label}
+          <ExpandMoreRoundedIcon
+            sx={{
+              fontSize: 34,
+              color: active ? "#1DA1F2" : "#657786",
+              position: "absolute",
+              right: "15px",
+              top: "35%",
+            }}
+          />
         </StyledInputLabel>
-        <select className="validated-input-value validated-date-selector" onChange={changeValue} onFocus={toggleSelect} onBlur={toggleSelect} value={data ? data :defaultValue}>
-            {content()}
+        <select
+          className="validated-input-value validated-date-selector"
+          onChange={changeValue}
+          onFocus={toggleSelect}
+          onBlur={toggleSelect}
+          value={data ? data : defaultValue}
+        >
+          {content()}
         </select>
       </StyledInputBox>
     </div>

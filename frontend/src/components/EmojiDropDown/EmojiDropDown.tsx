@@ -269,11 +269,11 @@ export const EmojiDropDown: React.FC = () => {
   }, [searchEmojis.length])
 
   return (
-    <div className='emoji-drop-down' onClick={(e)=> e.stopPropagation()}>
+    <div className='emoji-drop-down' onClick={(e) => e.stopPropagation()}>
       <div className='emoji-drop-down-top'>
         <div className='emoji-drop-down-search-border'>
           <SearchIcon sx={{
-            fontSize: "18px", 
+            fontSize: "18px",
             position: "absolute",
             top: "24px",
             left: "16px"
@@ -331,23 +331,23 @@ export const EmojiDropDown: React.FC = () => {
       <div className='emoji-drop-down-selector' onMouseOver={!emojiSearchContent ? getCurrentEmoji : () => { }}
         onMouseLeave={!emojiSearchContent ? resetCurrentEmoji : () => { }} id="emoji-scroll-area">
         {
-          !emojiSearchContent &&  recentEmojis ?
+          !emojiSearchContent && recentEmojis ?
             <>
-              { JSON.parse(recentEmojis).length > 0 ? 
+              {JSON.parse(recentEmojis).length > 0 ?
                 <div className='emoji-drop-down-selector-section' id="Recent">
-                <div className='emoji-drop-down-selector-recent-section'>
-                  <h2 className='emoji-drop-down-selector-recent-title' id="recentHeader">Recent</h2>
-                  <h3 className='emoji-drop-down-selector-clear-recent' onClick={() => setRecentEmojis(JSON.stringify([]))}>
-                    Clear All
-                  </h3>
-                </div>
-                <div className='emoji-drop-down-selector-section-wrapper'>
-                  {JSON.parse(recentEmojis).map((emoji: EmojiData, index: number) => {
-                    return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
-                      style={{ backgroundImage: `url("${emoji.image}")` }}></div>
-                  })}
-                </div>
-              </div>  : <></>
+                  <div className='emoji-drop-down-selector-recent-section'>
+                    <h2 className='emoji-drop-down-selector-recent-title' id="recentHeader">Recent</h2>
+                    <h3 className='emoji-drop-down-selector-clear-recent' onClick={() => setRecentEmojis(JSON.stringify([]))}>
+                      Clear All
+                    </h3>
+                  </div>
+                  <div className='emoji-drop-down-selector-section-wrapper'>
+                    {JSON.parse(recentEmojis).map((emoji: EmojiData, index: number) => {
+                      return <div key={index} onClick={appendEmojiToPost} aria-label={emoji.name} id={emoji.name} className='emoji-drop-down-emoji'
+                        style={{ backgroundImage: `url("${emoji.image}")` }}></div>
+                    })}
+                  </div>
+                </div> : <></>
               }
               <div className='emoji-drop-down-selector-section' id="Smileys & Emotion">
                 <h2 className='emoji-drop-down-selector-section-title' id="smileysAndEmotionHeader">Smileys & Emotion</h2>
