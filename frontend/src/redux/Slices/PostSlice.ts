@@ -148,7 +148,7 @@ export const createReply = createAsyncThunk(
         ...original,
         replies: [...(original.replies ?? []), savedReply]
       }
-      thuckAPI.dispatch(updatePost(original));
+      thuckAPI.dispatch(updatePost(original) );
 
       return savedReply;
     }

@@ -127,7 +127,7 @@ export const FeedSlice = createSlice({
                     ...state,
                     currentPost:action.payload
                 }   
-            }   
+            }    
             state={
                 ...state,
                 posts:updatedPosts
