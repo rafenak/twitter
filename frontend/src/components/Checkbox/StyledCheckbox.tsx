@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { StyledCheckboxProps } from "../../utils/GlobalInterfaces";
 
 export const StyledCheckbox = styled.div<StyledCheckboxProps>`
-  margin : 0;
+  margin: 0;
   width: 20px;
   height: 20px;
   background-color: ${(props) =>

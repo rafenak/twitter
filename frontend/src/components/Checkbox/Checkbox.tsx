@@ -12,20 +12,20 @@ export const Checkbox: React.FC = () => {
 
   return (
     <div className="check-box-conatiner">
-    <StyledCheckboxBackground active={clicked} onClick={toggleCheckbox}>
-      <StyledCheckbox active={clicked}>
-        {clicked ? (
-          <CheckRoundedIcon
-            sx={{
-              fontSize: 18,
-              color: "white",
-            }}
-          />
-        ) : (
-          <></>
-        )}
-      </StyledCheckbox>
-    </StyledCheckboxBackground>
+      <StyledCheckboxBackground active={clicked} onClick={toggleCheckbox}>
+        <StyledCheckbox active={clicked}>
+          {clicked ? (
+            <CheckRoundedIcon
+              sx={{
+                fontSize: 18,
+                color: "white",
+              }}
+            />
+          ) : (
+            <></>
+          )}
+        </StyledCheckbox>
+      </StyledCheckboxBackground>
     </div>
   );
 };
